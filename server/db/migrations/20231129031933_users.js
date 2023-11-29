@@ -5,7 +5,7 @@ export async function up(knex) {
     table.string('auth_id')
     table.string('name')
     // table.string('user_type')
-    table.integer('current_points').defaultsTo(0)
+    table.integer('points').defaultsTo(0)
     table.boolean('is_parent').defaultsTo(null)
     // table.foreign('id').references('jobs.user_id').onDelete('cascade')
   })
