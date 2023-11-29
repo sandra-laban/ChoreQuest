@@ -4,6 +4,7 @@ export async function up(knex) {
     table.date('assigned')
     table.boolean('completed').defaultsTo('FALSE')
     table.date('due')
+    table.string('name')
     table.integer('points')
     table.integer('user_id')
   })
