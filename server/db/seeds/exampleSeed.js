@@ -1,9 +1,4 @@
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> }
- */
-
-exports.seed = async function (knex) {
+export async function seed(knex) {
   try {
     await knex.transaction(async (trx) => {
       // Seed tables without foreign key constraints
@@ -26,7 +21,7 @@ exports.seed = async function (knex) {
 async function seedChores(trx) {
   await trx('chores').del()
   await trx('chores').insert([
-    { name: 'Do the dishes', value: 100, family_id: 1, created: new Date() },
+    { name: 'Do the dishes', points: 100, family_id: 1, created: new Date() },
   ])
 }
 
@@ -39,8 +34,8 @@ async function seedChoreList(trx) {
 
   await trx('chore_list').insert([
     {
-      jobs_id: 1,
-      family_id: 1,
+      chores_id: 1,
+      user_id: 3,
       assigned: assignedDate,
       is_completed: false,
       due: dueDate,
@@ -74,21 +69,21 @@ async function seedUsers(trx) {
       name: 'Riley',
       is_parent: true,
       family_id: 1,
-      auth_id: '23523567564324',
+      auth_id: '111',
       points: null,
     },
     {
       name: 'Gideon',
       is_parent: false,
       family_id: 1,
-      auth_id: '23523567564324324',
+      auth_id: '222',
       points: 200,
     },
     {
       name: 'Ruby',
       is_parent: true,
       family_id: 1,
-      auth_id: '235235677567524324',
+      auth_id: '333',
       points: 0,
     },
   ])
