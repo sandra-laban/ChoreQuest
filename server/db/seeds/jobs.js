@@ -11,5 +11,14 @@ export const seed = async function (knex) {
       points: 10,
       user_id: 1,
     },
+    {
+      id: 2,
+      assigned: '2023-11-28',
+      completed: null,
+      due: '2023-11-30',
+      name: 'Fold clothes',
+      points: 10,
+      user_id: 2,
+    },
   ])
 }
