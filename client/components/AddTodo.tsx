@@ -3,7 +3,7 @@ function AddTodo() {
   return (
     <>
       <input
-        className="new-todo"
+        className="new-todo border-red-500 border-solid border-8 rounded-lg"
         placeholder="What needs to be done?"
         autoFocus={true}
       />
