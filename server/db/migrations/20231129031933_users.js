@@ -6,6 +6,7 @@ export async function up(knex) {
     table.string('name')
     table.string('user_type')
     table.number('current_points')
+    table.foreign('id').references('jobs.user_id').onDelete('cascade')
   })
 }
 

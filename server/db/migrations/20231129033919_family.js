@@ -3,6 +3,8 @@ export async function up(knex) {
     table.increments('id').primary
     table.string('name')
     table.password('password')
+    table.foreign('id').references('users.family_id').onDelete('cascade')
+    table.foreign('id').refernces('jobs.family_id').onDelete('cascade')
   })
 }
 
