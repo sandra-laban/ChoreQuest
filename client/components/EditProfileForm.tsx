@@ -56,10 +56,10 @@ function EditProfileForm() {
     console.log(form)
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     currentForm = { ...form }
-    updateProfileMutation.mutate()
+    await updateProfileMutation.mutate()
     setSubmit(true)
   }
 

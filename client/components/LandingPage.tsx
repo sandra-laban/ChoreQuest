@@ -42,7 +42,8 @@ function LandingPage() {
     !userData.some((profile) => profile.auth_id === user?.sub)
   ) {
     navigate('/complete-profile')
-  } else if (
+  }
+  if (
     isAuthenticated &&
     userData.some(
       (profile) => profile.auth_id === user?.sub && profile.family_id !== null
