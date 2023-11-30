@@ -2,6 +2,8 @@ import db from '../connection'
 import { FamilyFormData } from '@models/family'
 import fs from 'fs'
 import path from 'path'
+import { extname } from 'path'
+import { v4 as uuidv4 } from 'uuid'
 
 export async function createFamily(
   familyData: FamilyFormData,
@@ -12,9 +14,28 @@ export async function createFamily(
   const fileExtension = path.extname(image.originalname).toLowerCase()
   const trx = await db.transaction()
 
+  let pictureUrl = null
   try {
-    const [familyId] = await trx('family').insert(familyData)
+    if (image) {
+      if (allowedExtensions.includes(fileExtension)) {
+        const folderPath = './public/images/familyIcons'
+        await fs.promises.mkdir(folderPath, { recursive: true })
 
+        const uniqueFilename = `${uuidv4()}${extname(image.originalname)}`
+        pictureUrl = uniqueFilename
+
+        const filePath = `${folderPath}/${uniqueFilename}`
+
+        await fs.promises.writeFile(filePath, image.buffer)
+      } else {
+        throw new Error('Invalid image extension')
+      }
+    }
+
+    const [familyId] = await trx('family').insert({
+      ...familyData,
+      picture: pictureUrl,
+    })
     if (!familyId) {
       throw new Error('Could not create your family')
     }
@@ -33,20 +54,6 @@ export async function createFamily(
 
     if (joinedFamily !== 1) {
       throw new Error('Failed to update user record')
-    }
-
-    if (image) {
-      if (allowedExtensions.includes(fileExtension)) {
-        const folderPath = './public/images/familyIcons'
-        await fs.promises.mkdir(folderPath, { recursive: true })
-
-        await fs.promises.writeFile(
-          path.join(folderPath, familyId + '.png'),
-          image.buffer
-        )
-      } else {
-        throw new Error('Invalid image extension')
-      }
     }
 
     trx.commit()

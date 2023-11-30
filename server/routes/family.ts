@@ -21,6 +21,7 @@ router.post('/create', jwtCheck, upload.single('image'), async (req, res) => {
     const auth_id = req.auth?.payload.sub as string
 
     const image = req.file ? req.file : null
+    
 
     const familyFormData = { name, password }
 
