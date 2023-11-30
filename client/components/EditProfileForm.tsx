@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { completeProfile, getAllUsers } from '../apis/userApi'
+import { getAllUsers, updateProfile } from '../apis/userApi'
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { useAuth0 } from '@auth0/auth0-react'
 import { useNavigate } from 'react-router-dom'
@@ -13,15 +13,15 @@ const initialForm = {
 }
 
 let currentForm: UserForm
-function CompleteProfile() {
+function EditProfileForm() {
   const [form, setForm] = useState<UserForm>(initialForm)
   const [submit, setSubmit] = useState(false)
   const navigate = useNavigate()
   const { user } = useAuth0()
   const queryClient = useQueryClient()
   console.log(user)
-  const completeProfileMutation = useMutation({
-    mutationFn: () => completeProfile(user?.sub as string, form),
+  const updateProfileMutation = useMutation({
+    mutationFn: () => updateProfile(user?.sub as string, form),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] })
     },
@@ -59,7 +59,7 @@ function CompleteProfile() {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     currentForm = { ...form }
-    completeProfileMutation.mutate()
+    updateProfileMutation.mutate()
     setSubmit(true)
   }
 
@@ -89,11 +89,11 @@ function CompleteProfile() {
   return (
     <div>
       <img
-        src="images/chorequest.png"
+        src="/images/chorequest.png"
         alt="ChoreQuest Logo"
         className="mx-auto w-1/3"
       />
-      <h1 className="mx-auto mt-12 mb-6 text-center">COMPLETE YOUR PROFILE</h1>
+      <h1 className="mx-auto mt-12 mb-6 text-center">EDIT YOUR PROFILE</h1>
       {!allUsers.some((user) => user.name === currentForm?.username) ? (
         <form
           onSubmit={handleSubmit}
@@ -111,7 +111,10 @@ function CompleteProfile() {
             onChange={handleChange}
             className="m-4 border-solid border-2 border-black p-2 px-5 w-1/3 rounded-lg mb-12"
           />
-          {allUsers.some((user) => user.name === form.username) ? (
+          {allUsers.some(
+            (profile) =>
+              profile.auth_id !== user?.sub && profile.name === form.username
+          ) ? (
             <p className="bg-red-100 border-rose-600 border-4 rounded-lg py-2 px-4 mb-4">
               Username already exists
             </p>
@@ -120,7 +123,10 @@ function CompleteProfile() {
           <h2>Choose an Avatar</h2>
           <ImageGrid images={avatars} onSelect={handleImageSelect} />
 
-          {!allUsers.some((user) => user.name === form.username) ? (
+          {!allUsers.some(
+            (profile) =>
+              profile.auth_id !== user?.sub && profile.name === form.username
+          ) ? (
             <button
               type="submit"
               className="btn-primary mb-12 items-center justify-center"
@@ -130,10 +136,11 @@ function CompleteProfile() {
           ) : null}
         </form>
       ) : null}
-      {submit && allUsers.some((user) => user.name === currentForm.username) ? (
+      {submit &&
+      allUsers.some((profile) => profile.name === currentForm.username) ? (
         <div className="flex flex-col items-center justify-center">
           <h2 className="text-center m-10">
-            Thank you for completing your profile!
+            Thank you for updating your profile!
           </h2>
 
           <button className="btn-primary m-12" onClick={handleRedirect}>
@@ -145,4 +152,4 @@ function CompleteProfile() {
   )
 }
 
-export default CompleteProfile
+export default EditProfileForm

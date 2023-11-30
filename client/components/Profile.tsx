@@ -13,7 +13,7 @@ export default function Profile() {
     isLoading,
   } = useQuery({
     queryKey: ['user', id],
-    queryFn: () => getUser(id as unknown as number),
+    queryFn: () => getUser(Number(id)),
   })
   const queryClient = useQueryClient()
   const deleteProfileMutation = useMutation({
@@ -25,7 +25,7 @@ export default function Profile() {
 
   async function handleDeleteClick() {
     await deleteProfileMutation.mutate()
-    navigate('/login')
+    navigate('/')
   }
 
   if (isError) {
@@ -43,7 +43,9 @@ export default function Profile() {
       <h1>{profile.name}</h1>
       <img src={profile.picture} alt={profile.name} />
       <h2>Family - {profile.familyName}</h2>
-      <button>Edit</button>
+      <button onClick={() => navigate(`/profile/${Number(profile.id)}/edit`)}>
+        Edit
+      </button>
       <button onClick={() => handleDeleteClick()}>Delete Profile</button>
     </>
   )

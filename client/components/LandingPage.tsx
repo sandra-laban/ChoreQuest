@@ -53,15 +53,23 @@ function LandingPage() {
 
   return (
     <>
-      <div className="h-screen">
-        <h1>ChoreQuest</h1>
+      <div className="flex flex-col justify-center items-center h-screen">
+        <img
+          src="images/chorequest.png"
+          alt="ChoreQuest Logo"
+          className="mx-auto w-1/3"
+        />
         {!registered ? (
-          <button onClick={() => loginWithRedirect()}>Login / Sign Up</button>
+          <div className="text-center">
+            <button className="btn-primary" onClick={() => loginWithRedirect()}>
+              LOGIN / SIGN UP
+            </button>
+          </div>
         ) : null}
         {registered && !joinedFamily ? (
-          <div>
-            <button>Join Family</button>
-            <button>Create Family</button>
+          <div className="flex justify-center">
+            <button className="btn-primary mx-8">Join Family</button>
+            <button className="btn-primary mx-8">Create Family</button>
           </div>
         ) : null}
       </div>

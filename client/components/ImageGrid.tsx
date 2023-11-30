@@ -22,14 +22,16 @@ function ImageGrid({ images, onSelect }: ImageGrid) {
   }
 
   return (
-    <div className="image-grid">
+    <div className="grid grid-cols-4 gap-4 m-10">
       {images.map((image) => (
         <img
           key={image.id}
           src={image.url}
           alt={image.alt}
           className={
-            selectedImage && selectedImage.id === image.id ? 'selected' : ''
+            selectedImage && selectedImage.id === image.id
+              ? 'border-cyan-200 image-grid'
+              : 'image-grid'
           }
           onClick={() => handleImageClick(image)}
           onKeyDown={(e) => handleImageKeyDown(e, image)}

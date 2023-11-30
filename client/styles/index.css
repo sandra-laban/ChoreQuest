@@ -1,3 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  button {
+    @apply text-3xl;
+    font-family: 'Poppins', sans-serif;
+  }
+  h1 {
+    @apply text-5xl;
+    font-family: 'Poppins', sans-serif;
+  }
+  h2 {
+    @apply text-3xl;
+    font-family: 'Poppins', sans-serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply cursor-pointer transition-all bg-blue-300 text-purple-950 px-6 py-3 rounded-lg text-3xl
+    border-blue-400 
+    border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px]
+    active:border-b-[2px] active:brightness-90 active:translate-y-[2px];
+  }
+
+  .image-grid {
+    @apply w-40 h-auto cursor-pointer border-solid border-8 border-transparent rounded-full transition ease-in-out duration-300;
+  }
+}

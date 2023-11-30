@@ -4,12 +4,14 @@ import {
   fetchAllUsers,
   fetchUser,
   removeUser,
+  updateUser,
 } from '../db/functions/users'
 
 const router = express.Router()
 
 router.get('/:id', async (req, res) => {
   try {
+    console.log('route', req.params.id)
     const id = Number(req.params.id)
     const user = await fetchUser(id)
     res.json(user)
@@ -38,6 +40,19 @@ router.post('/', async (req, res) => {
     const newUser = req.body
     const user = await addUser(newUser)
     res.json({ user })
+  } catch (err) {
+    res.status(500).json({
+      message: 'an error occurred',
+      error: err instanceof Error ? err.message : 'Unknown error',
+    })
+  }
+})
+
+router.patch('/', async (req, res) => {
+  try {
+    const updatedUser = req.body
+    const renewedUser = await updateUser(updatedUser)
+    res.json({ renewedUser })
   } catch (err) {
     res.status(500).json({
       message: 'an error occurred',

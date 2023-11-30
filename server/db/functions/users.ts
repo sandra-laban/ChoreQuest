@@ -1,4 +1,4 @@
-import { UserForm } from '../../../models/Iforms'
+import { UpdateUserForm, UserForm } from '../../../models/Iforms'
 import { CompleteUser, User } from '../../../models/Iusers'
 import connection from './../connection'
 
@@ -15,15 +15,16 @@ export async function fetchUser(id: number): Promise<CompleteUser> {
     .where('users.id', id)
     .select(
       'users.id',
-      'auth_id' as 'authId',
-      'users.name',
+      'auth_id as authId',
+      'users.name as name',
       'picture',
       'points',
-      'is_parent' as 'isParent',
-      'family_id' as 'familyId',
-      'family.name' as 'familyName'
+      'is_parent as isParent',
+      'family_id as familyId',
+      'family.name as familyName'
     )
     .first()
+  console.log('db', user)
   return user
 }
 
@@ -34,6 +35,18 @@ export async function removeUser(id: number): Promise<any> {
 
 export async function addUser(newUser: UserForm): Promise<User[]> {
   const user = await db('users').insert(newUser).returning('*')
+
+  return user
+}
+
+export async function updateUser(updatedUser: UpdateUserForm): Promise<User[]> {
+  const user = await db('users')
+    .where('auth_id', updatedUser.auth_id)
+    .update({
+      name: updatedUser.username,
+      picture: updatedUser.picture,
+    })
+    .returning('*')
 
   return user
 }
