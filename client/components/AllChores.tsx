@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { getAllChores } from '../apis/chores'
+import { DateTime } from 'luxon'
 
 const ChoreList = () => {
   const {
@@ -14,6 +15,7 @@ const ChoreList = () => {
   if (isLoading || !chores) {
     return <p>Loading chores...</p>
   }
+
   return (
     <>
       <h1> All Chores</h1>
@@ -26,7 +28,7 @@ const ChoreList = () => {
             <li>
               <h2>Chore name: {chore.name}</h2>
               <p>Points: {chore.points}</p>
-              <p>Created: {new Date(Number(chore.created)).toLocaleString()}</p>
+              <p>Created: {DateTime.fromMillis(chore.created).toISODate()}</p>
             </li>
           </ul>
         ))}
