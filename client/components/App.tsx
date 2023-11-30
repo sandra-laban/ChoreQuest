@@ -1,12 +1,14 @@
-import ChoreList from './AllChores.tsx'
+import { Outlet } from 'react-router-dom'
 
 function App() {
   return (
     <>
       <header className="header">
-        <ChoreList />
+        <h1>App</h1>
       </header>
-      <section className="main"></section>
+      <section className="main">
+        <Outlet />
+      </section>
       <footer className="footer"></footer>
     </>
   )
