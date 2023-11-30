@@ -1,23 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { completeProfile, getAllUsers } from '../api/apiClient'
+import { completeProfile, getAllUsers } from '../apis/userApi'
 import { ChangeEvent, FormEvent, useState } from 'react'
-import { Profile } from '../../models/users'
 import { useAuth0 } from '@auth0/auth0-react'
 import { useNavigate } from 'react-router-dom'
 import ImageGrid from './ImageGrid'
+import { UserForm } from '../../models/Iforms'
+import { Image } from '../../models/Iforms'
 
 const initialForm = {
   username: '',
   picture: '',
-  firstName: '',
-  surname: '',
-  location: '',
-  email: '',
 }
 
-let currentForm: Profile
+let currentForm: UserForm
 function CompleteProfile() {
-  const [form, setForm] = useState<Profile>(initialForm)
+  const [form, setForm] = useState<UserForm>(initialForm)
   const [submit, setSubmit] = useState(false)
   const navigate = useNavigate()
   const { user } = useAuth0()
@@ -92,7 +89,7 @@ function CompleteProfile() {
   return (
     <>
       <h1 className="mx-auto mt-12">COMPLETE YOUR PROFILE</h1>
-      {!allUsers.some((user) => user.username === currentForm?.username) ? (
+      {!allUsers.some((user) => user.name === currentForm?.username) ? (
         <form onSubmit={handleSubmit} className="form-layout">
           <label htmlFor="username">Username</label>
           <input
@@ -104,22 +101,21 @@ function CompleteProfile() {
             onChange={handleChange}
             className="form-input"
           />
-          {allUsers.some((user) => user.username === form.username) ? (
+          {allUsers.some((user) => user.name === form.username) ? (
             <p className="form-warning">Username already exists</p>
           ) : null}
 
           <h2>Choose an Avatar</h2>
           <ImageGrid images={avatars} onSelect={handleImageSelect} />
 
-          {!allUsers.some((user) => user.username === form.username) ? (
+          {!allUsers.some((user) => user.name === form.username) ? (
             <button type="submit" className="login-button">
               Submit
             </button>
           ) : null}
         </form>
       ) : null}
-      {submit &&
-      allUsers.some((user) => user.username === currentForm.username) ? (
+      {submit && allUsers.some((user) => user.name === currentForm.username) ? (
         <div className="signup-success">
           <h2 className="text-center">
             Thank you for completing your profile!
