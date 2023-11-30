@@ -1,12 +1,14 @@
 import AddTodo from './AddTodo.tsx'
+import ChoreList from './AllChores.tsx'
 import CreateFamilyForm from './CreateFamilyForm.tsx'
 
 function App() {
   return (
     <>
       <header className="header">
-        <h1>todos</h1>
+  
         <CreateFamilyForm />
+        <ChoreList />
       </header>
       <section className="main"></section>
       <footer className="footer"></footer>
