@@ -30,13 +30,6 @@ function LandingPage() {
 
   if (
     isAuthenticated &&
-    !userData.some((profile) => profile.auth_id === user?.sub)
-  ) {
-    navigate('/complete-profile')
-  }
-
-  if (
-    isAuthenticated &&
     userData.some(
       (profile) => profile.auth_id === user?.sub && profile.family_id === null
     )
@@ -45,6 +38,11 @@ function LandingPage() {
   }
 
   if (
+    isAuthenticated &&
+    !userData.some((profile) => profile.auth_id === user?.sub)
+  ) {
+    navigate('/complete-profile')
+  } else if (
     isAuthenticated &&
     userData.some(
       (profile) => profile.auth_id === user?.sub && profile.family_id !== null
