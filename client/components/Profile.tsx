@@ -1,10 +1,12 @@
-import { getUser } from '../apis/userApi'
-import { useParams } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
+import { deleteUser, getUser } from '../apis/userApi'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
+import { useAuth0 } from '@auth0/auth0-react'
 
 export default function Profile() {
   const { id } = useParams()
+  const navigate = useNavigate()
   const {
     data: userData,
     isError,
@@ -13,6 +15,18 @@ export default function Profile() {
     queryKey: ['user', id],
     queryFn: () => getUser(id as unknown as number),
   })
+  const queryClient = useQueryClient()
+  const deleteProfileMutation = useMutation({
+    mutationFn: () => deleteUser(Number(id)),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['users'] })
+    },
+  })
+
+  async function handleDeleteClick() {
+    await deleteProfileMutation.mutate()
+    navigate('/login')
+  }
 
   if (isError) {
     return <div>There was an error finding your profile</div>
@@ -22,15 +36,15 @@ export default function Profile() {
     return <p>Profile is loading...</p>
   }
 
-  const user = userData
+  const profile = userData
 
   return (
     <>
-      <h1>{user.name}</h1>
-      <img src={user.picture} alt={user.name} />
-      <h2>Family - {user.familyName}</h2>
+      <h1>{profile.name}</h1>
+      <img src={profile.picture} alt={profile.name} />
+      <h2>Family - {profile.familyName}</h2>
       <button>Edit</button>
-      <button>Delete Profile</button>
+      <button onClick={() => handleDeleteClick()}>Delete Profile</button>
     </>
   )
 }
