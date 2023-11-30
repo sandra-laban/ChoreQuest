@@ -71,10 +71,9 @@
     "vitest": "^0.34.4"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^2.2.3",
     "express": "^4.17.2",
     "knex": "^2.5.1",
-    "luxon": "^3.4.4",
-    "react-datepicker": "^4.23.0",
     "sqlite3": "^5.1.6",
     "superagent": "7.1.1"
   },

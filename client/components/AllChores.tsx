@@ -18,6 +18,7 @@ const ChoreList = () => {
     return <p>Loading chores...</p>
   }
   console.log(chores)
+  // const choreDate = DateTime.fromMillis(chore.created)
   return (
     <>
       <div className="container px-4 mx-auto">
