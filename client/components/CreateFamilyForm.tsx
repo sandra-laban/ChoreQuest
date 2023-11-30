@@ -5,6 +5,7 @@ import { createFamily } from '../apis/Family'
 const emptyForm = {
   name: '',
   password: '',
+  image: null,
 }
 
 const CreateFamilyForm = () => {
@@ -12,11 +13,19 @@ const CreateFamilyForm = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
-    const { name, value } = e.target
-    setFamilyForm((prevForm) => ({
-      ...prevForm,
-      [name]: value,
-    }))
+    const { name, value, files } = e.target
+    if (name === 'familyImg' && files) {
+      setFamilyForm((prevForm) => ({
+        ...prevForm,
+        image: files[0],
+      }))
+    } else {
+      // Handle other inputs
+      setFamilyForm((prevForm) => ({
+        ...prevForm,
+        [name]: value,
+      }))
+    }
   }
 
   const formSubmit = async (e: React.FormEvent) => {
@@ -45,7 +54,49 @@ const CreateFamilyForm = () => {
           id="password"
           value={familyFrom.password}
           onChange={handleChange}
-        ></input>
+        />
+
+        {familyFrom.image === null ? (
+          <>
+            <label htmlFor="familyImg">Upload an image</label>
+            <input
+              type="file"
+              className="familyImg"
+              name="familyImg"
+              id="familyImg"
+              onChange={handleChange}
+            />
+          </>
+        ) : (
+          <div style={{ position: 'relative', display: 'inline-block' }}>
+            <img
+              className="previewImage"
+              src={URL.createObjectURL(familyFrom.image)}
+              alt="Preview"
+            />
+            <button
+              className="removeImageButton"
+              style={{
+                position: 'absolute',
+                top: 10,
+                right: -10,
+                backgroundColor: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                color: 'red',
+              }}
+              onClick={(e) => {
+                e.preventDefault()
+                setFamilyForm((prevForm) => ({
+                  ...prevForm,
+                  image: null,
+                }))
+              }}
+            >
+              ✖
+            </button>
+          </div>
+        )}
 
         <button onClick={formSubmit}>Create your family</button>
       </form>
