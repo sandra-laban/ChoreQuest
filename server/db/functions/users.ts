@@ -9,10 +9,10 @@ export async function fetchAllUsers(): Promise<User[]> {
   return users
 }
 
-export async function fetchUser(id: number): Promise<CompleteUser> {
+export async function fetchUser(authid: string): Promise<CompleteUser> {
   const user = await db('users')
     .join('family', 'family.id', 'users.family_id')
-    .where('users.id', id)
+    .where('auth_id', authid)
     .select(
       'users.id',
       'auth_id as authId',

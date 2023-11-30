@@ -6,14 +6,21 @@ import {
   removeUser,
   updateUser,
 } from '../db/functions/users'
+import { auth } from 'express-oauth2-jwt-bearer'
 
 const router = express.Router()
 
-router.get('/:id', async (req, res) => {
+const jwtCheck = auth({
+  audience: 'https://chorequest/api',
+  issuerBaseURL: 'https://manaia-2023-pete.au.auth0.com/',
+  tokenSigningAlg: 'RS256',
+})
+
+router.get('/', jwtCheck, async (req, res) => {
   try {
-    console.log('route', req.params.id)
-    const id = Number(req.params.id)
-    const user = await fetchUser(id)
+    const authId = req.auth?.payload.sub as string
+    console.log('route', authId)
+    const user = await fetchUser(authId)
     res.json(user)
   } catch (err) {
     res.status(500).json({

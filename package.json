@@ -72,6 +72,7 @@
   "dependencies": {
     "@auth0/auth0-react": "^2.2.3",
     "express": "^4.17.2",
+    "express-oauth2-jwt-bearer": "^1.6.0",
     "knex": "^2.5.1",
     "luxon": "^3.4.4",
     "sqlite3": "^5.1.6",

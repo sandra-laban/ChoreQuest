@@ -8,9 +8,11 @@ export async function getAllUsers(): Promise<User[]> {
   return response.body
 }
 
-export async function getUser(userId: number): Promise<CompleteUser> {
-  console.log('api', userId)
-  const response = await request.get(`${usersUrl}/${userId}`)
+export async function getUser(token: string): Promise<CompleteUser> {
+  console.log('api', token)
+  const response = await request
+    .get(`${usersUrl}`)
+    .set('Authorization', `Bearer ${token}`)
   return response.body
 }
 
