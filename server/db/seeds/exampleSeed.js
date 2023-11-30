@@ -82,7 +82,7 @@ async function seedUsers(trx) {
     {
       name: 'Ruby',
       is_parent: true,
-      family_id: 1,
+      family_id: null,
       auth_id: '333',
       points: 0,
     },

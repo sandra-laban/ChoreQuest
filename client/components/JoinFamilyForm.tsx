@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import '../styles/CreateFamilyForm.css'
-import { createFamily } from '../apis/Family'
+import { joinFamily } from '../apis/Family'
 
 const emptyForm = {
   name: '',
   password: '',
 }
 
-const CreateFamilyForm = () => {
-  const [familyFrom, setFamilyForm] = useState(emptyForm)
+const JoinFamilyForm = () => {
+  const [familyForm, setFamilyForm] = useState(emptyForm)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
@@ -21,20 +21,20 @@ const CreateFamilyForm = () => {
 
   const formSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    await createFamily(familyFrom)
+    await joinFamily(familyForm) 
     setFamilyForm(emptyForm)
   }
 
   return (
     <>
       <form className="CreateFamilyFrom">
-        <h2>Create Family</h2>
+        <h2>Join Family</h2>
         <label htmlFor="name">Family Name</label>
         <input
           type="text"
           name="name"
           id="name"
-          value={familyFrom.name}
+          value={familyForm.name}
           onChange={handleChange}
         />
 
@@ -43,14 +43,14 @@ const CreateFamilyForm = () => {
           type="password"
           name="password"
           id="password"
-          value={familyFrom.password}
+          value={familyForm.password}
           onChange={handleChange}
-        ></input>
+        />
 
-        <button onClick={formSubmit}>Create your family</button>
+        <button onClick={formSubmit}>Join the family</button>
       </form>
     </>
   )
 }
 
-export default CreateFamilyForm
+export default JoinFamilyForm
