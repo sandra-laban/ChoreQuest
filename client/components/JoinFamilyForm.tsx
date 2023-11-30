@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import '../styles/CreateFamilyForm.css'
 import { joinFamily } from '../apis/Family'
+import { useAuth0 } from '@auth0/auth0-react'
+import { useNavigate } from 'react-router-dom'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 const emptyForm = {
   name: '',
@@ -9,6 +12,8 @@ const emptyForm = {
 
 const JoinFamilyForm = () => {
   const [familyForm, setFamilyForm] = useState(emptyForm)
+  const { getAccessTokenSilently } = useAuth0()
+  const navigate = useNavigate()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
@@ -21,9 +26,18 @@ const JoinFamilyForm = () => {
 
   const formSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    await joinFamily(familyForm) 
-    setFamilyForm(emptyForm)
+    joinFamilyMutation.mutate()
   }
+
+  const joinFamilyMutation = useMutation({
+    mutationFn: async () => {
+      const accessToken = await getAccessTokenSilently()
+      await joinFamily(familyForm, accessToken)
+    },
+    onSuccess: () => {
+      navigate('/')
+    },
+  })
 
   return (
     <>

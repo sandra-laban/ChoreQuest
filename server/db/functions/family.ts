@@ -6,7 +6,7 @@ import path from 'path'
 export async function createFamily(
   familyData: FamilyFormData,
   image: File | null | any,
-  auth_id: number
+  auth_id: string
 ) {
   const allowedExtensions = ['.png']
   const fileExtension = path.extname(image.originalname).toLowerCase()
@@ -16,7 +16,7 @@ export async function createFamily(
     const [familyId] = await trx('family').insert(familyData)
 
     if (!familyId) {
-      throw new Error('Could not find your family')
+      throw new Error('Could not create your family')
     }
 
     const makeUserParent = await trx('users')
@@ -58,23 +58,31 @@ export async function createFamily(
   }
 }
 
-export async function joinFamily(familyData: FamilyFormData, auth_id: number) {
-  const [family] = await db('family').where({
-    name: familyData.name,
-    password: familyData.password,
-  })
+export async function joinFamily(familyData: FamilyFormData, auth_id: string) {
+  const trx = await db.transaction()
+  try {
+    const [family] = await trx('family').where({
+      name: familyData.name,
+      password: familyData.password,
+    })
 
-  if (!family) {
-    throw new Error('Could not find your family')
+    if (!family) {
+      throw new Error('Could not find your family')
+    }
+
+    const joinedFamily = await trx('users')
+      .where({ auth_id })
+      .update({ family_id: family.id, is_parent: false })
+
+    if (joinedFamily !== 1) {
+      throw new Error('Failed to update user record')
+    }
+
+    trx.commit()
+    return { success: true, message: 'Successfully joined the family' }
+  } catch (error) {
+    await trx.rollback()
+    console.error('Error creating family:', error)
+    throw error
   }
-
-  const joinedFamily = await db('users')
-    .where({ auth_id })
-    .update({ family_id: family.id })
-
-  if (joinedFamily !== 1) {
-    throw new Error('Failed to update user record')
-  }
-
-  return { success: true, message: 'Successfully joined the family' }
 }

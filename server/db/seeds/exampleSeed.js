@@ -45,7 +45,13 @@ async function seedChoreList(trx) {
 
 async function seedFamily(trx) {
   await trx('family').del()
-  await trx('family').insert([{ name: 'Hayward', password: 'password' }])
+  await trx('family').insert([
+    {
+      name: 'Hayward',
+      password: 'password',
+      picture: '/images/familyIcons/4.png',
+    },
+  ])
 }
 
 async function seedPrizes(trx) {
