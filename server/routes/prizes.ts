@@ -13,3 +13,5 @@ router.get('/', async (req, res) => {
     res.sendStatus(500).json({ message: 'Unable to get prizes' })
   }
 })
+
+export default router

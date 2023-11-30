@@ -1,14 +1,8 @@
 import { Prizes } from '../../../models/prizes'
 import db from '../connection'
 
-export function getAllPrizes(): Promise<Prizes[]> {
-  return db('prizes').select([
-    'id',
-    'name',
-    'family_id as familyId',
-    'definition',
-    'price',
-    'quantity',
-  ])
+export async function getAllPrizes(): Promise<Prizes[]> {
+  const prizes = await db('prizes').select('*')
+  return prizes
   // .where('family_id', familyId)
 }
