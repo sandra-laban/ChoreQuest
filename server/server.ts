@@ -1,9 +1,13 @@
 import express from 'express'
 import * as Path from 'node:path'
 
+import choresRoutes from './routes/chores'
+
 const server = express()
 
 server.use(express.json())
+
+server.use('/api/v1/chores', choresRoutes)
 
 if (process.env.NODE_ENV === 'production') {
   server.use(express.static(Path.resolve('public')))
