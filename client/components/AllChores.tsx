@@ -26,8 +26,7 @@ const ChoreList = () => {
             key={chore.id}
           >
             <li>
-              <h2>Chore: {chore.name}</h2>
-              <p>Description: chore description</p>
+              <h2>Chore name: {chore.name}</h2>
               <p>Points: {chore.points}</p>
               <p>Created: {chore.created}</p>
             </li>
