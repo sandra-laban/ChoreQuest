@@ -28,7 +28,10 @@ const ChoreList = () => {
             <li>
               <h2>Chore name: {chore.name}</h2>
               <p>Points: {chore.points}</p>
-              <p>Created: {DateTime.fromMillis(chore.created).toISODate()}</p>
+              <p>
+                Created:{' '}
+                {DateTime.fromMillis(Number(chore.created)).toISODate()}
+              </p>
             </li>
           </ul>
         ))}

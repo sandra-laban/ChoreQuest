@@ -17,7 +17,7 @@ const CreateFamilyForm = () => {
     if (name === 'familyImg' && files) {
       setFamilyForm((prevForm) => ({
         ...prevForm,
-        image: files[0],
+        image: files[0] as any,
       }))
     } else {
       // Handle other inputs
