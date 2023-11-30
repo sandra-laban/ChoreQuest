@@ -1,9 +1,7 @@
 import request from 'superagent'
-import type { Chore } from '../../models/chores.ts'
-
-const choreUrl = '/api/v1/chores'
+import { Chore } from '../../models/chores.ts'
 
 export async function getAllChores(): Promise<Chore[]> {
-  const response = await request.get(choreUrl)
+  const response = await request.get('/api/v1/chores')
   return response.body
 }
