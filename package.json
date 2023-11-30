@@ -71,6 +71,7 @@
     "vitest": "^0.34.4"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^2.2.3",
     "express": "^4.17.2",
     "knex": "^2.5.1",
     "multer": "^1.4.5-lts.1",
