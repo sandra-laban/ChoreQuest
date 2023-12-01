@@ -7,7 +7,6 @@ const usersUrl = '/api/v1/user'
 export async function getUser(
   token: string
 ): Promise<{ profile?: CompleteUser; message?: string }> {
-  console.log('api', token)
   const response = await request
     .get('/api/v1/user')
     .set('Authorization', `Bearer ${token}`)
@@ -28,7 +27,6 @@ export async function completeProfile(
     name: newUser.username,
     picture: newUser.picture,
   }
-  console.log(localUser)
   const finalUser = await request.post('/api/v1/user').send(localUser)
 
   return finalUser.body
@@ -43,7 +41,6 @@ export async function updateProfile(
     name: newUser.username,
     picture: newUser.picture,
   }
-  console.log(updatedUser)
   const finalUser = await request.patch('/api/v1/user').send(updatedUser)
 
   return finalUser.body

@@ -22,7 +22,6 @@ const ChoreList = () => {
   if (isLoading || !chores) {
     return <p>Loading chores...</p>
   }
-  console.log(chores)
   //const choreDate = DateTime.fromMillis(chore.created)
   return (
     <>
