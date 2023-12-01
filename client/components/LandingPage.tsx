@@ -24,7 +24,7 @@ function LandingPage() {
         <img
           src="images/chorequest.png"
           alt="ChoreQuest Logo"
-          className="mx-auto w-1/3"
+          className="mx-auto w-1/3 flex flex-col items-center justify-center"
         />
         <div className="text-center">
           <button className="btn-primary" onClick={() => loginWithRedirect()}>
