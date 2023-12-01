@@ -10,6 +10,12 @@ const ChoreList = () => {
     isLoading,
   } = useQuery({ queryKey: ['chores'], queryFn: getAllChores })
 
+  async function deleteChore(id: number) {
+    await fetch(`/api/v1/chores/${id}`, {
+      method: 'DELETE',
+    })
+    window.location.reload()
+  }
   if (isError) {
     return <p>There was an error trying to load the chores!</p>
   }
@@ -37,6 +43,12 @@ const ChoreList = () => {
                     ? DateTime.fromMillis(chore.created).toISODate()
                     : DateTime.fromISO(chore.created).toISODate()}
                 </p>
+                <button
+                  onClick={() => deleteChore(chore.id)}
+                  className="btn-primary hover:bg-red-500 bg-red-400 mb-12 items-center justify-center"
+                >
+                  Delete
+                </button>
               </li>
             </ul>
           ))}

@@ -14,3 +14,7 @@ export async function addChore({
   const chore = { name, points, created }
   await request.post('/api/v1/chores').send({ chore })
 }
+
+export async function deleteChore(id: number): Promise<void> {
+  await request.delete(`/api/v1/chores/${id}`)
+}

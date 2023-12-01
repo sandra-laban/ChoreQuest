@@ -11,3 +11,7 @@ export async function addChore(chore: ChoreData): Promise<Chore> {
     .insert(chore)
     .returning(['id', 'name', 'points', 'created'])
 }
+
+export async function deleteChore(id: number) {
+  return connection('chores').where('id', id).del()
+}

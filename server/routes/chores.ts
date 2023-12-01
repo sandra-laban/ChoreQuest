@@ -31,4 +31,16 @@ router.post('/', async (req, res) => {
   }
 })
 
+// DELETE /api/v1/chores/:id
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params
+  const idNumber = Number(id)
+  try {
+    await db.deleteChore(idNumber)
+    res.sendStatus(204)
+  } catch (err) {
+    res.status(500).json({ err })
+  }
+})
+
 export default router
