@@ -18,7 +18,6 @@ function CompleteProfile() {
   const navigate = useNavigate()
   const { user, getAccessTokenSilently } = useAuth0()
   const queryClient = useQueryClient()
-  console.log(user)
 
   const accessTokenPromise = getAccessTokenSilently()
 
@@ -80,7 +79,6 @@ function CompleteProfile() {
   ]
 
   if (profile) {
-    console.log('happy days')
     navigate('/')
   }
 

@@ -35,7 +35,7 @@ export default function Profile() {
     return <div>{message}</div>
   }
 
-  const profile = data.profile
+  const profile = data?.profile
 
   if (profile && !profile.family_id) {
     return <FamilyPage />

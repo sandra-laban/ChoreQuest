@@ -19,11 +19,7 @@ const AddChore = () => {
   const addChoreMutation = useMutation({
     mutationFn: addChore,
     onSuccess: () => {
-      try {
-        queryClient.invalidateQueries(['chores'])
-      } catch (err) {
-        console.log(err)
-      }
+      queryClient.invalidateQueries({ queryKey: ['chores'] })
     },
   })
   function handleChange(

@@ -35,7 +35,7 @@ const JoinFamilyForm = () => {
       await joinFamily(familyForm, accessToken)
     },
     onSuccess: () => {
-      navigate('/')
+      // navigate('/')
     },
   })
 

@@ -7,7 +7,6 @@ function LandingPage() {
   const { user, isAuthenticated, loginWithRedirect, getAccessTokenSilently } =
     useAuth0()
   const navigate = useNavigate()
-  console.log(user)
 
   const accessTokenPromise = getAccessTokenSilently()
 
