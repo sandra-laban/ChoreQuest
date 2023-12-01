@@ -4,3 +4,8 @@ export interface Chore {
   points: number
   created: Date
 }
+export interface ChoreData {
+  name: string
+  points: number
+  created: Date
+}
