@@ -10,7 +10,7 @@ export default function AllPrizes() {
   if (isError) {
     return <div>There was an error getting your prizes</div>
   }
-  if (isLoading) {
+  if (isLoading || !allPrizes) {
     return <div>Loading your prizes...</div>
   }
   return (
