@@ -8,7 +8,6 @@ const ChoreList = () => {
     isError,
     isLoading,
   } = useQuery({ queryKey: ['chores'], queryFn: getAllChores })
-  console.log(chores)
 
   if (isError) {
     return <p>There was an error trying to load the chores!</p>
@@ -16,8 +15,7 @@ const ChoreList = () => {
   if (isLoading || !chores) {
     return <p>Loading chores...</p>
   }
-  console.log(chores)
-  // const choreDate = DateTime.fromMillis(chore.created)
+
   return (
     <>
       <h1> All Chores</h1>
@@ -30,7 +28,10 @@ const ChoreList = () => {
             <li>
               <h2>Chore name: {chore.name}</h2>
               <p>Points: {chore.points}</p>
-              <p>Created: {DateTime.fromMillis(chore.created).toISODate()}</p>
+              <p>
+                Created:{' '}
+                {DateTime.fromMillis(Number(chore.created)).toISODate()}
+              </p>
             </li>
           </ul>
         ))}

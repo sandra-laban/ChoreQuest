@@ -51,7 +51,6 @@ function CompleteProfile() {
       ...prevForm,
       picture: selectedImage.url,
     }))
-    console.log(form)
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {

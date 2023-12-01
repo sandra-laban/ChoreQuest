@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "paths": {
+      "@/*": ["./client/*"],
+      "@models/*": ["./models/*"]
+    },
     "types": ["vite/client"],
     "target": "es2020", 
     "jsx": "react-jsx",

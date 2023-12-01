@@ -18,7 +18,6 @@ function EditProfileForm() {
   const navigate = useNavigate()
   const { user } = useAuth0()
   const queryClient = useQueryClient()
-  console.log(user)
   const updateProfileMutation = useMutation({
     mutationFn: () => updateProfile(user?.sub as string, form),
     onSuccess: () => {
