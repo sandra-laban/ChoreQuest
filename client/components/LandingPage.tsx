@@ -69,8 +69,18 @@ function LandingPage() {
         ) : null}
         {registered && !joinedFamily ? (
           <div className="flex justify-center">
-            <button className="btn-primary mx-8">Join Family</button>
-            <button className="btn-primary mx-8">Create Family</button>
+            <button
+              className="btn-primary mx-8"
+              onClick={() => navigate('/family/join')}
+            >
+              Join Family
+            </button>
+            <button
+              className="btn-primary mx-8"
+              onClick={() => navigate('/family/create')}
+            >
+              Create Family
+            </button>
           </div>
         ) : null}
       </div>

@@ -9,7 +9,6 @@ const ChoreList = () => {
     isError,
     isLoading,
   } = useQuery({ queryKey: ['chores'], queryFn: getAllChores })
-  console.log(chores)
 
   if (isError) {
     return <p>There was an error trying to load the chores!</p>

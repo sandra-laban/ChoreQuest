@@ -3,6 +3,7 @@ import * as Path from 'node:path'
 
 import choresRoutes from './routes/chores'
 import usersRoutes from './routes/users'
+import familyRoutes from './routes/family'
 
 const server = express()
 
@@ -10,6 +11,7 @@ server.use(express.json())
 
 server.use('/api/v1/chores', choresRoutes)
 server.use('/api/v1/users', usersRoutes)
+server.use('/api/v1/family', familyRoutes)
 
 if (process.env.NODE_ENV === 'production') {
   server.use(express.static(Path.resolve('public')))

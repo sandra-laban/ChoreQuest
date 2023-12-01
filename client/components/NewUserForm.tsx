@@ -19,7 +19,7 @@ function CompleteProfile() {
   const navigate = useNavigate()
   const { user } = useAuth0()
   const queryClient = useQueryClient()
-  console.log(user)
+  
   const completeProfileMutation = useMutation({
     mutationFn: () => completeProfile(user?.sub as string, form),
     onSuccess: () => {
@@ -53,7 +53,6 @@ function CompleteProfile() {
       ...prevForm,
       picture: selectedImage.url,
     }))
-    console.log(form)
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
