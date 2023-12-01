@@ -8,6 +8,7 @@ import EditProfileForm from './components/EditProfileForm'
 import CreateFamilyForm from './components/CreateFamilyForm'
 import JoinFamilyForm from './components/JoinFamilyForm'
 import HomePage from './components/HomePage'
+import AllPrizes from './components/AllPrizes'
 
 export const routes = createRoutesFromElements(
   <Route path="/" element={<App />}>
@@ -19,5 +20,6 @@ export const routes = createRoutesFromElements(
     <Route path="/profile/:id/edit" element={<EditProfileForm />} />
     <Route path="/family/create" element={<CreateFamilyForm />} />
     <Route path="/family/join" element={<JoinFamilyForm />} />
+    <Route path="/prizes" element={<AllPrizes />} />
   </Route>
 )
