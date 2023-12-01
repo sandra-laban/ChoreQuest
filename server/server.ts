@@ -2,7 +2,7 @@ import express from 'express'
 import * as Path from 'node:path'
 
 import choresRoutes from './routes/chores'
-import usersRoutes from './routes/users'
+import usersRoutes from './routes/user'
 import familyRoutes from './routes/family'
 import prizesRoutes from './routes/prizes'
 
@@ -11,7 +11,7 @@ const server = express()
 server.use(express.json())
 
 server.use('/api/v1/chores', choresRoutes)
-server.use('/api/v1/users', usersRoutes)
+server.use('/api/v1/user', usersRoutes)
 server.use('/api/v1/family', familyRoutes)
 server.use('/api/v1/prizes', prizesRoutes)
 
