@@ -1,30 +1,21 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import { useQuery } from '@tanstack/react-query'
-import { getUser } from '../apis/userApi'
 import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 
 function LandingPage() {
-  const { user, isAuthenticated, loginWithRedirect, getAccessTokenSilently } =
-    useAuth0()
+  const { isAuthenticated, loginWithRedirect, isLoading } = useAuth0()
   const navigate = useNavigate()
 
-  const accessTokenPromise = getAccessTokenSilently()
+  useEffect(() => {
+    if (!isLoading) {
+      if (isAuthenticated) {
+        navigate('/profile')
+      }
+    }
+  }, [isLoading, isAuthenticated, navigate])
 
-  const { data, isPending, error } = useQuery({
-    queryKey: ['profile'],
-
-    queryFn: async () => {
-      const token = await accessTokenPromise
-      return await getUser(token)
-    },
-  })
-
-  if (isPending) {
-    return <p>Profile is loading...</p>
-  }
-
-  if (error) {
-    console.error('Error fetching user:', error.message)
+  if (isLoading) {
+    return <p>Loading...</p>
   }
 
   if (!isAuthenticated) {
@@ -42,7 +33,9 @@ function LandingPage() {
         </div>
       </>
     )
-  } else navigate('/profile')
+  }
+
+  return null
 }
 
 export default LandingPage

@@ -4,13 +4,18 @@ import connection from './../connection'
 
 const db = connection
 
-export async function fetchAllUsers(): Promise<User[]> {
-  const users = await db('users').select('*')
-  return users
-}
 
 export async function fetchUser(authid: string): Promise<CompleteUser> {
   const user = await db('users').where('auth_id', authid).select('*').first()
+  if (user) {
+    if (user.family_id !== null) {
+      const family = await db('family')
+        .where('id', user.family_id)
+        .select('*')
+        .first()
+      user.family = family
+    }
+  }
 
   console.log('db', user)
   return user
