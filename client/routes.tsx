@@ -11,7 +11,7 @@ export const routes = createRoutesFromElements(
     <Route index element={<LandingPage />} />
     <Route path="/chores" element={<ChoreList />} />
     <Route path="/complete-profile" element={<NewUserForm />} />
-    <Route path="/profile/:id" element={<Profile />} />
+    <Route path="/profile" element={<Profile />} />
     <Route path="/profile/:id/edit" element={<EditProfileForm />} />
   </Route>
 )

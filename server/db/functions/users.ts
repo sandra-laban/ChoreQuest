@@ -10,20 +10,8 @@ export async function fetchAllUsers(): Promise<User[]> {
 }
 
 export async function fetchUser(authid: string): Promise<CompleteUser> {
-  const user = await db('users')
-    .join('family', 'family.id', 'users.family_id')
-    .where('auth_id', authid)
-    .select(
-      'users.id',
-      'auth_id as authId',
-      'users.name as name',
-      'picture',
-      'points',
-      'is_parent as isParent',
-      'family_id as familyId',
-      'family.name as familyName'
-    )
-    .first()
+  const user = await db('users').where('auth_id', authid).select('*').first()
+
   console.log('db', user)
   return user
 }
@@ -34,7 +22,7 @@ export async function removeUser(id: number): Promise<any> {
 }
 
 export async function addUser(newUser: UserForm): Promise<User[]> {
-  const user = await db('users').insert(newUser).returning('*')
+  const [user] = await db('users').insert(newUser).returning('*')
 
   return user
 }

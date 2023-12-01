@@ -20,33 +20,29 @@ router.get('/', jwtCheck, async (req, res) => {
   try {
     const authId = req.auth?.payload.sub as string
     console.log('route', authId)
-    const user = await fetchUser(authId)
-    res.json(user)
+    console.log('happy')
+
+    const profile = await fetchUser(authId)
+
+
+    if (!profile) {
+      res.json({ message: 'Need to create profile' })
+    } else {
+      res.json({ profile })
+    }
   } catch (err) {
     res.status(500).json({
-      message: 'an error occurred',
-      error: err instanceof Error ? err.message : 'Unknown error',
+      message: err instanceof Error ? err.message : 'Unknown error',
     })
   }
 })
 
-router.get('/', async (req, res) => {
-  try {
-    const users = await fetchAllUsers()
-    res.status(200).json(users)
-  } catch (err) {
-    res.status(500).json({
-      message: 'an error occurred',
-      error: err instanceof Error ? err.message : 'Unknown error',
-    })
-  }
-})
 
 router.post('/', async (req, res) => {
   try {
     const newUser = req.body
-    const user = await addUser(newUser)
-    res.json({ user })
+    const profile = await addUser(newUser)
+    res.json({ profile })
   } catch (err) {
     res.status(500).json({
       message: 'an error occurred',
