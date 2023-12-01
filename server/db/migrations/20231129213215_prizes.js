@@ -7,7 +7,7 @@ export async function up(knex) {
     table.integer('price')
     table.integer('quantity')
     // table.foreign('id').references('users.family_id').onDelete('cascade')
-    // table.foreign('id').references('jobs.family_id').onDelete('cascade')
+    // table.foreign('id').references('chores.family_id').onDelete('cascade')
   })
 }
 
