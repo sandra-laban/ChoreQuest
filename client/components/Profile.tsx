@@ -40,12 +40,12 @@ export default function Profile() {
   if (profile && !profile.family_id) {
     return (
       <>
-        <img
-          src="images/chorequest.png"
-          alt="ChoreQuest Logo"
-          className="mx-auto w-1/3"
-        />
         <div className="flex flex-col justify-center items-center h-screen">
+          <img
+            src="images/chorequest.png"
+            alt="ChoreQuest Logo"
+            className="mx-auto w-1/3"
+          />
           {profile && profile.family_id === null ? (
             <div className="flex justify-center">
               <button className="btn-primary mx-8">Join Family</button>
