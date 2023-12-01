@@ -20,10 +20,6 @@ export default function Profile() {
   })
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/home')
-      return
-    }
     if (data?.message === 'Need to create profile') {
       navigate('/complete-profile')
       return
@@ -46,13 +42,23 @@ export default function Profile() {
   } else if (profile && profile.family_id) {
     return (
       <>
-        <h1>{profile.name}</h1>
-        <img src={profile.picture} alt={profile.name} />
-        <h2>Family - {profile.familyName}</h2>
-        <button onClick={() => navigate(`/profile/${Number(profile.id)}/edit`)}>
-          Edit
-        </button>
-        {/* <button onClick={() => handleDeleteClick()}>Delete Profile</button> */}
+        <div className="flex flex-col items-center h-screen">
+          <img
+            src="images/chorequest.png"
+            alt="ChoreQuest Logo"
+            className="mx-auto w-1/3"
+          />
+          <h1>{profile.name}</h1>
+          <img src={profile.picture} alt={profile.name} />
+          <h2>Family - {profile.familyName}</h2>
+          <div className="flex justify-center">
+            <button
+              onClick={() => navigate(`/profile/${Number(profile.id)}/edit`)}
+            >
+              Edit
+            </button>
+          </div>
+        </div>
       </>
     )
   }
