@@ -51,13 +51,6 @@ export default function Profile() {
           <h1>{profile.name}</h1>
           <img src={profile.picture} alt={profile.name} />
           <h2>Family - {profile.familyName}</h2>
-          <div className="flex justify-center">
-            <button
-              onClick={() => navigate(`/profile/${Number(profile.id)}/edit`)}
-            >
-              Edit
-            </button>
-          </div>
         </div>
       </>
     )

@@ -38,7 +38,12 @@ function CompleteProfile() {
       navigate('/')
     },
   })
-
+  if (isPending) {
+    return <p>Profile is loading...</p>
+  }
+  if (error) {
+    return <h1>oh no you got problems</h1>
+  }
   function handleChange(
     event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
   ) {
