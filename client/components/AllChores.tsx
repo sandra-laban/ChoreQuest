@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { getAllChores } from '../apis/chores'
 import { DateTime } from 'luxon'
+import { useNavigate } from 'react-router-dom'
 
 const ChoreList = () => {
   const {
@@ -9,11 +10,15 @@ const ChoreList = () => {
     isLoading,
   } = useQuery({ queryKey: ['chores'], queryFn: getAllChores })
 
+  const navigate = useNavigate()
   if (isError) {
     return <p>There was an error trying to load the chores!</p>
   }
   if (isLoading || !chores) {
     return <p>Loading chores...</p>
+  }
+  function handleClick() {
+    navigate('/prizes/add')
   }
 
   return (
@@ -36,6 +41,7 @@ const ChoreList = () => {
           </ul>
         ))}
       </div>
+      <button onClick={handleClick}>Add a Prize!</button>
     </>
   )
 }
