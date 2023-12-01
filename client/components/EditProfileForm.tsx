@@ -51,7 +51,6 @@ function EditProfileForm() {
       ...prevForm,
       picture: selectedImage.url,
     }))
-    console.log(form)
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
