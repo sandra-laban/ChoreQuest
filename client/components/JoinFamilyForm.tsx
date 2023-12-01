@@ -3,7 +3,7 @@ import '../styles/CreateFamilyForm.css'
 import { joinFamily } from '../apis/Family'
 import { useAuth0 } from '@auth0/auth0-react'
 import { useNavigate } from 'react-router-dom'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 
 const emptyForm = {
   name: '',

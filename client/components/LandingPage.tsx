@@ -1,91 +1,49 @@
 import { useAuth0 } from '@auth0/auth0-react'
 import { useQuery } from '@tanstack/react-query'
-import { getAllUsers } from '../apis/userApi'
+import { getUser } from '../apis/userApi'
 import { useNavigate } from 'react-router-dom'
 
 function LandingPage() {
-  const { user, isAuthenticated, loginWithRedirect } = useAuth0()
+  const { user, isAuthenticated, loginWithRedirect, getAccessTokenSilently } =
+    useAuth0()
   const navigate = useNavigate()
-  let registered = false
-  let joinedFamily = false
-  const {
-    data: userData,
-    isError,
-    isLoading,
-  } = useQuery({
-    queryKey: ['users'],
-    queryFn: () => getAllUsers(),
-  })
-  if (isError) {
-    return <div>There was an error finding your profile</div>
-  }
+  console.log(user)
 
-  if (!userData || isLoading) {
+  const accessTokenPromise = getAccessTokenSilently()
+
+  const { data, isPending, error } = useQuery({
+    queryKey: ['profile'],
+
+    queryFn: async () => {
+      const token = await accessTokenPromise
+      return await getUser(token)
+    },
+  })
+
+  if (isPending) {
     return <p>Profile is loading...</p>
   }
 
-  if (isAuthenticated) {
-    registered = true
+  if (error) {
+    console.error('Error fetching user:', error.message)
   }
 
-  if (
-    isAuthenticated &&
-    userData.some(
-      (profile) => profile.auth_id === user?.sub && profile.family_id === null
-    )
-  ) {
-    joinedFamily = false
-  }
-
-  if (
-    isAuthenticated &&
-    !userData.some((profile) => profile.auth_id === user?.sub)
-  ) {
-    navigate('/complete-profile')
-  }
-  if (
-    isAuthenticated &&
-    userData.some(
-      (profile) => profile.auth_id === user?.sub && profile.family_id !== null
-    )
-  ) {
-    navigate('/home')
-  }
-
-  return (
-    <>
-      <div className="flex flex-col justify-center items-center h-screen">
+  if (!isAuthenticated) {
+    return (
+      <>
         <img
           src="images/chorequest.png"
           alt="ChoreQuest Logo"
           className="mx-auto w-1/3"
         />
-        {!registered ? (
-          <div className="text-center">
-            <button className="btn-primary" onClick={() => loginWithRedirect()}>
-              LOGIN / SIGN UP
-            </button>
-          </div>
-        ) : null}
-        {registered && !joinedFamily ? (
-          <div className="flex justify-center">
-            <button
-              className="btn-primary mx-8"
-              onClick={() => navigate('/family/join')}
-            >
-              Join Family
-            </button>
-            <button
-              className="btn-primary mx-8"
-              onClick={() => navigate('/family/create')}
-            >
-              Create Family
-            </button>
-          </div>
-        ) : null}
-      </div>
-    </>
-  )
+        <div className="text-center">
+          <button className="btn-primary" onClick={() => loginWithRedirect()}>
+            LOGIN / SIGN UP
+          </button>
+        </div>
+      </>
+    )
+  } else navigate('/profile')
 }
 
 export default LandingPage

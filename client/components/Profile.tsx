@@ -1,52 +1,65 @@
-import { deleteUser, getUser } from '../apis/userApi'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Link } from 'react-router-dom'
+import { getUser } from '../apis/userApi'
+import { useNavigate } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
 import { useAuth0 } from '@auth0/auth0-react'
+import { useEffect } from 'react'
+import FamilyPage from './FamilyPage'
 
 export default function Profile() {
-  const { id } = useParams()
+  const { getAccessTokenSilently, isAuthenticated } = useAuth0()
   const navigate = useNavigate()
-  const {
-    data: userData,
-    isError,
-    isLoading,
-  } = useQuery({
-    queryKey: ['user', id],
-    queryFn: () => getUser(Number(id)),
-  })
-  const queryClient = useQueryClient()
-  const deleteProfileMutation = useMutation({
-    mutationFn: () => deleteUser(Number(id)),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['users'] })
+
+  const accessTokenPromise = getAccessTokenSilently()
+
+  const { data, error, isPending } = useQuery({
+    queryKey: ['profile'],
+    queryFn: async () => {
+      const accessToken = await accessTokenPromise
+      return await getUser(accessToken)
     },
   })
 
-  async function handleDeleteClick() {
-    await deleteProfileMutation.mutate()
-    navigate('/')
-  }
+  useEffect(() => {
+    if (data?.message === 'Need to create profile') {
+      navigate('/complete-profile')
+      return
+    }
+  }, [isAuthenticated, data, navigate])
 
-  if (isError) {
-    return <div>There was an error finding your profile</div>
-  }
-
-  if (!userData || isLoading) {
+  if (isPending) {
     return <p>Profile is loading...</p>
   }
 
-  const profile = userData
+  if (error) {
+    const message = data?.message
+    return <div>{message}</div>
+  }
 
-  return (
-    <>
-      <h1>{profile.name}</h1>
-      <img src={profile.picture} alt={profile.name} />
-      <h2>Family - {profile.familyName}</h2>
-      <button onClick={() => navigate(`/profile/${Number(profile.id)}/edit`)}>
-        Edit
-      </button>
-      <button onClick={() => handleDeleteClick()}>Delete Profile</button>
-    </>
-  )
+  const profile = data.profile
+
+  if (profile && !profile.family_id) {
+    return <FamilyPage />
+  } else if (profile && profile.family_id) {
+    return (
+      <>
+        <div className="flex flex-col items-center h-screen">
+          <img
+            src="images/chorequest.png"
+            alt="ChoreQuest Logo"
+            className="mx-auto w-1/3"
+          />
+          <h1>{profile.name}</h1>
+          <img src={profile.picture} alt={profile.name} />
+          <h2>Family - {profile.familyName}</h2>
+          <div className="flex justify-center">
+            <button
+              onClick={() => navigate(`/profile/${Number(profile.id)}/edit`)}
+            >
+              Edit
+            </button>
+          </div>
+        </div>
+      </>
+    )
+  }
 }
