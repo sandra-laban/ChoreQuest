@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { useAuth0 } from '@auth0/auth0-react'
 import { useEffect } from 'react'
+import FamilyPage from './FamilyPage'
 
 export default function Profile() {
   const { getAccessTokenSilently, isAuthenticated } = useAuth0()
@@ -41,33 +42,7 @@ export default function Profile() {
   const profile = data.profile
 
   if (profile && !profile.family_id) {
-    return (
-      <>
-        <div className="flex flex-col justify-center items-center h-screen">
-          <img
-            src="images/chorequest.png"
-            alt="ChoreQuest Logo"
-            className="mx-auto w-1/3"
-          />
-          {profile && profile.family_id === null ? (
-            <div className="flex justify-center">
-              <button
-                className="btn-primary mx-8"
-                onClick={() => navigate('/family/join')}
-              >
-                Join Family
-              </button>
-              <button
-                className="btn-primary mx-8"
-                onClick={() => navigate('/family/create')}
-              >
-                Create Family
-              </button>
-            </div>
-          ) : null}
-        </div>
-      </>
-    )
+    return <FamilyPage />
   } else if (profile && profile.family_id) {
     return (
       <>

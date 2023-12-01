@@ -5,8 +5,7 @@ import ChoreList from './components/AllChores'
 import NewUserForm from './components/NewUserForm'
 import Profile from './components/Profile'
 import EditProfileForm from './components/EditProfileForm'
-import CreateFamilyForm from './components/CreateFamilyForm'
-import JoinFamilyForm from './components/JoinFamilyForm'
+import FamilyPage from './components/FamilyPage'
 import HomePage from './components/HomePage'
 import AllPrizes from './components/AllPrizes'
 
@@ -18,8 +17,7 @@ export const routes = createRoutesFromElements(
     <Route path="/complete-profile" element={<NewUserForm />} />
     <Route path="/profile" element={<Profile />} />
     <Route path="/profile/:id/edit" element={<EditProfileForm />} />
-    <Route path="/family/create" element={<CreateFamilyForm />} />
-    <Route path="/family/join" element={<JoinFamilyForm />} />
+    <Route path="/family" element={<FamilyPage />} />
     <Route path="/prizes" element={<AllPrizes />} />
   </Route>
 )
