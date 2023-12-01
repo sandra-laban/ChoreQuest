@@ -9,7 +9,7 @@ function LandingPage() {
   const navigate = useNavigate()
   console.log(user)
   const { data, isPending, error } = useQuery({
-    queryKey: ['user'],
+    queryKey: ['profile'],
 
     queryFn: async () => {
       const token = await getAccessTokenSilently()

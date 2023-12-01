@@ -1,40 +1,42 @@
-import { deleteUser, getUser } from '../apis/userApi'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Link } from 'react-router-dom'
+import { getUser } from '../apis/userApi'
+import { useNavigate } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
 import { useAuth0 } from '@auth0/auth0-react'
+import { useEffect } from 'react'
 
 export default function Profile() {
-  const { user, getAccessTokenSilently, isAuthenticated } = useAuth0()
+  const { getAccessTokenSilently, isAuthenticated } = useAuth0()
   const navigate = useNavigate()
   const { data, error, isPending } = useQuery({
-    queryKey: ['user'],
+    queryKey: ['profile'],
     queryFn: async () => {
       const accessToken = await getAccessTokenSilently()
       return await getUser(accessToken)
     },
   })
 
-  if (error) {
-    const message = data?.message
-    return <div>{message}</div>
-  }
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/home')
+      return
+    }
+    if (data?.message === 'Need to create profile') {
+      navigate('/complete-profile')
+      return
+    }
+  }, [isAuthenticated, data, navigate])
 
   if (isPending) {
     return <p>Profile is loading...</p>
   }
 
-  if (data?.message === 'Need to create profile') {
-    navigate('/complete-profile')
+  if (error) {
+    const message = data?.message
+    return <div>{message}</div>
   }
 
   const profile = data.profile
 
-  if (!isAuthenticated) {
-    navigate('/home')
-  }
-
-  console.log(profile)
   if (profile && !profile.family_id) {
     return (
       <>

@@ -30,7 +30,7 @@ function EditProfileForm() {
     data: allUsers,
     isError,
     isLoading,
-  } = useQuery({ queryKey: ['users'], queryFn: () => getAllUsers() })
+  } = useQuery({ queryKey: ['profile'], queryFn: () => getAllUsers() })
   if (isError) {
     return <div>There was an error getting all users...</div>
   }
