@@ -20,10 +20,12 @@ function CompleteProfile() {
   const queryClient = useQueryClient()
   console.log(user)
 
+  const accessTokenPromise = getAccessTokenSilently()
+
   const { data, error, isPending } = useQuery({
     queryKey: ['profile'],
     queryFn: async () => {
-      const accessToken = await getAccessTokenSilently()
+      const accessToken = await accessTokenPromise
       return await getUser(accessToken)
     },
   })

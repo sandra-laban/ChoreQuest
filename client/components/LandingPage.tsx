@@ -8,11 +8,14 @@ function LandingPage() {
     useAuth0()
   const navigate = useNavigate()
   console.log(user)
+
+  const accessTokenPromise = getAccessTokenSilently()
+
   const { data, isPending, error } = useQuery({
     queryKey: ['profile'],
 
     queryFn: async () => {
-      const token = await getAccessTokenSilently()
+      const token = await accessTokenPromise
       return await getUser(token)
     },
   })

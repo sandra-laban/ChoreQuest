@@ -2,7 +2,7 @@ import express from 'express'
 import * as Path from 'node:path'
 
 import choresRoutes from './routes/chores'
-import usersRoutes from './routes/users'
+import usersRoutes from './routes/user'
 import familyRoutes from './routes/family'
 import prizesRoutes from './routes/prizes'
 

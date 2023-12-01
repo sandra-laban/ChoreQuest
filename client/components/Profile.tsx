@@ -7,10 +7,13 @@ import { useEffect } from 'react'
 export default function Profile() {
   const { getAccessTokenSilently, isAuthenticated } = useAuth0()
   const navigate = useNavigate()
+
+  const accessTokenPromise = getAccessTokenSilently()
+
   const { data, error, isPending } = useQuery({
     queryKey: ['profile'],
     queryFn: async () => {
-      const accessToken = await getAccessTokenSilently()
+      const accessToken = await accessTokenPromise
       return await getUser(accessToken)
     },
   })
@@ -48,8 +51,18 @@ export default function Profile() {
           />
           {profile && profile.family_id === null ? (
             <div className="flex justify-center">
-              <button className="btn-primary mx-8">Join Family</button>
-              <button className="btn-primary mx-8">Create Family</button>
+              <button
+                className="btn-primary mx-8"
+                onClick={() => navigate('/family/join')}
+              >
+                Join Family
+              </button>
+              <button
+                className="btn-primary mx-8"
+                onClick={() => navigate('/family/create')}
+              >
+                Create Family
+              </button>
             </div>
           ) : null}
         </div>
