@@ -1,7 +1,6 @@
 import express from 'express'
 import {
   addUser,
-  fetchAllUsers,
   fetchUser,
   removeUser,
   updateUser,
