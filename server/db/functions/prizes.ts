@@ -1,7 +1,11 @@
 import { Prizes } from '../../../models/prizes'
 import db from '../connection'
 
-export async function getAllPrizes(familyId: number): Promise<Prizes[]> {
+export async function getAllPrizes(auth_id: string): Promise<Prizes[]> {
+  const familyId = await db('users')
+    .where('auth_id', auth_id)
+    .select('family_id')
+    .first()
   const prizes = await db('prizes').where('family_id', familyId).select('*')
   // .join('users', 'users.family_id', 'prizes.family_id')
   // .select(

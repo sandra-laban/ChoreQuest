@@ -15,7 +15,7 @@ export const routes = createRoutesFromElements(
     <Route path="/complete-profile" element={<NewUserForm />} />
     <Route path="/profile" element={<Profile />} />
     <Route path="/family" element={<FamilyPage />} />
-    <Route path="/prizes/:id" element={<AllPrizes />} />
-    <Route path="/prizes/add" element={<AddPrize />} />
+    <Route path="/prizes" element={<AllPrizes />} />
+    {/* <Route path="/prizes/add" element={<AddPrize />} /> */}
   </Route>
 )
