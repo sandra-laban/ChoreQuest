@@ -42,3 +42,21 @@ export async function updateUser(updatedUser: UpdateUserForm): Promise<User[]> {
 
   return user
 }
+
+export async function createParent(
+  authId: string,
+  childId: number
+): Promise<any> {
+  const authority = await db('users')
+    .where('auth_id', authId)
+    .select('is_parent')
+    .first()
+
+  const newParent = authority.is_parent
+    ? await db('users').where('id', childId).update({
+        is_parent: true,
+      })
+    : false
+  console.log('newParent', newParent)
+  return newParent
+}

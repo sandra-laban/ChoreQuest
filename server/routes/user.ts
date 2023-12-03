@@ -4,6 +4,7 @@ import {
   fetchUser,
   removeUser,
   updateUser,
+  createParent,
 } from '../db/functions/users'
 import { auth } from 'express-oauth2-jwt-bearer'
 
@@ -23,7 +24,6 @@ router.get('/', jwtCheck, async (req, res) => {
 
     const profile = await fetchUser(authId)
 
-
     if (!profile) {
       res.json({ message: 'Need to create profile' })
     } else {
@@ -36,6 +36,24 @@ router.get('/', jwtCheck, async (req, res) => {
   }
 })
 
+router.patch('/parentify', jwtCheck, async (req, res) => {
+  try {
+    const authId = req.auth?.payload.sub as string
+    const childId = req.body.childId
+
+    const newParent = await createParent(authId, childId)
+
+    if (!newParent) {
+      res.json({ message: 'Could not make parent' })
+    } else {
+      res.json({ newParent })
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: err instanceof Error ? err.message : 'Unknown error',
+    })
+  }
+})
 
 router.post('/', async (req, res) => {
   try {

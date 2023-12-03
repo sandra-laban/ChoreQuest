@@ -54,3 +54,14 @@ export async function updateProfile(
 
   return finalUser.body
 }
+
+export async function makeParent(
+  token: string,
+  childId: number
+): Promise<void> {
+  const response = await request
+    .patch('/api/v1/user/parentify')
+    .set('Authorization', `Bearer ${token}`)
+    .send({ childId })
+  return response.body
+}
