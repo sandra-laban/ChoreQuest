@@ -3,8 +3,8 @@ import { PrizeData, Prizes } from '../../models/prizes'
 
 const serverUrl = '/api/v1/prizes'
 // GET '/api/v1/prizes/:familyId
-export async function getAllPrizes(familyId: number): Promise<Prizes[]> {
-  const response = await request.get(`${serverUrl}/${familyId}`)
+export async function getAllPrizes(family: number): Promise<Prizes[]> {
+  const response = await request.get(`${serverUrl}/${family}`)
   return response.body
 }
 
