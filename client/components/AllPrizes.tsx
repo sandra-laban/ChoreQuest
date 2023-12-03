@@ -1,5 +1,6 @@
 import { getAllPrizes } from '../apis/prizes'
 import { useQuery } from '@tanstack/react-query'
+import { useAuth0 } from '@auth0/auth0-react'
 
 export default function AllPrizes() {
   const {
@@ -7,9 +8,14 @@ export default function AllPrizes() {
     isError,
     isLoading,
   } = useQuery({ queryKey: ['prizes'], queryFn: getAllPrizes })
+  const { user } = useAuth0()
+  console.log(user?.sub)
+  console.log(allPrizes)
+
   if (isError) {
     return <div>There was an error getting your prizes</div>
   }
+
   if (isLoading || !allPrizes) {
     return <div>Loading your prizes...</div>
   }
