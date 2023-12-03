@@ -46,9 +46,15 @@ function Home() {
     return (
       <div className="flex flex-col justify-center items-center">
         <h1>{`${profile.profile?.name}'s Family Status`}</h1>
-        {familyData?.map(
-          (member) =>
-            !member.is_parent && <HomeProfile member={member} key={member.id} />
+        {familyData?.some((member) => !member.is_parent) ? (
+          familyData?.map(
+            (member) =>
+              !member.is_parent && (
+                <HomeProfile member={member} key={member.id} />
+              )
+          )
+        ) : (
+          <h2>{`Go get some kids ${profile.profile?.name}!`} </h2>
         )}
       </div>
     )

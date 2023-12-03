@@ -3,10 +3,12 @@ import { useQuery } from '@tanstack/react-query'
 import { getFamilyMembers, getUser } from '../apis/userApi'
 import ManagementProfile from './ManagementProfile'
 import { getFamily } from '../apis/familyApi'
+import { useState } from 'react'
 
 function ManageFamily() {
   const { getAccessTokenSilently } = useAuth0()
   const accessTokenPromise = getAccessTokenSilently()
+  const [familyView, setFamilyView] = useState('View All')
 
   const {
     data: familydata,
@@ -57,15 +59,46 @@ function ManageFamily() {
     })
   }
 
+  function handleClick(e: React.MouseEvent<HTMLButtonElement>) {
+    setFamilyView(e.target.innerText)
+  }
+
   const profile = userData?.profile
   const family = familyInfo?.family
+
   return (
     <div className="flex flex-col justify-center items-center">
       <h1>Manage {profile?.family?.name} Family</h1>
       <img src={`images/familyIcons/${family?.picture}`} alt={family?.name} />
-      {sortedFamily?.map((member) => (
-        <ManagementProfile member={member} key={member.id} />
-      ))}
+      <div className="flex justify-center items-center">
+        <button className="btn-primary" onClick={handleClick}>
+          View Parents
+        </button>
+        <button className="btn-primary" onClick={handleClick}>
+          View Kids
+        </button>
+        <button className="btn-primary" onClick={handleClick}>
+          View All
+        </button>
+      </div>
+      {familyView === 'View All' &&
+        sortedFamily?.map((member) => (
+          <ManagementProfile member={member} key={member.id} />
+        ))}
+      {familyView === 'View Parents' &&
+        sortedFamily?.map(
+          (member) =>
+            member.is_parent && (
+              <ManagementProfile member={member} key={member.id} />
+            )
+        )}
+      {familyView === 'View Kids' &&
+        sortedFamily?.map(
+          (member) =>
+            !member.is_parent && (
+              <ManagementProfile member={member} key={member.id} />
+            )
+        )}
     </div>
   )
 }
