@@ -27,6 +27,7 @@ export default function AllPrizes() {
   return (
     <>
       <div className="grid md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-3 mx-5 mb-10">
+        <h2>All Prizes</h2>
         {allPrizes.map((prize) => (
           <div
             key={prize.id}
