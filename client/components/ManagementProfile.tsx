@@ -35,6 +35,10 @@ function ManagementProfile({ member }: Props) {
     makeParentMutation.mutate()
   }
 
+  function handleDeleteClick() {
+    deleteUserMutation.mutate()
+  }
+
   return (
     <>
       <div className="flex items-center justify-around border border-4 border-white p-1 rounded-md w-1/2 my-8">
@@ -52,7 +56,9 @@ function ManagementProfile({ member }: Props) {
               </button>
             ) : null}
             {member.auth_id !== user?.sub ? (
-              <button className="btn-primary">Delete User?</button>
+              <button onClick={handleDeleteClick} className="btn-primary">
+                Delete User?
+              </button>
             ) : null}
           </div>
         </div>

@@ -7,6 +7,7 @@ import Profile from './components/Profile'
 import FamilyPage from './components/FamilyPage'
 import AllPrizes from './components/AllPrizes'
 import ManageFamily from './components/ManageFamily'
+import Home from './components/Home'
 
 export const routes = createRoutesFromElements(
   <Route path="/" element={<App />}>
@@ -17,5 +18,6 @@ export const routes = createRoutesFromElements(
     <Route path="/family" element={<FamilyPage />} />
     <Route path="/prizes" element={<AllPrizes />} />
     <Route path="/manage-family" element={<ManageFamily />} />
+    <Route path="/home" element={<Home />} />
   </Route>
 )
