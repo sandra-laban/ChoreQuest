@@ -17,7 +17,7 @@ export async function getFamilyMembers(token: string): Promise<User[]> {
   console.log('token', token)
   console.log('api familyrequest')
   const response = await request
-    .get('api/v1/family')
+    .get('api/v1/family/members')
     .set('Authorization', `Bearer ${token}`)
   return response.body.family
 }

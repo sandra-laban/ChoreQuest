@@ -33,6 +33,24 @@ router.post('/create', jwtCheck, upload.single('image'), async (req, res) => {
   }
 })
 
+router.get('/members', jwtCheck, async (req, res) => {
+  try {
+    const auth_id = req.auth?.payload.sub as string
+
+    const family = await db.fetchFamilyMembers(auth_id)
+
+    if (!family) {
+      res.json({ message: 'Need to create or join family' })
+    } else {
+      res.json({ family })
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: err instanceof Error ? err.message : 'Unknown error',
+    })
+  }
+})
+
 router.get('/', jwtCheck, async (req, res) => {
   try {
     const auth_id = req.auth?.payload.sub as string
