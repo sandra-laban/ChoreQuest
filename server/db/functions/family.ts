@@ -96,3 +96,30 @@ export async function joinFamily(familyData: FamilyFormData, auth_id: string) {
     throw error
   }
 }
+
+export async function fetchFamilyId(auth_id: string) {
+  const familyId = await db('users')
+    .where('auth_id', auth_id)
+    .select('family_id')
+    .first()
+  return familyId
+}
+
+export async function fetchFamily(auth_id: string) {
+  const familyId = await fetchFamilyId(auth_id)
+  const family = await db('family')
+    .where({ id: familyId.family_id })
+    .select('*')
+    .first()
+
+  return family
+}
+
+export async function fetchFamilyMembers(auth_id: string) {
+  const familyId = await fetchFamilyId(auth_id)
+  const family = await db('users')
+    .where({ family_id: familyId.family_id })
+    .select('*')
+
+  return family
+}
