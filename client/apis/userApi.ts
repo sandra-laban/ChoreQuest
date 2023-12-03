@@ -22,11 +22,6 @@ export async function getFamilyMembers(token: string): Promise<User[]> {
   return response.body.family
 }
 
-export async function deleteUser(userId: number): Promise<void> {
-  const response = await request.delete(`${usersUrl}/${userId}`)
-  return response.body
-}
-
 export async function completeProfile(
   authRes: string,
   newUser: UserForm
@@ -63,5 +58,13 @@ export async function makeParent(
     .patch('/api/v1/user/parentify')
     .set('Authorization', `Bearer ${token}`)
     .send({ childId })
+  return response.body
+}
+
+export async function deleteUser(token: string, userId: number): Promise<void> {
+  const response = await request
+    .delete('/api/v1/user')
+    .set('Authorization', `Bearer ${token}`)
+    .send({ userId })
   return response.body
 }

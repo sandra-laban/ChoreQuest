@@ -81,15 +81,21 @@ router.patch('/', async (req, res) => {
   }
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/', jwtCheck, async (req, res) => {
   try {
-    const id = Number(req.params.id)
-    const deletedUser = await removeUser(id)
-    res.json(deletedUser)
+    const authId = req.auth?.payload.sub as string
+    const userId = req.body.userId
+
+    const deletedUser = await removeUser(authId, userId)
+
+    if (!deletedUser) {
+      res.json({ message: 'Could not delete user' })
+    } else {
+      res.json({ deletedUser })
+    }
   } catch (err) {
     res.status(500).json({
-      message: 'an error occurred',
-      error: err instanceof Error ? err.message : 'Unknown error',
+      message: err instanceof Error ? err.message : 'Unknown error',
     })
   }
 })

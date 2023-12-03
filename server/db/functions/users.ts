@@ -20,9 +20,16 @@ export async function fetchUser(authid: string): Promise<CompleteUser> {
   return user
 }
 
-export async function removeUser(id: number): Promise<any> {
-  const removedUser = await db('users').where('id', id).del().returning('*')
-  return removedUser
+export async function removeUser(authId: string, userId: number): Promise<any> {
+  const authority = await db('users')
+    .where('auth_id', authId)
+    .select('is_parent')
+    .first()
+  const deletedUser = authority.is_parent
+    ? await db('users').where('id', userId).del()
+    : false
+  console.log('deletedUser', deletedUser)
+  return deletedUser
 }
 
 export async function addUser(newUser: UserForm): Promise<User[]> {
