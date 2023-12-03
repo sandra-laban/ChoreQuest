@@ -34,7 +34,7 @@ function CompleteProfile() {
   const completeProfileMutation = useMutation({
     mutationFn: () => completeProfile(user?.sub as string, form),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['user'] })
+      queryClient.invalidateQueries({ queryKey: ['profile'] })
       navigate('/')
     },
   })
@@ -89,11 +89,6 @@ function CompleteProfile() {
 
   return (
     <div>
-      <img
-        src="images/chorequest.png"
-        alt="ChoreQuest Logo"
-        className="mx-auto w-1/3"
-      />
       <h1 className="mx-auto mt-12 mb-6 text-center">COMPLETE YOUR PROFILE</h1>
 
       <form

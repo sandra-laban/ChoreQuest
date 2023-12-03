@@ -39,11 +39,6 @@ export default function FamilyPage() {
     return (
       <>
         <div className="flex flex-col items-center h-screen">
-          <img
-            src="images/chorequest.png"
-            alt="ChoreQuest Logo"
-            className="mx-auto w-1/3"
-          />
           <div className="flex justify-center">
             <button className="btn-primary mx-8" onClick={showJoinFamilyForm}>
               Join Family

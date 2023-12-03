@@ -60,7 +60,7 @@ function ManageFamily() {
   }
 
   function handleClick(e: React.MouseEvent<HTMLButtonElement>) {
-    setFamilyView(e.target.innerText)
+    setFamilyView(e.currentTarget.innerText)
   }
 
   const profile = userData?.profile
