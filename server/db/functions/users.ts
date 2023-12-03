@@ -4,7 +4,6 @@ import connection from './../connection'
 
 const db = connection
 
-
 export async function fetchUser(authid: string): Promise<CompleteUser> {
   const user = await db('users').where('auth_id', authid).select('*').first()
   if (user) {

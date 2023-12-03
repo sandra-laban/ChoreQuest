@@ -9,5 +9,8 @@ export interface User {
 }
 
 export interface CompleteUser extends User {
-  familyName?: string
+  family?: {
+    id: number
+    name: string
+  }
 }
