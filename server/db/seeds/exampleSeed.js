@@ -66,7 +66,21 @@ async function seedPrizes(trx) {
     {
       family_id: 1,
       name: 'Ice Cream',
-      definition: '1 double scoope from the ice cream store',
+      definition: '1 double scoop from the ice cream store',
+      price: 800,
+      quantity: 1,
+    },
+    {
+      family_id: 1,
+      name: 'Movie of your choice',
+      definition: 'Any movie that we can stream at home',
+      price: 100,
+      quantity: 1,
+    },
+    {
+      family_id: 2,
+      name: 'Ice Cream',
+      definition: '1 double scoop from the ice cream store',
       price: 800,
       quantity: 1,
     },

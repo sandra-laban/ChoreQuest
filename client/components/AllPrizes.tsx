@@ -11,7 +11,7 @@ export default function AllPrizes() {
     isLoading,
   } = useQuery({
     queryKey: ['prizes', familyId],
-    queryFn: () => getAllPrizes(familyId as unknown as number),
+    queryFn: () => getAllPrizes(Number(familyId)),
   })
   const { user } = useAuth0()
   console.log(user)
