@@ -13,6 +13,15 @@ export async function getUser(
   return response.body
 }
 
+export async function getFamilyMembers(token: string): Promise<User[]> {
+  console.log('token', token)
+  console.log('api familyrequest')
+  const response = await request
+    .get('api/v1/family')
+    .set('Authorization', `Bearer ${token}`)
+  return response.body.family
+}
+
 export async function deleteUser(userId: number): Promise<void> {
   const response = await request.delete(`${usersUrl}/${userId}`)
   return response.body

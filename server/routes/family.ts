@@ -21,7 +21,6 @@ router.post('/create', jwtCheck, upload.single('image'), async (req, res) => {
     const auth_id = req.auth?.payload.sub as string
 
     const image = req.file ? req.file : null
-    
 
     const familyFormData = { name, password }
 
@@ -31,6 +30,24 @@ router.post('/create', jwtCheck, upload.single('image'), async (req, res) => {
   } catch (err) {
     console.error(err)
     res.status(500).json({ error: 'Internal server error' })
+  }
+})
+
+router.get('/', jwtCheck, async (req, res) => {
+  try {
+    const auth_id = req.auth?.payload.sub as string
+
+    const family = await db.fetchFamily(auth_id)
+
+    if (!family) {
+      res.json({ message: 'Need to create or join family' })
+    } else {
+      res.json({ family })
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: err instanceof Error ? err.message : 'Unknown error',
+    })
   }
 })
 

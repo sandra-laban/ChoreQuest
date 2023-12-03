@@ -43,7 +43,7 @@ const CreateFamilyForm = () => {
       await createFamily(familyFrom, accessToken)
     },
     onSuccess: () => {
-      // navigate('/')
+      navigate('/')
     },
   })
 

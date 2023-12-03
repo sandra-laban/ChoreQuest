@@ -93,3 +93,15 @@ export async function joinFamily(familyData: FamilyFormData, auth_id: string) {
     throw error
   }
 }
+
+export async function fetchFamily(auth_id: string) {
+  const familyId = await db('users')
+    .where('auth_id', auth_id)
+    .select('family_id')
+    .first()
+  const family = await db('users')
+    .where({ family_id: familyId.family_id })
+    .select('*')
+
+  return family
+}

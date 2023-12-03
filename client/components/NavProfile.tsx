@@ -1,5 +1,5 @@
 import { getUser } from '../apis/userApi'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { useAuth0 } from '@auth0/auth0-react'
 import { useEffect } from 'react'
@@ -29,8 +29,12 @@ export default function Profile() {
         <div className="flex items-center justify-center border border-4 border-white p-1 rounded-md ">
           <div className="flex flex-col items-center justify-center">
             <h2 className="mx-6">{profile.name}</h2>
-            {!profile.is_parent && (
+            {!profile.is_parent ? (
               <h3 className="mx-6">Points - {profile.points}</h3>
+            ) : (
+              <Link to="/manage-family">
+                <button className="btn-small">MANAGE FAMILY</button>
+              </Link>
             )}
             <button
               className="btn-small"
