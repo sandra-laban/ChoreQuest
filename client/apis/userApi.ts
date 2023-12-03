@@ -13,9 +13,13 @@ export async function getUser(
   return response.body
 }
 
-export async function deleteUser(userId: number): Promise<void> {
-  const response = await request.delete(`${usersUrl}/${userId}`)
-  return response.body
+export async function getFamilyMembers(token: string): Promise<User[]> {
+  console.log('token', token)
+  console.log('api familyrequest')
+  const response = await request
+    .get('api/v1/family/members')
+    .set('Authorization', `Bearer ${token}`)
+  return response.body.family
 }
 
 export async function completeProfile(
@@ -44,4 +48,23 @@ export async function updateProfile(
   const finalUser = await request.patch('/api/v1/user').send(updatedUser)
 
   return finalUser.body
+}
+
+export async function makeParent(
+  token: string,
+  childId: number
+): Promise<void> {
+  const response = await request
+    .patch('/api/v1/user/parentify')
+    .set('Authorization', `Bearer ${token}`)
+    .send({ childId })
+  return response.body
+}
+
+export async function deleteUser(token: string, userId: number): Promise<void> {
+  const response = await request
+    .delete('/api/v1/user')
+    .set('Authorization', `Bearer ${token}`)
+    .send({ userId })
+  return response.body
 }

@@ -4,3 +4,10 @@ export interface FamilyFormData {
   image?: File | null
   pictureUrl?: string
 }
+
+export interface Family {
+  id: number
+  name: string
+  password: string
+  picture: string
+}

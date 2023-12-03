@@ -11,25 +11,28 @@ export async function createFamily(
   auth_id: string
 ) {
   const allowedExtensions = ['.png']
-  const fileExtension = path.extname(image.originalname).toLowerCase()
+
   const trx = await db.transaction()
 
   let pictureUrl = null
   try {
-    if (image) {
-      if (allowedExtensions.includes(fileExtension)) {
-        const folderPath = './public/images/familyIcons'
-        await fs.promises.mkdir(folderPath, { recursive: true })
+    try {
+      const fileExtension = path.extname(image.originalname).toLowerCase()
+      if (image) {
+        if (allowedExtensions.includes(fileExtension)) {
+          const folderPath = './public/images/familyIcons'
+          await fs.promises.mkdir(folderPath, { recursive: true })
 
-        const uniqueFilename = `${uuidv4()}${extname(image.originalname)}`
-        pictureUrl = uniqueFilename
+          const uniqueFilename = `${uuidv4()}${extname(image.originalname)}`
+          pictureUrl = uniqueFilename
 
-        const filePath = `${folderPath}/${uniqueFilename}`
+          const filePath = `${folderPath}/${uniqueFilename}`
 
-        await fs.promises.writeFile(filePath, image.buffer)
-      } else {
-        throw new Error('Invalid image extension')
+          await fs.promises.writeFile(filePath, image.buffer)
+        }
       }
+    } catch (error) {
+      console.error('Error saving image:', error)
     }
 
     const [familyId] = await trx('family').insert({
@@ -92,4 +95,31 @@ export async function joinFamily(familyData: FamilyFormData, auth_id: string) {
     console.error('Error creating family:', error)
     throw error
   }
+}
+
+export async function fetchFamilyId(auth_id: string) {
+  const familyId = await db('users')
+    .where('auth_id', auth_id)
+    .select('family_id')
+    .first()
+  return familyId
+}
+
+export async function fetchFamily(auth_id: string) {
+  const familyId = await fetchFamilyId(auth_id)
+  const family = await db('family')
+    .where({ id: familyId.family_id })
+    .select('*')
+    .first()
+
+  return family
+}
+
+export async function fetchFamilyMembers(auth_id: string) {
+  const familyId = await fetchFamilyId(auth_id)
+  const family = await db('users')
+    .where({ family_id: familyId.family_id })
+    .select('*')
+
+  return family
 }
