@@ -71,7 +71,8 @@ const ChoreList = () => {
       return await acceptChore(accessToken, choreId)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['chores', 'chorelist'] })
+      queryClient.invalidateQueries({ queryKey: ['chorelist'] })
+      queryClient.invalidateQueries({ queryKey: ['profile'] })
     },
   })
 
@@ -83,10 +84,17 @@ const ChoreList = () => {
     acceptChoreMutation.mutate(choreId)
   }
 
-  if (error || profileError) {
+  if (error || profileError || choreError) {
     return <p>There was an error trying to load the chores!</p>
   }
-  if (isPending || !choreData || profilePending || !profile) {
+  if (
+    isPending ||
+    !choreData ||
+    profilePending ||
+    !profile ||
+    chorePending ||
+    !choreList
+  ) {
     return <p>Loading chores...</p>
   }
   //const choreDate = DateTime.fromMillis(chore.created)
@@ -118,22 +126,25 @@ const ChoreList = () => {
                     Delete
                   </button>
                 ) : null}
-                {!profile.currentChore &&
-                !choreList.find((item: any) => item.chores_id === chore.id) ? (
+                {choreList.find((item: any) => item.chores_id === chore.id) &&
+                !(profile.currentChore?.chores_id === chore.id) ? (
+                  <h3 className="text-red-600">{`Assigned to ${
+                    choreList?.find((item: any) => item.chores_id === chore.id)
+                      ?.name
+                  }`}</h3>
+                ) : null}
+                {profile.currentChore?.chores_id === chore.id ? (
+                  <h3 className="text-green-600">Accepted</h3>
+                ) : null}
+                {!choreList.find((item: any) => item.chores_id === chore.id) &&
+                !profile.currentChore &&
+                !profile.is_parent ? (
                   <button
                     onClick={() => handleAcceptClick(chore.id)}
                     className="btn-primary hover:bg-cyan-500 bg-cyan-400 mb-12 items-center justify-center"
                   >
                     Do it!
                   </button>
-                ) : (
-                  <h3 className="text-red-600">{`Assigned to ${
-                    choreList?.find((item: any) => item.chores_id === chore.id)
-                      ?.name
-                  }`}</h3>
-                )}
-                {profile.currentChore?.chores_id === chore.id ? (
-                  <h3 className="text-green-600">Accepted</h3>
                 ) : null}
               </li>
             </ul>
