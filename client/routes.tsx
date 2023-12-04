@@ -11,7 +11,6 @@ import AuthCheck from './components/AuthCheck'
 export const routes = createRoutesFromElements(
   <Route path="/" element={<App />}>
     <Route index element={<LandingPage />} />
-    <Route path="/chores" element={<ChoreList />} />
     <Route path="/chores" element={<AuthCheck element={<ChoreList />} />} />
     <Route path="/profile" element={<AuthCheck element={<Profile />} />} />
     <Route path="/prizes" element={<AuthCheck element={<AllPrizes />} />} />
