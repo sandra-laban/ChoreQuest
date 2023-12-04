@@ -1,3 +1,8 @@
+import dotenv from 'dotenv'
+dotenv.config()
+
+console.log(process.env.TOBY_AUTH_ID)
+
 export async function seed(knex) {
   try {
     await knex.transaction(async (trx) => {
@@ -123,7 +128,7 @@ async function seedUsers(trx) {
       name: 'Toby',
       is_parent: true,
       family_id: 1,
-      auth_id: 'auth0|656900ee01f9e8a19d2ba049',
+      auth_id: process.env.TOBY_AUTH_ID,
       points: null,
       picture: '/images/avatars/avatar-2.png',
     },
