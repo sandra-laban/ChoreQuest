@@ -1,6 +1,7 @@
 import { UpdateUserForm, UserForm } from '../../../models/Iforms'
 import { CompleteUser, User } from '../../../models/Iusers'
 import connection from './../connection'
+import { isParent } from './helper'
 
 const db = connection
 
@@ -21,11 +22,8 @@ export async function fetchUser(authid: string): Promise<CompleteUser> {
 }
 
 export async function removeUser(authId: string, userId: number): Promise<any> {
-  const authority = await db('users')
-    .where('auth_id', authId)
-    .select('is_parent')
-    .first()
-  const deletedUser = authority.is_parent
+  const authorised = await isParent(authId)
+  const deletedUser = authorised
     ? await db('users').where('id', userId).del()
     : false
   console.log('deletedUser', deletedUser)
@@ -58,12 +56,9 @@ export async function createParent(
   authId: string,
   childId: number
 ): Promise<any> {
-  const authority = await db('users')
-    .where('auth_id', authId)
-    .select('is_parent')
-    .first()
+  const authorised = await isParent(authId)
 
-  const newParent = authority.is_parent
+  const newParent = authorised
     ? await db('users').where('id', childId).update({
         is_parent: true,
       })

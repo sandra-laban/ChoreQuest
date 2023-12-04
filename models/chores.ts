@@ -1,11 +1,14 @@
+import { DateTime } from 'luxon'
+
 export interface Chore {
   id: number
   name: string
   points: number
-  created: Date
+  created: string
+  family_id: number
 }
 export interface ChoreData {
   name: string
-  points: number
-  created: Date
+  points: string
+  created: string
 }

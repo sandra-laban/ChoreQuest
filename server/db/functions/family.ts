@@ -4,6 +4,7 @@ import fs from 'fs'
 import path from 'path'
 import { extname } from 'path'
 import { v4 as uuidv4 } from 'uuid'
+import { fetchFamilyId } from './helper'
 
 export async function createFamily(
   familyData: FamilyFormData,
@@ -95,14 +96,6 @@ export async function joinFamily(familyData: FamilyFormData, auth_id: string) {
     console.error('Error creating family:', error)
     throw error
   }
-}
-
-export async function fetchFamilyId(auth_id: string) {
-  const familyId = await db('users')
-    .where('auth_id', auth_id)
-    .select('family_id')
-    .first()
-  return familyId
 }
 
 export async function fetchFamily(auth_id: string) {

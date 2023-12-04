@@ -1,34 +1,83 @@
-import { useQuery } from '@tanstack/react-query'
-import { getAllChores } from '../apis/chores'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { acceptChore, deleteChore, getFamilyChores } from '../apis/chores'
 import { DateTime } from 'luxon'
 import AddChore from './AddChoreForm'
+import { useAuth0 } from '@auth0/auth0-react'
+import { getUser } from '../apis/userApi'
+import { useState } from 'react'
 
 const ChoreList = () => {
-  const {
-    data: chores,
-    isError,
-    isLoading,
-  } = useQuery({ queryKey: ['chores'], queryFn: getAllChores })
+  const [formView, setFormView] = useState(false)
+  const { getAccessTokenSilently } = useAuth0()
+  const accessTokenPromise = getAccessTokenSilently()
+  const queryClient = useQueryClient()
 
-  async function deleteChore(id: number) {
-    await fetch(`/api/v1/chores/${id}`, {
-      method: 'DELETE',
-    })
-    window.location.reload()
+  const {
+    data: choreData,
+    error,
+    isPending,
+  } = useQuery({
+    queryKey: ['chores'],
+    queryFn: async () => {
+      const accessToken = await accessTokenPromise
+      return await getFamilyChores(accessToken)
+    },
+  })
+
+  const {
+    data: profileData,
+    error: profileError,
+    isPending: profilePending,
+  } = useQuery({
+    queryKey: ['profile'],
+    queryFn: async () => {
+      const accessToken = await accessTokenPromise
+      return await getUser(accessToken)
+    },
+  })
+  const profile = profileData?.profile
+
+  const deleteChoreMutation = useMutation({
+    mutationFn: async (choreId: number) => {
+      const accessToken = await accessTokenPromise
+      return await deleteChore(accessToken, choreId)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['chores'] })
+    },
+  })
+
+  const acceptChoreMutation = useMutation({
+    mutationFn: async (choreId: number) => {
+      const accessToken = await accessTokenPromise
+      return await acceptChore(accessToken, choreId)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['chores', 'chorelist'] })
+    },
+  })
+
+  function handleDeleteClick(choreId: number) {
+    deleteChoreMutation.mutate(choreId)
   }
-  if (isError) {
+
+  function handleAcceptClick(choreId: number) {
+    acceptChoreMutation.mutate(choreId)
+  }
+
+  if (error || profileError) {
     return <p>There was an error trying to load the chores!</p>
   }
-  if (isLoading || !chores) {
+  if (isPending || !choreData || profilePending || !profile) {
     return <p>Loading chores...</p>
   }
   //const choreDate = DateTime.fromMillis(chore.created)
   return (
     <>
-      <div className="container px-4 mx-auto">
-        <h1> All Chores</h1>
+      <div className="container px-4 mx-auto text-center">
+        <h1>{profile.family?.name} Family Chores</h1>
         <div className="grid md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-3 m-5 mb-10">
-          {chores?.map((chore) => (
+          {choreData?.map((chore) => (
             <ul
               className="bg-white overflow-hidden m-5 hover:bg-blue-100 border border-gray-200 p-3 text-center"
               key={chore.id}
@@ -42,19 +91,34 @@ const ChoreList = () => {
                     ? DateTime.fromMillis(chore.created).toISODate()
                     : DateTime.fromISO(chore.created).toISODate()}
                 </p>
-                <button
-                  onClick={() => deleteChore(chore.id)}
-                  className="btn-primary hover:bg-red-500 bg-red-400 mb-12 items-center justify-center"
-                >
-                  Delete
-                </button>
+                {profile.is_parent ? (
+                  <button
+                    onClick={() => handleDeleteClick(chore.id)}
+                    className="btn-primary hover:bg-red-500 bg-red-400 mb-12 items-center justify-center"
+                  >
+                    Delete
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleAcceptClick(chore.id)}
+                    className="btn-primary hover:bg-cyan-500 bg-cyan-400 mb-12 items-center justify-center"
+                  >
+                    Do it!
+                  </button>
+                )}
               </li>
             </ul>
           ))}
         </div>
-        <div className="grid md:grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 m-5 mb-10">
-          <AddChore />
-        </div>
+        {profile.is_parent ? (
+          <button className="btn-primary" onClick={() => setFormView(true)}>
+            Add Chore?
+          </button>
+        ) : // <div className="grid md:grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 m-5 mb-10">
+        //   <AddChore />
+        // </div>
+        null}
+        {formView ? <AddChore setFormView={setFormView} /> : null}
       </div>
     </>
   )
