@@ -3,7 +3,7 @@ import '../styles/CreateFamilyForm.css'
 import { joinFamily } from '../apis/Family'
 import { useAuth0 } from '@auth0/auth0-react'
 import { useNavigate } from 'react-router-dom'
-import { useMutation } from '@tanstack/react-query'
+import { QueryClient, useMutation, useQueryClient } from '@tanstack/react-query'
 
 const emptyForm = {
   name: '',
@@ -14,6 +14,7 @@ const JoinFamilyForm = () => {
   const [familyForm, setFamilyForm] = useState(emptyForm)
   const { getAccessTokenSilently } = useAuth0()
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
@@ -35,6 +36,7 @@ const JoinFamilyForm = () => {
       await joinFamily(familyForm, accessToken)
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['profile'] })
       navigate('/')
     },
   })

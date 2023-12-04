@@ -42,12 +42,7 @@ export default function Profile() {
   } else if (profile && profile.family_id) {
     return (
       <>
-        <div className="flex flex-col items-center justify-center h-screen">
-          <img
-            src="images/chorequest.png"
-            alt="ChoreQuest Logo"
-            className="mx-auto w-1/3"
-          />
+        <div className="flex flex-col items-center h-screen">
           <h1>{profile.name}</h1>
           <img src={profile.picture} alt={profile.name} />
           <h2>Family - {profile.family?.name}</h2>

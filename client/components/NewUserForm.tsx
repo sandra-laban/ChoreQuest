@@ -2,11 +2,9 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { completeProfile } from '../apis/userApi'
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { useAuth0 } from '@auth0/auth0-react'
-import { useNavigate } from 'react-router-dom'
 import ImageGrid from './ImageGrid'
 import { UserForm } from '../../models/Iforms'
 import { Image } from '../../models/Iforms'
-import { getUser } from '../apis/userApi'
 
 const initialForm = {
   username: '',
@@ -15,35 +13,15 @@ const initialForm = {
 
 function CompleteProfile() {
   const [form, setForm] = useState<UserForm>(initialForm)
-  const navigate = useNavigate()
-  const { user, getAccessTokenSilently } = useAuth0()
+  const { user } = useAuth0()
   const queryClient = useQueryClient()
-
-  const accessTokenPromise = getAccessTokenSilently()
-
-  const { data, error, isPending } = useQuery({
-    queryKey: ['profile'],
-    queryFn: async () => {
-      const accessToken = await accessTokenPromise
-      return await getUser(accessToken)
-    },
-  })
-
-  const profile = data?.profile
-
   const completeProfileMutation = useMutation({
     mutationFn: () => completeProfile(user?.sub as string, form),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['user'] })
-      navigate('/')
+      queryClient.invalidateQueries({ queryKey: ['profile'] })
     },
   })
-  if (isPending) {
-    return <p>Profile is loading...</p>
-  }
-  if (error) {
-    return <h1>oh no you got problems</h1>
-  }
+
   function handleChange(
     event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
   ) {
@@ -83,18 +61,9 @@ function CompleteProfile() {
     { id: 16, url: '/images/avatars/avatar-16.png', alt: 'Avatar 16' },
   ]
 
-  if (profile) {
-    navigate('/')
-  }
-
   return (
     <div>
-      <img
-        src="images/chorequest.png"
-        alt="ChoreQuest Logo"
-        className="mx-auto w-1/3"
-      />
-      <h1 className="mx-auto mt-12 mb-6 text-center">COMPLETE YOUR PROFILE</h1>
+      <h1 className="mx-auto mt-2 mb-6 text-center">COMPLETE YOUR PROFILE</h1>
 
       <form
         onSubmit={handleSubmit}
@@ -110,7 +79,7 @@ function CompleteProfile() {
           placeholder="Username"
           name="username"
           onChange={handleChange}
-          className="m-4 border-solid border-2 border-black p-2 px-5 w-1/3 rounded-lg mb-12"
+          className="m-4 border-solid border-2 border-black p-2 px-5 w-1/3 rounded-lg mb-8"
         />
 
         <h2>Choose an Avatar</h2>

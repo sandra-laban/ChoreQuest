@@ -15,6 +15,7 @@ const CreateFamilyForm = () => {
   const [familyFrom, setFamilyForm] = useState(emptyForm)
   const { getAccessTokenSilently } = useAuth0()
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
@@ -43,6 +44,7 @@ const CreateFamilyForm = () => {
       await createFamily(familyFrom, accessToken)
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['profile'] })
       navigate('/')
     },
   })
