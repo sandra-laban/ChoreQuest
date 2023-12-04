@@ -75,11 +75,21 @@ export async function deleteChore(authId: string, choreId: number) {
   const familyId = await fetchFamilyId(authId)
   const authorised = await isParent(authId)
 
-  const deletedChore = authorised
-    ? await db('chores')
-        .where('family_id', familyId.family_id)
-        .where('id', choreId)
-        .del()
-    : null
-  return deletedChore
+  const trx = await db.transaction()
+  try {
+    if (!authorised) return null
+
+    await trx('chore_list').where('chores_id', choreId).del()
+
+    const deletedChore = await trx('chores')
+      .where('family_id', familyId.family_id)
+      .where('id', choreId)
+      .del()
+
+    trx.commit()
+    return deletedChore
+  } catch (err) {
+    trx.rollback()
+    throw err
+  }
 }
