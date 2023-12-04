@@ -1,12 +1,16 @@
 import { Prizes } from '../../../models/prizes'
 import db from '../connection'
+import { fetchFamilyId } from './family'
 
 export async function getAllPrizes(auth_id: string): Promise<Prizes[]> {
-  const familyId = await db('users')
-    .where('auth_id', auth_id)
-    .select('family_id')
-    .first()
-  const prizes = await db('prizes').where('family_id', familyId).select('*')
+  const familyId = await fetchFamilyId(auth_id)
+  // const familyId = await db('users')
+  //   .where('auth_id', auth_id)
+  //   .select('family_id')
+  //   .first()
+  const prizes = await db('prizes')
+    .where({ family_id: familyId.family_id })
+    .select('*')
   // .join('users', 'users.family_id', 'prizes.family_id')
   // .select(
   //   'prizes.id',
