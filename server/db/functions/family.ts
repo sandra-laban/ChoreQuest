@@ -4,7 +4,7 @@ import fs from 'fs'
 import path from 'path'
 import { extname } from 'path'
 import { v4 as uuidv4 } from 'uuid'
-import { fetchFamilyId } from './helper'
+import { fetchFamilyId, generateUniqueUsername, usernameCheck } from './helper'
 
 export async function createFamily(
   familyData: FamilyFormData,
@@ -90,6 +90,7 @@ export async function joinFamily(familyData: FamilyFormData, auth_id: string) {
     }
 
     trx.commit()
+    usernameCheck(auth_id, family.id)
     return { success: true, message: 'Successfully joined the family' }
   } catch (error) {
     await trx.rollback()

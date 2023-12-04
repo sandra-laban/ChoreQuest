@@ -38,3 +38,30 @@ export async function getUserId(auth_id: string) {
     .first()
   return userId
 }
+
+export async function generateUniqueUsername(baseUsername: string) {
+  let suffix = 1
+  let newUsername = baseUsername
+
+  while (await db('users').where('name', newUsername).first()) {
+    suffix++
+    newUsername = `${baseUsername}${suffix}`
+  }
+  console.log('helper', newUsername)
+  return newUsername
+}
+
+export async function usernameCheck(auth_id: string, family_id: number) {
+  const username = await db('users').where({ auth_id }).select('name').first()
+
+  const existingUser = await db('users')
+    .where('family_id', family_id)
+    .where('name', username.name)
+    .select('*')
+
+  if (existingUser.length > 1) {
+    const newName = await generateUniqueUsername(username.name)
+    console.log('newName', newName)
+    await db('users').where({ auth_id }).update({ name: newName })
+  }
+}

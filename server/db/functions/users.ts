@@ -1,7 +1,8 @@
 import { UpdateUserForm, UserForm } from '../../../models/Iforms'
 import { CompleteUser, User } from '../../../models/Iusers'
 import connection from './../connection'
-import { isParent } from './helper'
+import { fetchFamily } from './family'
+import { isParent, usernameCheck } from './helper'
 
 const db = connection
 
@@ -48,13 +49,16 @@ export async function updateUser(
   authId: string,
   updatedUser: UpdateUserForm
 ): Promise<User[]> {
-  const user = await db('users')
-    .where('auth_id', authId)
-    .update({
-      name: updatedUser.username,
-      picture: updatedUser.picture,
-    })
-    .returning('*')
+  console.log('db', updatedUser)
+  await db('users').where('auth_id', authId).update({
+    name: updatedUser.username,
+    picture: updatedUser.picture,
+  })
+  const family_id = await fetchFamily(authId)
+  console.log('family_id', family_id)
+  await usernameCheck(authId, family_id.id)
+
+  const user = await db('users').where('auth_id', authId).select('*').first()
 
   return user
 }
