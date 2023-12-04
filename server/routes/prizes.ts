@@ -14,6 +14,7 @@ const jwtCheck = auth({
 router.get('/', jwtCheck, async (req, res) => {
   try {
     const auth_id = req.auth?.payload.sub as string
+    console.log('route', auth_id)
     const prizes = await db.getAllPrizes(auth_id)
     res.status(200).json({ prizes })
   } catch (error) {

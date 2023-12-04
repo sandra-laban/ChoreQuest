@@ -4,19 +4,24 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { useParams } from 'react-router-dom'
 
 export default function AllPrizes() {
-  const { family } = useParams()
+  // const { family } = useParams()
+  const { user, getAccessTokenSilently } = useAuth0()
+  const accessTokenPromise = getAccessTokenSilently()
   const {
     data: allPrizes,
     isError,
     isLoading,
   } = useQuery({
-    queryKey: ['prizes', family],
-    queryFn: () => getAllPrizes(Number(family)),
+    queryKey: ['prizes'],
+    queryFn: async () => {
+      const token = await accessTokenPromise
+      getAllPrizes(token)
+    },
   })
-  const { user } = useAuth0()
+
   console.log(user)
   console.log(allPrizes)
-  console.log(family)
+  // console.log(family)
 
   if (isError) {
     return <div>There was an error getting your prizes</div>

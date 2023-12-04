@@ -32,7 +32,8 @@ export async function getAllPrizes(auth_id: string): Promise<Prizes[]> {
   // .leftJoin('family', 'family.id', 'prizes.family_id')
   // .leftJoin('users', 'users.family_id', 'prizes.family_id')
   // .select('prizes.id as prizeId', 'prizes.name as prizeName', 'prizes.price as price', 'prizes.quantity as quantity','family.id as familyId')
-
+  console.log('DB HERE')
+  console.log(prizes)
   return prizes
 }
 
