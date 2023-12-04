@@ -51,6 +51,11 @@ async function seedFamily(trx) {
       password: 'password',
       picture: '/images/familyIcons/4.png',
     },
+    {
+      name: 'Hind',
+      password: 'password',
+      picture: '/images/familyIcons/3.png',
+    },
   ])
 }
 
@@ -61,8 +66,43 @@ async function seedPrizes(trx) {
     {
       family_id: 1,
       name: 'Ice Cream',
-      definition: '1 double scoope from the ice cream store',
+      definition: '1 double scoop from the ice cream store',
       price: 800,
+      quantity: 1,
+    },
+    {
+      family_id: 1,
+      name: 'Movie of your choice',
+      definition: 'Any movie that we can stream at home',
+      price: 100,
+      quantity: 1,
+    },
+    {
+      family_id: 2,
+      name: 'Ice Cream',
+      definition: '1 double scoop from the ice cream store',
+      price: 800,
+      quantity: 1,
+    },
+    {
+      family_id: 2,
+      name: 'Movie of your choice',
+      definition: 'Any movie that we can stream at home',
+      price: 100,
+      quantity: 1,
+    },
+    {
+      family_id: 3,
+      name: 'Ice Cream',
+      definition: '1 double scoop from the ice cream store',
+      price: 800,
+      quantity: 1,
+    },
+    {
+      family_id: 3,
+      name: 'Movie of your choice',
+      definition: 'Any movie that we can stream at home',
+      price: 100,
       quantity: 1,
     },
   ])
@@ -91,6 +131,48 @@ async function seedUsers(trx) {
       family_id: null,
       auth_id: '333',
       points: 0,
+    },
+    {
+      name: 'Maresa',
+      is_parent: true,
+      family_id: 2,
+      auth_id: 'auth0|112',
+      points: null,
+    },
+    {
+      name: 'Peter',
+      is_parent: true,
+      family_id: 2,
+      auth_id: 'auth0|111',
+      points: null,
+    },
+    {
+      name: 'Teddy',
+      is_parent: false,
+      family_id: 2,
+      auth_id: 'auth0|113',
+      points: null,
+    },
+    {
+      name: 'Otis',
+      is_parent: false,
+      family_id: 2,
+      auth_id: 'auth0|114',
+      points: null,
+    },
+    {
+      name: 'Rudy',
+      is_parent: false,
+      family_id: 2,
+      auth_id: 'auth0|115',
+      points: null,
+    },
+    {
+      name: 'Remy',
+      is_parent: false,
+      family_id: 2,
+      auth_id: 'auth0|116',
+      points: null,
     },
   ])
 }
