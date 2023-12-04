@@ -68,10 +68,11 @@ router.post('/', async (req, res) => {
   }
 })
 
-router.patch('/', async (req, res) => {
+router.patch('/', jwtCheck, async (req, res) => {
   try {
+    const authId = req.auth?.payload.sub as string
     const updatedUser = req.body
-    const renewedUser = await updateUser(updatedUser)
+    const renewedUser = await updateUser(authId, updatedUser)
     res.json({ renewedUser })
   } catch (err) {
     res.status(500).json({
