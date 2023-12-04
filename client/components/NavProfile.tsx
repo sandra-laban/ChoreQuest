@@ -94,27 +94,6 @@ export default function Profile() {
             </div>
           ) : null}
         </div>
-        {/* <div className="flex items-center justify-center border border-4 border-white p-1 rounded-md ">
-          <div className="flex flex-col items-center justify-center">
-            <h2 className="mx-6">{profile.name}</h2>
-            {!profile.is_parent ? (
-              <h3 className="mx-6">Points - {profile.points}</h3>
-            ) : (
-              <Link to="/manage-family">
-                <button className="btn-small">MANAGE FAMILY</button>
-              </Link>
-            )}
-            <button
-              className="btn-small"
-              onClick={() =>
-                logout({ logoutParams: { returnTo: window.location.origin } })
-              }
-            >
-              LOGOUT?
-            </button>
-          </div>
-          <img src={profile.picture} alt={profile.name} className="w-24 mx-6" />
-        </div> */}
       </>
     )
   }
