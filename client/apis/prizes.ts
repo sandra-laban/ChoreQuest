@@ -7,7 +7,6 @@ export async function getAllPrizes(token: string): Promise<Prizes[]> {
   const response = await request
     .get(`${serverUrl}`)
     .set('Authorization', `Bearer ${token}`)
-  console.log('api', response.body)
   return response.body.prizes
 }
 
