@@ -11,8 +11,14 @@ export function getAllChores() {
 export async function fetchFamilyChores(authId: string): Promise<Chore[]> {
   const familyId = await fetchFamilyId(authId)
   const chores = await db('chores')
+    .leftJoin('chore_list', 'chores.id', 'chore_list.chores_id')
     .where('family_id', familyId.family_id)
-    .select('*')
+    .select('chores.*', { is_completed: 'chore_list.is_completed' })
+    .where((builder) => {
+      builder
+        .whereNull('chore_list.is_completed')
+        .orWhere('chore_list.is_completed', false)
+    })
   return chores
 }
 
@@ -23,7 +29,7 @@ export async function fetchFamilyChorelist(authId: string): Promise<Chore[]> {
     .join('users', 'users.id', 'chore_list.user_id')
     .where('chores.family_id', familyId.family_id)
     .where('is_completed', false)
-    .select('chores_id', 'users.name')
+    .select('chores_id', 'users.name', 'is_completed')
   console.log('chorelist', chorelist)
   return chorelist
 }
@@ -92,4 +98,16 @@ export async function deleteChore(authId: string, choreId: number) {
     trx.rollback()
     throw err
   }
+}
+
+export async function finishChore(authId: string, choreId: number) {
+  const userId = await getUserId(authId)
+  const completedChore = await db('chore_list')
+    .where('chores_id', choreId)
+    .where('user_id', userId.id)
+    .update({
+      is_completed: true,
+    })
+
+  return completedChore
 }
