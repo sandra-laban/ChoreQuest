@@ -61,6 +61,12 @@ function CompleteProfile() {
     { id: 16, url: '/images/avatars/avatar-16.png', alt: 'Avatar 16' },
   ]
 
+  const defaultAvatar = {
+    id: 1,
+    url: '/images/avatars/avatar-1.png',
+    alt: 'Avatar 1',
+  }
+
   return (
     <div>
       <h1 className="mx-auto mt-2 mb-6 text-center">COMPLETE YOUR PROFILE</h1>
@@ -83,7 +89,11 @@ function CompleteProfile() {
         />
 
         <h2>Choose an Avatar</h2>
-        <ImageGrid images={avatars} onSelect={handleImageSelect} />
+        <ImageGrid
+          images={avatars}
+          onSelect={handleImageSelect}
+          current={defaultAvatar}
+        />
 
         <button
           type="submit"
