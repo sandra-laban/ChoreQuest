@@ -100,7 +100,7 @@ function EditProfileForm() {
           id="username"
           type="text"
           required
-          placeholder={`${profile?.name}`}
+          defaultValue={`${profile?.name}`}
           name="username"
           onChange={handleChange}
           className="m-4 border-solid border-2 border-black p-2 px-5 w-1/3 rounded-lg mb-12"
