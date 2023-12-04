@@ -13,6 +13,14 @@ export async function getFamilyChores(token: string): Promise<Chore[]> {
   return response.body.chores
 }
 
+export async function getFamilyChorelist(token: string): Promise<any> {
+  const response = await request
+    .get('/api/v1/chores/list')
+    .set('Authorization', `Bearer ${token}`)
+  console.log('response', response.body)
+  return response.body.chores
+}
+
 export async function addChore(
   token: string,
   chore: ChoreData

@@ -1,5 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { acceptChore, deleteChore, getFamilyChores } from '../apis/chores'
+import {
+  acceptChore,
+  deleteChore,
+  getFamilyChores,
+  getFamilyChorelist,
+} from '../apis/chores'
 import { DateTime } from 'luxon'
 import AddChore from './AddChoreForm'
 import { useAuth0 } from '@auth0/auth0-react'
@@ -23,6 +28,19 @@ const ChoreList = () => {
       return await getFamilyChores(accessToken)
     },
   })
+
+  const {
+    data: choreList,
+    error: choreError,
+    isPending: chorePending,
+  } = useQuery({
+    queryKey: ['chorelist'],
+    queryFn: async () => {
+      const accessToken = await accessTokenPromise
+      return await getFamilyChorelist(accessToken)
+    },
+  })
+  console.log('allchores', choreList)
 
   const {
     data: profileData,
@@ -91,6 +109,7 @@ const ChoreList = () => {
                     ? DateTime.fromMillis(chore.created).toISODate()
                     : DateTime.fromISO(chore.created).toISODate()}
                 </p>
+
                 {profile.is_parent ? (
                   <button
                     onClick={() => handleDeleteClick(chore.id)}
@@ -99,14 +118,20 @@ const ChoreList = () => {
                     Delete
                   </button>
                 ) : null}
-                {!profile.currentChore ? (
+                {!profile.currentChore &&
+                !choreList.find((item: any) => item.chores_id === chore.id) ? (
                   <button
                     onClick={() => handleAcceptClick(chore.id)}
                     className="btn-primary hover:bg-cyan-500 bg-cyan-400 mb-12 items-center justify-center"
                   >
                     Do it!
                   </button>
-                ) : null}
+                ) : (
+                  <h3 className="text-red-600">{`Assigned to ${
+                    choreList?.find((item: any) => item.chores_id === chore.id)
+                      ?.name
+                  }`}</h3>
+                )}
                 {profile.currentChore?.chores_id === chore.id ? (
                   <h3 className="text-green-600">Accepted</h3>
                 ) : null}

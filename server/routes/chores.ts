@@ -39,6 +39,24 @@ router.get('/', jwtCheck, async (req, res) => {
   }
 })
 
+router.get('/list', jwtCheck, async (req, res) => {
+  try {
+    const auth_id = req.auth?.payload.sub as string
+
+    const chores = await db.fetchFamilyChorelist(auth_id)
+
+    if (!chores) {
+      res.json({ message: "Couldn't find chores!" })
+    } else {
+      res.json({ chores })
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: err instanceof Error ? err.message : 'Unknown error',
+    })
+  }
+})
+
 router.post('/', jwtCheck, async (req, res) => {
   try {
     const authId = req.auth?.payload.sub as string

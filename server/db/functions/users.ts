@@ -7,11 +7,12 @@ const db = connection
 
 export async function fetchUser(authid: string): Promise<CompleteUser> {
   const user = await db('users').where('auth_id', authid).select('*').first()
-  const currentChore = await db('chore_list')
-    .join('users', 'users.id', 'chore_list.user_id')
+  const currentChore = await db('users')
+    .join('chore_list', 'users.id', 'chore_list.user_id')
+    .join('chores', 'chores.id', 'chore_list.chores_id')
     .where('auth_id', authid)
     .where('is_completed', false)
-    .select('chores_id')
+    .select('chore_list.chores_id', 'chores.name')
     .first()
   console.log('chore', currentChore)
   if (user) {

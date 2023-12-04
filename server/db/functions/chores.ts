@@ -16,6 +16,18 @@ export async function fetchFamilyChores(authId: string): Promise<Chore[]> {
   return chores
 }
 
+export async function fetchFamilyChorelist(authId: string): Promise<Chore[]> {
+  const familyId = await fetchFamilyId(authId)
+  const chorelist = await db('chores')
+    .join('chore_list', 'chores.id', 'chore_list.chores_id')
+    .join('users', 'users.id', 'chore_list.user_id')
+    .where('chores.family_id', familyId.family_id)
+    .where('is_completed', false)
+    .select('chores_id', 'users.name')
+  console.log('chorelist', chorelist)
+  return chorelist
+}
+
 export async function addChore(
   authId: string,
   chore: ChoreData
