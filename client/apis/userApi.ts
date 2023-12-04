@@ -40,8 +40,9 @@ export async function updateProfile(
   token: string,
   newUser: UserForm
 ): Promise<User> {
+  console.log('api', newUser)
   const updatedUser = {
-    name: newUser.username,
+    username: newUser.username,
     picture: newUser.picture,
   }
   const finalUser = await request

@@ -42,8 +42,9 @@ export async function updateUser(
   authId: string,
   updatedUser: UpdateUserForm
 ): Promise<User[]> {
+  console.log('db', updatedUser)
   const user = await db('users')
-    .where('auth_id', updatedUser.auth_id)
+    .where('auth_id', authId)
     .update({
       name: updatedUser.username,
       picture: updatedUser.picture,

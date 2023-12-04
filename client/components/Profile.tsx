@@ -1,9 +1,7 @@
 import { getUser } from '../apis/userApi'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { useAuth0 } from '@auth0/auth0-react'
-import { useEffect } from 'react'
-import FamilyPage from './FamilyPage'
 
 export default function Profile() {
   const { getAccessTokenSilently, isAuthenticated } = useAuth0()
@@ -19,13 +17,6 @@ export default function Profile() {
     },
   })
 
-  useEffect(() => {
-    if (data?.message === 'Need to create profile') {
-      navigate('/complete-profile')
-      return
-    }
-  }, [isAuthenticated, data, navigate])
-
   if (isPending) {
     return <p>Profile is loading...</p>
   }
@@ -37,15 +28,16 @@ export default function Profile() {
 
   const profile = data?.profile
 
-  if (profile && !profile.family_id) {
-    return <FamilyPage />
-  } else if (profile && profile.family_id) {
+  if (profile && profile.family_id) {
     return (
       <>
         <div className="flex flex-col items-center h-screen">
           <h1>{profile.name}</h1>
           <img src={profile.picture} alt={profile.name} />
           <h2>Family - {profile.family?.name}</h2>
+          <Link to="/profile/edit">
+            <button className="btn-primary">Edit Profile?</button>
+          </Link>
         </div>
       </>
     )

@@ -5,19 +5,22 @@ import { useNavigate } from 'react-router-dom'
 import ImageGrid from './ImageGrid'
 import { UserForm } from '../../models/Iforms'
 import { Image } from '../../models/Iforms'
-import { getUser } from '../apis/userApi'
+import { getUser, updateProfile } from '../apis/userApi'
 
 let currentForm: UserForm
 function EditProfileForm() {
-  const [submit, setSubmit] = useState(false)
   const navigate = useNavigate()
-  const { user, getAccessTokenSilently } = useAuth0()
+  const { getAccessTokenSilently } = useAuth0()
   const queryClient = useQueryClient()
   const accessTokenPromise = getAccessTokenSilently()
   const updateProfileMutation = useMutation({
-    mutationFn: () => updateProfile(user?.sub as string, form),
+    mutationFn: async () => {
+      const accessToken = await accessTokenPromise
+      updateProfile(accessToken, form)
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['users'] })
+      queryClient.invalidateQueries({ queryKey: ['profile'] })
+      navigate('/profile')
     },
   })
 
@@ -55,6 +58,7 @@ function EditProfileForm() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     currentForm = { ...form }
+    console.log('component', form)
     await updateProfileMutation.mutate()
   }
 
@@ -77,6 +81,10 @@ function EditProfileForm() {
     { id: 16, url: '/images/avatars/avatar-16.png', alt: 'Avatar 16' },
   ]
 
+  const currentAvatar = avatars.find(
+    (avatar) => avatar.url === profile?.picture
+  )
+
   return (
     <div>
       <h1 className="mx-auto mt-12 mb-6 text-center">EDIT YOUR PROFILE</h1>
@@ -92,14 +100,18 @@ function EditProfileForm() {
           id="username"
           type="text"
           required
-          placeholder="Username"
+          placeholder={`${profile?.name}`}
           name="username"
           onChange={handleChange}
           className="m-4 border-solid border-2 border-black p-2 px-5 w-1/3 rounded-lg mb-12"
         />
 
         <h2>Choose an Avatar</h2>
-        <ImageGrid images={avatars} onSelect={handleImageSelect} />
+        <ImageGrid
+          images={avatars}
+          onSelect={handleImageSelect}
+          current={currentAvatar}
+        />
 
         <button
           type="submit"
