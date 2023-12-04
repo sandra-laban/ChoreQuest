@@ -1,7 +1,8 @@
 import { UpdateUserForm, UserForm } from '../../../models/Iforms'
 import { CompleteUser, User } from '../../../models/Iusers'
 import connection from './../connection'
-import { isParent } from './helper'
+import { fetchFamily } from './family'
+import { isParent, usernameCheck } from './helper'
 
 const db = connection
 
@@ -42,26 +43,9 @@ export async function removeUser(authId: string, userId: number): Promise<any> {
 }
 
 export async function addUser(newUser: UserForm): Promise<User[]> {
-  // const existingUser = await db('users').where('name', newUser.username)
-  // if (existingUser) {
-  //   const newUsername = await generateUniqueUsername(newUser.username)
-  //   newUser.username = newUsername
-  // }
   const [user] = await db('users').insert(newUser).returning('*')
 
   return user
-}
-
-async function generateUniqueUsername(baseUsername: string) {
-  let suffix = 2
-  let newUsername = baseUsername
-
-  while (await db('users').where('username', newUsername).first()) {
-    suffix++
-    newUsername = `${baseUsername}${suffix}`
-  }
-
-  return newUsername
 }
 
 export async function updateUser(
@@ -69,13 +53,15 @@ export async function updateUser(
   updatedUser: UpdateUserForm
 ): Promise<User[]> {
   console.log('db', updatedUser)
-  const user = await db('users')
-    .where('auth_id', authId)
-    .update({
-      name: updatedUser.username,
-      picture: updatedUser.picture,
-    })
-    .returning('*')
+  await db('users').where('auth_id', authId).update({
+    name: updatedUser.username,
+    picture: updatedUser.picture,
+  })
+  const family_id = await fetchFamily(authId)
+  console.log('family_id', family_id)
+  await usernameCheck(authId, family_id.id)
+
+  const user = await db('users').where('auth_id', authId).select('*').first()
 
   return user
 }
