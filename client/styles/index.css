@@ -46,6 +46,6 @@
   }
 
   .image-grid {
-    @apply w-40 h-auto cursor-pointer border-solid border-8 border-transparent rounded-full transition ease-in-out duration-300;
+    @apply w-32 h-auto cursor-pointer border-solid border-8 border-transparent rounded-full transition ease-in-out duration-300;
   }
 }
