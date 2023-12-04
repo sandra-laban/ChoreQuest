@@ -1,6 +1,6 @@
 import { Prizes } from '../../../models/prizes'
 import db from '../connection'
-import { fetchFamilyId } from './family'
+import { fetchFamilyId } from './helper'
 
 export async function getAllPrizes(auth_id: string): Promise<Prizes[]> {
   const familyId = await fetchFamilyId(auth_id)
