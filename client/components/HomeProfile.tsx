@@ -1,7 +1,7 @@
 import { CompleteUser, User } from '@models/Iusers'
 
 interface Props {
-  member: User | CompleteUser
+  member: CompleteUser
 }
 function HomeProfile({ member }: Props) {
   return (
@@ -11,9 +11,9 @@ function HomeProfile({ member }: Props) {
           <h3>{member.name}</h3>
           <img src={member.picture} alt={member.name} className="my-4" />
         </div>
-        <div className="flex flex-col items-center justify-center my-6">
+        <div className="flex flex-col items-center justify-center my-6 mx-8">
           <h3>Points - {member.points}</h3>
-          <h3> CURRENT CHORE PLACEHOLDER - View Chores</h3>
+          <h3> Current Chore - {member.currentChore?.name}</h3>
           <h3> CURRENT GOAL PLACEHOLDER - View Prizes</h3>
         </div>
       </div>

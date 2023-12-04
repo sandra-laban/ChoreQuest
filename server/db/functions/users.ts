@@ -1,11 +1,20 @@
 import { UpdateUserForm, UserForm } from '../../../models/Iforms'
 import { CompleteUser, User } from '../../../models/Iusers'
 import connection from './../connection'
+import { isParent } from './helper'
 
 const db = connection
 
 export async function fetchUser(authid: string): Promise<CompleteUser> {
   const user = await db('users').where('auth_id', authid).select('*').first()
+  const currentChore = await db('users')
+    .join('chore_list', 'users.id', 'chore_list.user_id')
+    .join('chores', 'chores.id', 'chore_list.chores_id')
+    .where('auth_id', authid)
+    .where('is_completed', false)
+    .select('chore_list.chores_id', 'chores.name')
+    .first()
+  console.log('chore', currentChore)
   if (user) {
     if (user.family_id !== null) {
       const family = await db('family')
@@ -14,6 +23,9 @@ export async function fetchUser(authid: string): Promise<CompleteUser> {
         .first()
       user.family = family
     }
+    if (currentChore) {
+      user.currentChore = currentChore
+    }
   }
 
   console.log('db', user)
@@ -21,11 +33,8 @@ export async function fetchUser(authid: string): Promise<CompleteUser> {
 }
 
 export async function removeUser(authId: string, userId: number): Promise<any> {
-  const authority = await db('users')
-    .where('auth_id', authId)
-    .select('is_parent')
-    .first()
-  const deletedUser = authority.is_parent
+  const authorised = await isParent(authId)
+  const deletedUser = authorised
     ? await db('users').where('id', userId).del()
     : false
   console.log('deletedUser', deletedUser)
@@ -58,12 +67,9 @@ export async function createParent(
   authId: string,
   childId: number
 ): Promise<any> {
-  const authority = await db('users')
-    .where('auth_id', authId)
-    .select('is_parent')
-    .first()
+  const authorised = await isParent(authId)
 
-  const newParent = authority.is_parent
+  const newParent = authorised
     ? await db('users').where('id', childId).update({
         is_parent: true,
       })

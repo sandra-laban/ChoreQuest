@@ -5,6 +5,7 @@ import { addChore } from '../apis/chores'
 import { ChoreData } from '../../models/chores'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
+import { useAuth0 } from '@auth0/auth0-react'
 
 const initalForm = {
   name: '',
@@ -12,18 +13,27 @@ const initalForm = {
   created: DateTime.local().toISODate(), // luxon
 }
 
-const AddChore = () => {
+interface Props {
+  setFormView: (value: boolean) => void
+}
+
+const AddChore = ({ setFormView }: Props) => {
+  const { getAccessTokenSilently } = useAuth0()
+  const accessTokenPromise = getAccessTokenSilently()
   const [form, setForm] = useState<ChoreData>(initalForm)
   const queryClient = useQueryClient()
 
   const addChoreMutation = useMutation({
-    mutationFn: addChore,
-    onSuccess: () => {
+    mutationFn: async () => {
+      const accessToken = await accessTokenPromise
+      return await addChore(accessToken, form)
+    },
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['chores'] })
     },
   })
   function handleChange(
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | Date | null>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
     const { name, value } = e.target || { name: '', value: null }
     //console.log('name, value', name, value)
@@ -53,11 +63,12 @@ const AddChore = () => {
     setForm(newForm)
   }
 
-  function handleAddChange(e: ChangeEvent<HTMLFormElement>) {
+  async function handleAddChange(e: ChangeEvent<HTMLFormElement>) {
     e.preventDefault()
-    addChoreMutation.mutate(form)
+    await addChoreMutation.mutate()
     console.log(form, typeof form.created)
     setForm(initalForm)
+    setFormView(false)
     console.log(initalForm, typeof initalForm.created)
   }
 
@@ -115,9 +126,15 @@ const AddChore = () => {
                   dateFormat="yyyy-MM-dd"
                 />
               </div>
-              <button className="btn-primary mb-12 items-center justify-center">
-                Add Chore
-              </button>
+              <div className="flex justify-center items-center">
+                <button className="btn-primary mb-12">Add Chore</button>
+                <button
+                  className="btn-primary mb-12"
+                  onClick={() => setFormView(false)}
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           </div>
         </form>

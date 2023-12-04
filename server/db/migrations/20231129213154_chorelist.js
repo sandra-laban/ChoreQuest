@@ -4,7 +4,7 @@ export async function up(knex) {
     table.integer('user_id')
     table.date('due')
     table.date('assigned')
-    table.boolean('is_completed').defaultsTo(null)
+    table.boolean('is_completed').defaultsTo(false)
     // table.foreign('id').references('users.family_id').onDelete('cascade')
     // table.foreign('id').references('jobs.family_id').onDelete('cascade')
   })
