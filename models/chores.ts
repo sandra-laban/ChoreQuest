@@ -6,6 +6,7 @@ export interface Chore {
   points: number
   created: string
   family_id: number
+  is_completed: boolean
 }
 export interface ChoreData {
   name: string
