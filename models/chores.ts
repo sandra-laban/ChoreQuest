@@ -12,3 +12,11 @@ export interface ChoreData {
   points: string
   created: string
 }
+
+export interface AssignedChore {
+  chores_id: number
+  users_id: number
+  assigned: string
+  due: string | null
+  is_completed: boolean
+}

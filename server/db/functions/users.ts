@@ -7,6 +7,13 @@ const db = connection
 
 export async function fetchUser(authid: string): Promise<CompleteUser> {
   const user = await db('users').where('auth_id', authid).select('*').first()
+  const currentChore = await db('chore_list')
+    .join('users', 'users.id', 'chore_list.user_id')
+    .where('auth_id', authid)
+    .where('is_completed', false)
+    .select('chores_id')
+    .first()
+  console.log('chore', currentChore)
   if (user) {
     if (user.family_id !== null) {
       const family = await db('family')
@@ -14,6 +21,9 @@ export async function fetchUser(authid: string): Promise<CompleteUser> {
         .select('*')
         .first()
       user.family = family
+    }
+    if (currentChore) {
+      user.currentChore = currentChore
     }
   }
 

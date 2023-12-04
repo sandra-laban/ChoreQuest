@@ -1,7 +1,8 @@
-import { Chore, ChoreData } from '../../../models/chores'
+import { DateTime } from 'luxon'
+import { AssignedChore, Chore, ChoreData } from '../../../models/chores'
 import connection from '../connection'
 import db from '../connection'
-import { fetchFamilyId, isParent } from './helper.ts'
+import { fetchFamilyId, getUserId, isAvailable, isParent } from './helper.ts'
 
 export function getAllChores() {
   return db('chores').select('*')
@@ -37,22 +38,25 @@ export async function addChore(
 
 export async function acceptChore(
   authId: string,
-  chore: ChoreData
-): Promise<Chore | null> {
-  const familyId = await fetchFamilyId(authId)
-  const authorised = await isParent(authId)
+  choreId: number
+): Promise<AssignedChore | null> {
+  console.log('db accept chore')
+  const available = await isAvailable(authId)
+  console.log(available)
+  const userId = await getUserId(authId)
+  console.log(userId)
 
-  const newChore = {
-    ...chore,
-    points: Number(chore.points),
-    family_id: familyId.family_id,
+  const assignedChore = {
+    chores_id: choreId,
+    user_id: userId.id,
+    assigned: DateTime.now(),
   }
-  console.log('newChore', newChore)
-  const addedChore = authorised
-    ? await db('chores').insert(newChore).returning('*')
+  console.log('assignedChore', assignedChore)
+  const acceptedChore = available
+    ? await db('chore_list').insert(assignedChore).returning('*')
     : null
-
-  return addedChore ? addedChore[0] : null
+  console.log('acceptedChore', acceptedChore)
+  return acceptedChore ? acceptedChore[0] : null
 }
 
 export async function deleteChore(authId: string, choreId: number) {

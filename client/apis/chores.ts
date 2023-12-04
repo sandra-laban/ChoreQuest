@@ -33,7 +33,7 @@ export async function acceptChore(
     .post('/api/v1/chores/accept')
     .set('Authorization', `Bearer ${token}`)
     .send({ choreId })
-
+  console.log('api response', response.body)
   return response.body
 }
 

@@ -98,14 +98,18 @@ const ChoreList = () => {
                   >
                     Delete
                   </button>
-                ) : (
+                ) : null}
+                {!profile.currentChore ? (
                   <button
                     onClick={() => handleAcceptClick(chore.id)}
                     className="btn-primary hover:bg-cyan-500 bg-cyan-400 mb-12 items-center justify-center"
                   >
                     Do it!
                   </button>
-                )}
+                ) : null}
+                {profile.currentChore?.chores_id === chore.id ? (
+                  <h3 className="text-green-600">Accepted</h3>
+                ) : null}
               </li>
             </ul>
           ))}
