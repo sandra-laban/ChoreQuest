@@ -17,10 +17,14 @@ export async function addPrize(
 ): Promise<Prizes | null> {
   const familyId = await fetchFamilyId(auth_id)
   const authorised = await isParent(auth_id)
+  const addPrize = {
+    ...newPrize,
+    price: Number(newPrize.price),
+    quantity: Number(newPrize.quantity),
+    family_id: familyId.family_id,
+  }
   const prize = authorised
-    ? await db('prizes')
-        .insert({ ...newPrize, family_id: familyId.family_id })
-        .returning('*')
+    ? await db('prizes').insert(addPrize).returning('*')
     : null
   return prize ? prize[0] : null
 }
