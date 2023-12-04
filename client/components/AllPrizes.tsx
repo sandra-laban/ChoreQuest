@@ -1,12 +1,11 @@
 import { getAllPrizes } from '../apis/prizes'
 import { useQuery } from '@tanstack/react-query'
 import { useAuth0 } from '@auth0/auth0-react'
-import { useParams } from 'react-router-dom'
 
 export default function AllPrizes() {
-  // const { family } = useParams()
   const { user, getAccessTokenSilently } = useAuth0()
   const accessTokenPromise = getAccessTokenSilently()
+
   const {
     data: allPrizes,
     isError,
@@ -41,6 +40,7 @@ export default function AllPrizes() {
           </div>
         ))}
       </div>
+      <button>Add a Prize!</button>
     </>
   )
 }
