@@ -37,16 +37,18 @@ export async function completeProfile(
 }
 
 export async function updateProfile(
-  authRes: string,
+  token: string,
   newUser: UserForm
 ): Promise<User> {
+  console.log('api', newUser)
   const updatedUser = {
-    auth_id: authRes,
-    name: newUser.username,
+    username: newUser.username,
     picture: newUser.picture,
   }
-  const finalUser = await request.patch('/api/v1/user').send(updatedUser)
-
+  const finalUser = await request
+    .patch('/api/v1/user')
+    .send(updatedUser)
+    .set('Authorization', `Bearer ${token}`)
   return finalUser.body
 }
 
