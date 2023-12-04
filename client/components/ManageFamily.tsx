@@ -90,11 +90,10 @@ function ManageFamily() {
           <ManagementProfile member={member} key={member.id} />
         ))}
       {familyView === 'View Parents' &&
-        sortedFamily?.map(
-          (member) =>
-            member.is_parent && (
-              <ManagementProfile member={member} key={member.id} />
-            )
+        sortedFamily?.map((member) =>
+          member.is_parent ? (
+            <ManagementProfile member={member} key={member.id} />
+          ) : null
         )}
       {familyView === 'View Kids' &&
         sortedFamily?.map(
