@@ -1,6 +1,7 @@
 import { useAuth0 } from '@auth0/auth0-react'
 import { Link } from 'react-router-dom'
 import NavProfile from './NavProfile'
+import NotificationBar from './NotificationBar'
 
 function Nav() {
   const { user, isAuthenticated, logout, loginWithRedirect } = useAuth0()
@@ -22,6 +23,7 @@ function Nav() {
       <Link to="/profile">
         <button className="btn-nav">PROFILE</button>
       </Link>
+      <NotificationBar />
       {user ? (
         <>
           <NavProfile />

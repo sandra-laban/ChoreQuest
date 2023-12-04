@@ -2,11 +2,15 @@
 
 import { useEffect } from 'react'
 import configureSocket from '../apis/websocket' // assuming you have a file to configure the socket
+import { useAuth0 } from '@auth0/auth0-react'
 
-const NotificationBar = ({ accessToken }: { accessToken: string }) => {
+const NotificationBar = () => {
+  const { getAccessTokenSilently } = useAuth0()
+  const accessTokenPromise = getAccessTokenSilently()
+
   useEffect(() => {
     const connectWebSocket = async () => {
-      const socket = await configureSocket(accessToken)
+      const socket = await configureSocket(accessTokenPromise)
 
       if (socket) {
         const handleData = (receivedData: any) => {
@@ -22,7 +26,7 @@ const NotificationBar = ({ accessToken }: { accessToken: string }) => {
     }
 
     connectWebSocket()
-  }, [accessToken])
+  }, [accessTokenPromise])
 
   return (
     <div>

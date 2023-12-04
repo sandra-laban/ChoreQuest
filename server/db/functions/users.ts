@@ -14,7 +14,6 @@ export async function fetchUser(authid: string): Promise<CompleteUser> {
     .where('is_completed', false)
     .select('chore_list.chores_id', 'chores.name')
     .first()
-  console.log('chore', currentChore)
   if (user) {
     if (user.family_id !== null) {
       const family = await db('family')
@@ -28,7 +27,6 @@ export async function fetchUser(authid: string): Promise<CompleteUser> {
     }
   }
 
-  console.log('db', user)
   return user
 }
 
@@ -37,7 +35,6 @@ export async function removeUser(authId: string, userId: number): Promise<any> {
   const deletedUser = authorised
     ? await db('users').where('id', userId).del()
     : false
-  console.log('deletedUser', deletedUser)
   return deletedUser
 }
 
@@ -51,7 +48,6 @@ export async function updateUser(
   authId: string,
   updatedUser: UpdateUserForm
 ): Promise<User[]> {
-  console.log('db', updatedUser)
   const user = await db('users')
     .where('auth_id', authId)
     .update({
@@ -74,6 +70,5 @@ export async function createParent(
         is_parent: true,
       })
     : false
-  console.log('newParent', newParent)
   return newParent
 }

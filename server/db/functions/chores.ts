@@ -24,7 +24,6 @@ export async function fetchFamilyChorelist(authId: string): Promise<Chore[]> {
     .where('chores.family_id', familyId.family_id)
     .where('is_completed', false)
     .select('chores_id', 'users.name')
-  console.log('chorelist', chorelist)
   return chorelist
 }
 
@@ -40,7 +39,6 @@ export async function addChore(
     points: Number(chore.points),
     family_id: familyId.family_id,
   }
-  console.log('newChore', newChore)
   const addedChore = authorised
     ? await db('chores').insert(newChore).returning('*')
     : null
@@ -52,22 +50,17 @@ export async function acceptChore(
   authId: string,
   choreId: number
 ): Promise<AssignedChore | null> {
-  console.log('db accept chore')
   const available = await isAvailable(authId)
-  console.log(available)
   const userId = await getUserId(authId)
-  console.log(userId)
 
   const assignedChore = {
     chores_id: choreId,
     user_id: userId.id,
     assigned: DateTime.now(),
   }
-  console.log('assignedChore', assignedChore)
   const acceptedChore = available
     ? await db('chore_list').insert(assignedChore).returning('*')
     : null
-  console.log('acceptedChore', acceptedChore)
   return acceptedChore ? acceptedChore[0] : null
 }
 

@@ -20,12 +20,10 @@ export async function fetchFamilyId(auth_id: string) {
 }
 
 export async function isAvailable(auth_id: string) {
-  console.log('availability')
   const userChores = await db('chore_list')
     .join('users', 'users.id', 'chore_list.user_id')
     .where('auth_id', auth_id)
     .select('is_completed')
-  console.log('userChores', userChores)
   const available = userChores
     ? userChores.every((chore) => chore.is_completed)
     : true
