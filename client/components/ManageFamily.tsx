@@ -72,7 +72,7 @@ function ManageFamily() {
 
       {family?.picture !== null && (
         <img src={`images/familyIcons/${family?.picture}`} alt={family?.name} />
-
+      )}
 
       <div className="flex justify-center items-center">
         <button className="btn-primary" onClick={handleClick}>
