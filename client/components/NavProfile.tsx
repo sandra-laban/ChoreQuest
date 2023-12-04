@@ -21,8 +21,17 @@ export default function Profile() {
 
   const profile = data?.profile
 
-  if (profile && !profile.family_id) {
-    return null
+  if (!profile?.family_id) {
+    return (
+      <button
+        className="btn-nav"
+        onClick={() =>
+          logout({ logoutParams: { returnTo: window.location.origin } })
+        }
+      >
+        LOGOUT?
+      </button>
+    )
   } else if (profile && profile.family_id) {
     return (
       <>
