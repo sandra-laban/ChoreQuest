@@ -21,4 +21,21 @@ router.get('/', jwtCheck, async (req, res) => {
   }
 })
 
+// POST /api/v1/prizes
+router.post('/', jwtCheck, async (req, res) => {
+  try {
+    const auth_id = req.auth?.payload.sub as string
+    const prize = req.body.prize
+    const addedPrize = await db.addPrize(auth_id, prize)
+
+    if (!addedPrize) {
+      res.json({ message: 'Unable to add prize' })
+    } else {
+      res.json({ addedPrize })
+    }
+  } catch (error) {
+    res.sendStatus(500).json({ message: 'Unable to add prize' })
+  }
+})
+
 export default router

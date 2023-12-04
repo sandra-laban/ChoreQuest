@@ -11,14 +11,6 @@ export async function getAllPrizes(auth_id: string): Promise<Prizes[]> {
   return prizes
 }
 
-// export async function fetchParent(auth_id: string) {
-//   const parent = await db('users')
-//     .where('auth_id', auth_id)
-//     .select('isParent')
-//     .first()
-//   return parent
-// }
-
 export async function addPrize(
   auth_id: string,
   newPrize: PrizeData
@@ -31,4 +23,25 @@ export async function addPrize(
         .returning('*')
     : null
   return prize ? prize[0] : null
+}
+
+export async function editPrize(
+  prizes_id: number,
+  editPrize: PrizeData
+): Promise<Prizes[]> {
+  const prize = await db('prizes')
+    .where('id', prizes_id)
+    .update({
+      ...editPrize,
+    })
+    .returning('*')
+  return prize
+}
+
+export async function deletePrize(auth_id: string, prize_id: number) {
+  const authorised = await isParent(auth_id)
+  const deletePrize = authorised
+    ? await db('prizes').where('id', prize_id).delete()
+    : null
+  return deletePrize
 }
