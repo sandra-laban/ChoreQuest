@@ -1,3 +1,8 @@
+import dotenv from 'dotenv'
+dotenv.config()
+
+console.log(process.env.TOBY_AUTH_ID)
+
 export async function seed(knex) {
   try {
     await knex.transaction(async (trx) => {
@@ -51,6 +56,11 @@ async function seedFamily(trx) {
       password: 'password',
       picture: '/images/familyIcons/4.png',
     },
+    {
+      name: 'Hind',
+      password: 'password',
+      picture: '/images/familyIcons/3.png',
+    },
   ])
 }
 
@@ -61,8 +71,43 @@ async function seedPrizes(trx) {
     {
       family_id: 1,
       name: 'Ice Cream',
-      definition: '1 double scoope from the ice cream store',
+      definition: '1 double scoop from the ice cream store',
       price: 800,
+      quantity: 1,
+    },
+    {
+      family_id: 1,
+      name: 'Movie of your choice',
+      definition: 'Any movie that we can stream at home',
+      price: 100,
+      quantity: 1,
+    },
+    {
+      family_id: 2,
+      name: 'Ice Cream',
+      definition: '1 double scoop from the ice cream store',
+      price: 800,
+      quantity: 1,
+    },
+    {
+      family_id: 2,
+      name: 'Movie of your choice',
+      definition: 'Any movie that we can stream at home',
+      price: 100,
+      quantity: 1,
+    },
+    {
+      family_id: 3,
+      name: 'Ice Cream',
+      definition: '1 double scoop from the ice cream store',
+      price: 800,
+      quantity: 1,
+    },
+    {
+      family_id: 3,
+      name: 'Movie of your choice',
+      definition: 'Any movie that we can stream at home',
+      price: 100,
       quantity: 1,
     },
   ])
@@ -77,6 +122,15 @@ async function seedUsers(trx) {
       family_id: 1,
       auth_id: '111',
       points: null,
+      picture: '/images/avatars/avatar-1.png',
+    },
+    {
+      name: 'Toby',
+      is_parent: true,
+      family_id: 1,
+      auth_id: process.env.TOBY_AUTH_ID,
+      points: null,
+      picture: '/images/avatars/avatar-2.png',
     },
     {
       name: 'Gideon',
@@ -84,13 +138,57 @@ async function seedUsers(trx) {
       family_id: 1,
       auth_id: '222',
       points: 200,
+      picture: '/images/avatars/avatar-3.png',
     },
     {
       name: 'Ruby',
-      is_parent: true,
-      family_id: null,
+      is_parent: false,
+      family_id: 1,
       auth_id: '333',
       points: 0,
+      picture: '/images/avatars/avatar-4.png',
+    },
+    {
+      name: 'Maresa',
+      is_parent: true,
+      family_id: 2,
+      auth_id: 'auth0|112',
+      points: null,
+    },
+    {
+      name: 'Peter',
+      is_parent: true,
+      family_id: 2,
+      auth_id: 'auth0|111',
+      points: null,
+    },
+    {
+      name: 'Teddy',
+      is_parent: false,
+      family_id: 2,
+      auth_id: 'auth0|113',
+      points: null,
+    },
+    {
+      name: 'Otis',
+      is_parent: false,
+      family_id: 2,
+      auth_id: 'auth0|114',
+      points: null,
+    },
+    {
+      name: 'Rudy',
+      is_parent: false,
+      family_id: 2,
+      auth_id: 'auth0|115',
+      points: null,
+    },
+    {
+      name: 'Remy',
+      is_parent: false,
+      family_id: 2,
+      auth_id: 'auth0|116',
+      points: null,
     },
   ])
 }

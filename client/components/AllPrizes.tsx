@@ -1,16 +1,28 @@
 import { getAllPrizes } from '../apis/prizes'
 import { useQuery } from '@tanstack/react-query'
+import { useAuth0 } from '@auth0/auth0-react'
 
 export default function AllPrizes() {
+  const { user, getAccessTokenSilently } = useAuth0()
+  const accessTokenPromise = getAccessTokenSilently()
+
   const {
     data: allPrizes,
     isError,
     isLoading,
-  } = useQuery({ queryKey: ['prizes'], queryFn: getAllPrizes })
+  } = useQuery({
+    queryKey: ['prizes'],
+    queryFn: async () => {
+      const token = await accessTokenPromise
+      return await getAllPrizes(token)
+    },
+  })
+
   if (isError) {
     return <div>There was an error getting your prizes</div>
   }
-  if (isLoading) {
+
+  if (isLoading || !allPrizes) {
     return <div>Loading your prizes...</div>
   }
   return (
@@ -22,11 +34,13 @@ export default function AllPrizes() {
             className="border-2 m-5 gap-3 text-center bg-sky-200"
           >
             <h2>Prize: {prize.name}</h2>
+            <p>{prize.definition}</p>
             <p>Price: {prize.price}</p>
             <p>How many left: {prize.quantity}</p>
           </div>
         ))}
       </div>
+      <button>Add a Prize!</button>
     </>
   )
 }
