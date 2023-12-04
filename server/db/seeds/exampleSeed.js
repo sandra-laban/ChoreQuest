@@ -117,6 +117,15 @@ async function seedUsers(trx) {
       family_id: 1,
       auth_id: '111',
       points: null,
+      picture: '/images/avatars/avatar-1.png',
+    },
+    {
+      name: 'Toby',
+      is_parent: true,
+      family_id: 1,
+      auth_id: 'auth0|656900ee01f9e8a19d2ba049',
+      points: null,
+      picture: '/images/avatars/avatar-2.png',
     },
     {
       name: 'Gideon',
@@ -124,13 +133,15 @@ async function seedUsers(trx) {
       family_id: 1,
       auth_id: '222',
       points: 200,
+      picture: '/images/avatars/avatar-3.png',
     },
     {
       name: 'Ruby',
-      is_parent: true,
-      family_id: null,
+      is_parent: false,
+      family_id: 1,
       auth_id: '333',
       points: 0,
+      picture: '/images/avatars/avatar-4.png',
     },
     {
       name: 'Maresa',
