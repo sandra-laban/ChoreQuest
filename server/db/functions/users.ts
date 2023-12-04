@@ -42,9 +42,26 @@ export async function removeUser(authId: string, userId: number): Promise<any> {
 }
 
 export async function addUser(newUser: UserForm): Promise<User[]> {
+  // const existingUser = await db('users').where('name', newUser.username)
+  // if (existingUser) {
+  //   const newUsername = await generateUniqueUsername(newUser.username)
+  //   newUser.username = newUsername
+  // }
   const [user] = await db('users').insert(newUser).returning('*')
 
   return user
+}
+
+async function generateUniqueUsername(baseUsername: string) {
+  let suffix = 2
+  let newUsername = baseUsername
+
+  while (await db('users').where('username', newUsername).first()) {
+    suffix++
+    newUsername = `${baseUsername}${suffix}`
+  }
+
+  return newUsername
 }
 
 export async function updateUser(
