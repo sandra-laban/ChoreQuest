@@ -108,6 +108,19 @@ export async function finishChore(authId: string, choreId: number) {
     .update({
       is_completed: true,
     })
-
+  await getPoints(authId, choreId)
   return completedChore
+}
+
+async function getPoints(authId: string, choreId: number) {
+  const userId = await getUserId(authId)
+  const points = await db('chores')
+    .where('id', choreId)
+    .select('points')
+    .first()
+  const userPoints = await db('users')
+    .where('id', userId.id)
+    .increment('points', points.points)
+
+  return userPoints
 }
