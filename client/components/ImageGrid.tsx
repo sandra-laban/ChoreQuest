@@ -4,10 +4,13 @@ import { Image } from '../../models/Iforms'
 interface ImageGrid {
   images: Image[]
   onSelect: (selectedImage: Image) => void
+  current?: Image
 }
 
-function ImageGrid({ images, onSelect }: ImageGrid) {
-  const [selectedImage, setSelectedImage] = useState<Image | null>(null)
+function ImageGrid({ images, onSelect, current }: ImageGrid) {
+  const [selectedImage, setSelectedImage] = useState<Image | null>(
+    current ? current : null
+  )
 
   function handleImageClick(image: Image) {
     setSelectedImage(image)
