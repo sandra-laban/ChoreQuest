@@ -8,6 +8,8 @@ import AddPrize from './components/AddPrize'
 import ManageFamily from './components/ManageFamily'
 import Home from './components/Home'
 import AuthCheck from './components/AuthCheck'
+import NewUserForm from './components/NewUserForm'
+import FamilyPage from './components/FamilyPage'
 
 export const routes = createRoutesFromElements(
   <Route path="/" element={<App />}>
