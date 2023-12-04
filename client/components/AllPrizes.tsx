@@ -15,7 +15,7 @@ export default function AllPrizes() {
     queryKey: ['prizes'],
     queryFn: async () => {
       const token = await accessTokenPromise
-      getAllPrizes(token)
+      return await getAllPrizes(token)
     },
   })
 
