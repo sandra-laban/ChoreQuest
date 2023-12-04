@@ -8,7 +8,7 @@ import { Image } from '../../models/Iforms'
 
 const initialForm = {
   username: '',
-  picture: '',
+  picture: '/images/avatars/avatar-1.png',
 }
 
 function CompleteProfile() {
