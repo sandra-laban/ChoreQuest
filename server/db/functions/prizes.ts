@@ -16,6 +16,7 @@ export async function addPrize(
 ): Promise<Prizes | null> {
   const familyId = await fetchFamilyId(auth_id)
   const authorised = await isParent(auth_id)
+  console.log(newPrize)
   const addPrize = {
     ...newPrize,
     price: Number(newPrize.price),

@@ -17,7 +17,7 @@ router.get('/', jwtCheck, async (req, res) => {
     const prizes = await db.getAllPrizes(auth_id)
     res.status(200).json({ prizes })
   } catch (error) {
-    res.sendStatus(500).json({ message: 'Unable to get prizes' })
+    res.status(500).json({ message: 'Unable to get prizes' })
   }
 })
 
@@ -27,14 +27,13 @@ router.post('/', jwtCheck, async (req, res) => {
     const authId = req.auth?.payload.sub as string
     const prize = req.body.prize
     const addedPrize = await db.addPrize(authId, prize)
-
     if (!addedPrize) {
       res.json({ message: 'Unable to add prize' })
     } else {
       res.json({ addedPrize })
     }
   } catch (error) {
-    res.sendStatus(500).json({ message: 'Unable to add prize' })
+    res.status(500).json({ message: 'Unable to add prize' })
   }
 })
 
