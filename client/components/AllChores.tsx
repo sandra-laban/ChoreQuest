@@ -16,7 +16,6 @@ import { socketInstance } from '../apis/websocket'
 
 import { AssignedChore, Chore } from '@models/chores'
 
-
 const ChoreList = () => {
   const [formView, setFormView] = useState(false)
   const { getAccessTokenSilently } = useAuth0()
@@ -71,9 +70,9 @@ const ChoreList = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['chores'] })
       socketInstance.emit('update_query_key', {
-        queryKey: ['chores'],
+        queryKey: ['chores', 'notifications'],
         users: 'all',
-        notificationMessage: 'Chore added',
+        notificationMessage: 'Chore deleted',
       })
     },
   })

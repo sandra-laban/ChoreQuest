@@ -1,5 +1,6 @@
 import { Server as SocketIoServer, Socket } from 'socket.io'
 import { getFamilyMembersById } from '../db/functions/websocketQureys'
+import * as db from '../db/functions/notifications'
 
 const userSocketMap = new Map<string, Socket>()
 let ioInstance: SocketIoServer // Variable to store the io instance
@@ -25,8 +26,9 @@ const handleSocketMessages = (io: SocketIoServer) => {
           if (!socket.userId) return
           const familyMembers = await getFamilyMembersById(socket.userId)
           if (familyMembers.length === 0) return
-          familyMembers.forEach((memberId) => {
-            sendMessageToUser(memberId.id, { queryKey, notificationMessage })
+          familyMembers.forEach(async (memberId) => {
+            await db.addUserNotification(memberId.auth_id, notificationMessage)
+            sendMessageToUser(memberId.id, { queryKey })
           })
         })
 

@@ -16,6 +16,8 @@ export async function seed(knex) {
 
       // Seed tables with foreign key constraints that depend on other seeded tables
       await seedChoreList(trx)
+
+      await seedNotifications(trx)
     })
   } catch (error) {
     console.error('Error during seed:', error)
@@ -128,7 +130,7 @@ async function seedUsers(trx) {
       name: 'Toby',
       is_parent: true,
       family_id: 1,
-      auth_id: process.env.TOBY_AUTH_ID,
+      auth_id: 'auth0|656e8ad0b3f48a3f1d32e77d',
       points: null,
       picture: '/images/avatars/avatar-2.png',
     },
@@ -197,7 +199,7 @@ async function seedNotifications(trx) {
   await trx('notifications').del()
   await trx('notifications').insert([
     {
-      user_id: 2,
+      auth_id: 'auth0|656e8ad0b3f48a3f1d32e77d',
       message: 'Chore has been added',
     },
   ])

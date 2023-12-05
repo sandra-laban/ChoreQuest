@@ -1,13 +1,26 @@
 // NotificationBar.js
-
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { configureSocket } from '../apis/websocket'
 import { useAuth0 } from '@auth0/auth0-react'
+import { getNotifications } from '../apis/Notifications'
 
 const NotificationBar = () => {
+  const queryClient = useQueryClient()
   const { getAccessTokenSilently } = useAuth0()
   const accessTokenPromise = getAccessTokenSilently()
-  const [notifications, setNotifications] = useState<string[]>([])
+
+  const {
+    data: notifications,
+    error,
+    isPending,
+  } = useQuery({
+    queryKey: ['notifications'],
+    queryFn: async () => {
+      const accessToken = await accessTokenPromise
+      return await getNotifications(accessToken)
+    },
+  })
 
   useEffect(() => {
     const connectWebSocket = async () => {
@@ -15,10 +28,8 @@ const NotificationBar = () => {
 
       if (socket) {
         const handleData = (receivedData: any) => {
-          setNotifications(() => [
-            ...notifications,
-            receivedData.notificationMessage,
-          ])
+          console.log('query keys', receivedData.queryKey)
+          queryClient.invalidateQueries({ queryKey: receivedData.queryKey })
         }
 
         socket.on('notification_data', handleData)
@@ -26,14 +37,15 @@ const NotificationBar = () => {
     }
 
     connectWebSocket()
-  }, [accessTokenPromise, notifications])
+  }, [accessTokenPromise])
 
   return (
     <div>
       <h2>NotificationBar</h2>
-      {notifications.map((notification, index) => (
-        <p key={index}>{notification}</p>
-      ))}
+      {notifications &&
+        notifications.map((notification) => (
+          <p key={notification.id}>{notification.message}</p>
+        ))}
     </div>
   )
 }
