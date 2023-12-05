@@ -1,6 +1,7 @@
 import express from 'express'
 import * as db from '../db/functions/prizes'
 import { auth } from 'express-oauth2-jwt-bearer'
+import { useParams } from 'react-router-dom'
 
 const router = express.Router()
 
@@ -17,7 +18,51 @@ router.get('/', jwtCheck, async (req, res) => {
     const prizes = await db.getAllPrizes(auth_id)
     res.status(200).json({ prizes })
   } catch (error) {
-    res.sendStatus(500).json({ message: 'Unable to get prizes' })
+    res.status(500).json({ message: 'Unable to get prizes' })
+  }
+})
+
+router.get('/:id', jwtCheck, async (req, res) => {
+  try {
+    // const auth_id = req.auth?.payload.sub as string
+    const prizeId = Number(req.params.id)
+    const prize = await db.getPrize(prizeId)
+    res.status(200).json({ prize })
+  } catch (error) {
+    res.status(500).json({ message: 'Unable to get prize' })
+  }
+})
+
+// POST /api/v1/prizes
+router.post('/', jwtCheck, async (req, res) => {
+  try {
+    const authId = req.auth?.payload.sub as string
+    const prize = req.body.prize
+    const addedPrize = await db.addPrize(authId, prize)
+    if (!addedPrize) {
+      res.json({ message: 'Unable to add prize' })
+    } else {
+      res.json({ addedPrize })
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Unable to add prize' })
+  }
+})
+
+// PATCH /api/v1/prizes
+router.patch('/', jwtCheck, async (req, res) => {
+  try {
+    const authId = req.auth?.payload.sub as string
+    const editPrize = req.body.editPrize
+    const prizeId = req.body.prizeId
+    const editedPrize = await db.editPrize(authId, prizeId, editPrize)
+    if (!editedPrize) {
+      res.json({ message: 'Unable to edit prize' })
+    } else {
+      res.json({ editedPrize })
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Unable to edit prizze' })
   }
 })
 
