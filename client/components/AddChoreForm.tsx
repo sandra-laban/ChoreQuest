@@ -88,11 +88,11 @@ const AddChore = ({ setFormView }: Props) => {
           aria-label="Add Chore Form"
           className="flex flex-col items-center justify-center"
         >
-          <div className="border p-8 border-gray-900/10 m-8 bg-white">
+          <div className="border p-8 border-gray-900/10 m-8">
             <h2 className="mx-auto mt-6 mb-6 text-center">Add new chore</h2>
             <div className="flex flex-col items-center justify-center">
               <label htmlFor="name" className="text-2xl">
-                Name:
+                What to do:
               </label>
               <input
                 id="name"
@@ -102,7 +102,7 @@ const AddChore = ({ setFormView }: Props) => {
                 className="border-solid border-2 border-black rounded-lg"
               ></input>
               <label htmlFor="points" className="text-2xl">
-                Points:
+                Add few points:
               </label>
               <input
                 id="points"
@@ -112,7 +112,7 @@ const AddChore = ({ setFormView }: Props) => {
                 className="border-solid border-2 border-black rounded-lg"
               ></input>
               <label htmlFor="date" className="text-2xl">
-                Pick a date:
+                Pick a due date:
               </label>
               <DatePicker
                 className="border-solid border-2 border-black rounded-lg"

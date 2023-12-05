@@ -57,4 +57,24 @@
   .nav-link-mob {
     @apply text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium;
   }
+  span.svg-icon {
+    width: 40px;
+    height: 40px;
+    -o-object-fit: contain;
+    object-fit: contain;
+    margin: 0 auto;
+  }
+  .points-fixed {
+    text-align: center;
+    @apply text-xl text-yellow-400;
+  }
+  .card-chore {
+    @apply relative bg-purple-800 block p-6 rounded-lg;
+  }
+  .colour-border {
+    @apply absolute inset-x-0 bottom-0 h-2 bg-gradient-to-r from-green-300 via-blue-500 to-purple-600;
+  }
+  .main-title {
+    @apply flex justify-center mb-6 uppercase;
+  }
 }
