@@ -37,11 +37,13 @@ router.post('/', jwtCheck, async (req, res) => {
   }
 })
 
+// PATCH /api/v1/prizes
 router.patch('/', jwtCheck, async (req, res) => {
   try {
     const authId = req.auth?.payload.sub as string
     const editPrize = req.body.editPrize
-    const editedPrize = await db.editPrize(authId, editPrize)
+    const prizeId = req.body.prizeId
+    const editedPrize = await db.editPrize(authId, prizeId, editPrize)
     if (!editedPrize) {
       res.json({ message: 'Unable to edit prize' })
     } else {
