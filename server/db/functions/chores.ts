@@ -67,8 +67,8 @@ export async function acceptChore(
   const assignedChore = {
     chores_id: choreId,
     user_id: userId.id,
-    assigned: DateTime.now(),
   }
+
   console.log('assignedChore', assignedChore)
   const acceptedChore = available
     ? await db('chore_list').insert(assignedChore).returning('*')
