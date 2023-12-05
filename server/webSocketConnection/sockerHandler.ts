@@ -17,7 +17,7 @@ const handleSocketMessages = (io: SocketIoServer) => {
         socket.userId = userId
         userSocketMap.set(userId, socket)
         console.log(`WebSocket connection linked to user ${userId}`)
-
+        socket.removeAllListeners('update_query_key')
         socket.on('update_query_key', async (data) => {
           const queryKey = data.queryKey
           const users = data.users
@@ -26,6 +26,7 @@ const handleSocketMessages = (io: SocketIoServer) => {
 
           if (!socket.userId) return
           const familyMembers = await getFamilyMembersById(socket.userId)
+          console.log(familyMembers)
           if (familyMembers.length === 0) return
           familyMembers.forEach(async (memberId) => {
             await db.addUserNotification(
