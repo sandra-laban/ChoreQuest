@@ -1,6 +1,7 @@
 import express from 'express'
 import * as db from '../db/functions/prizes'
 import { auth } from 'express-oauth2-jwt-bearer'
+import { useParams } from 'react-router-dom'
 
 const router = express.Router()
 
@@ -21,7 +22,16 @@ router.get('/', jwtCheck, async (req, res) => {
   }
 })
 
-router.get('/')
+router.get('/:id', jwtCheck, async (req, res) => {
+  try {
+    const auth_id = req.auth?.payload.sub as string
+    const prizeId = Number(req.params.id)
+    const prize = await db.getPrize(prizeId)
+    res.json({ prize })
+  } catch (error) {
+    res.status(500).json({ message: 'Unable to get prize' })
+  }
+})
 
 // POST /api/v1/prizes
 router.post('/', jwtCheck, async (req, res) => {

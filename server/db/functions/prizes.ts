@@ -28,8 +28,8 @@ export async function addPrize(
   return prize ? prize[0] : null
 }
 
-export async function getPrize(prize_id: number): Promise<Prizes> {
-  const prize = await db('prizes').where('id', prize_id).select('*').first()
+export async function getPrize(prizeId: number): Promise<Prizes> {
+  const prize = await db('prizes').where('id', prizeId).select('*').first()
   return prize
 }
 
