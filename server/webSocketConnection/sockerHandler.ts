@@ -32,7 +32,7 @@ const handleSocketMessages = (io: SocketIoServer) => {
             const pageUrl = data.pageUrl
 
             if (!socket.userId) return
-            const familyMembers = []
+            const familyMembers: any = []
             if (users === 'family') {
               familyMembers.push(
                 await getFamilyMembersById(socket.userId, 'family')
@@ -48,7 +48,9 @@ const handleSocketMessages = (io: SocketIoServer) => {
             }
 
             if (familyMembers.length === 0) return
-            familyMembers.forEach(async (memberId) => {
+
+            console.log('familyMembers', familyMembers)
+            familyMembers.forEach(async (memberId: any) => {
               await db.addUserNotification(
                 memberId.auth_id,
                 notificationMessage,
