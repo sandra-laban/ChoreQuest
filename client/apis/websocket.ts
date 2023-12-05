@@ -2,13 +2,14 @@ import io from 'socket.io-client'
 
 let socketInstance: any = null
 ;('https://chorequest.pushed.nz')
+;('http://localhost:3000')
 const configureSocket = async () => {
   try {
     if (socketInstance) {
       return socketInstance
     }
 
-    const socket = io('http://localhost:3000', {
+    const socket = io('https://chorequest.pushed.nz', {
       transports: ['websocket'],
       reconnection: true,
       reconnectionAttempts: 10,
