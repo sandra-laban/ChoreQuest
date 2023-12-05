@@ -78,3 +78,13 @@ export async function unassignChore(
     .send({ choreId })
   return unassignedChore.body
 }
+
+export async function assignChore(token: string, choreAssignment: any) {
+  const { choreId, kid } = choreAssignment
+  console.log(choreId, kid)
+  const assignedChore = await request
+    .post(`/api/v1/chores/chorelist`)
+    .set('Authorization', `Bearer ${token}`)
+    .send({ choreId, kid })
+  return assignedChore.body
+}

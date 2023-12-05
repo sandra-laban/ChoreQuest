@@ -6,20 +6,29 @@ import {
   getFamilyChorelist,
   completeChore,
   unassignChore,
+  assignChore,
 } from '../apis/chores'
 import { DateTime } from 'luxon'
 import AddChore from './AddChoreForm'
 import { useAuth0 } from '@auth0/auth0-react'
+<<<<<<< Updated upstream
 import { getUser } from '../apis/userApi'
 import { useState } from 'react'
 
 import { socketInstance } from '../apis/websocket'
 
+=======
+import { getFamilyMembers, getUser } from '../apis/userApi'
+import { ChangeEvent, useState } from 'react'
+>>>>>>> Stashed changes
 import { AssignedChore, Chore } from '@models/chores'
+import { User } from '@models/Iusers'
 
 
 const ChoreList = () => {
   const [formView, setFormView] = useState(false)
+  const [assignView, setAssignView] = useState(false)
+  const [selectedKid, setSelectedKid] = useState('')
   const { getAccessTokenSilently } = useAuth0()
   const accessTokenPromise = getAccessTokenSilently()
   const queryClient = useQueryClient()
@@ -50,6 +59,18 @@ const ChoreList = () => {
     },
   })
   console.log('allchores', choreList)
+
+  const {
+    data: familydata,
+    error: famError,
+    isPending: famPending,
+  } = useQuery({
+    queryKey: ['familymembers'],
+    queryFn: async () => {
+      const accessToken = await accessTokenPromise
+      return await getFamilyMembers(accessToken)
+    },
+  })
 
   const {
     data: profileData,
@@ -103,6 +124,18 @@ const ChoreList = () => {
     },
   })
 
+  const assignChoreMutation = useMutation({
+    mutationFn: async (choreAssignment: { choreId: number; kid: string }) => {
+      const accessToken = await accessTokenPromise
+      return await assignChore(accessToken, choreAssignment)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['chores'] })
+      queryClient.invalidateQueries({ queryKey: ['chorelist'] })
+      queryClient.invalidateQueries({ queryKey: ['profile'] })
+    },
+  })
+
   const acceptChoreMutation = useMutation({
     mutationFn: async (choreId: number) => {
       const accessToken = await accessTokenPromise
@@ -130,6 +163,20 @@ const ChoreList = () => {
     unassignChoreMutation.mutate(choreId)
   }
 
+  function handleAssignClick(choreId: number, kid: string) {
+    console.log('comp', kid)
+    const choreAssignment = {
+      choreId: choreId,
+      kid: kid,
+    }
+    assignChoreMutation.mutate(choreAssignment)
+  }
+
+  const handleAssignChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    // Update the state with the currently selected value
+    setSelectedKid(event.target.value)
+  }
+
   if (error || profileError || choreError) {
     return <p>There was an error trying to load the chores!</p>
   }
@@ -144,6 +191,12 @@ const ChoreList = () => {
     return <p>Loading chores...</p>
   }
   //const choreDate = DateTime.fromMillis(chore.created)
+
+  const availableKids = familydata?.filter(
+    (user) =>
+      !user.is_parent &&
+      !choreList.some((excludedUser: User) => excludedUser.name === user.name)
+  )
 
   return (
     <>
@@ -166,12 +219,48 @@ const ChoreList = () => {
                 </p>
 
                 {profile.is_parent ? (
-                  <button
-                    onClick={() => handleDeleteClick(chore.id)}
-                    className="btn-primary hover:bg-red-500 bg-red-400 mb-12 items-center justify-center"
-                  >
-                    Delete
-                  </button>
+                  <>
+                    <button
+                      onClick={() => handleDeleteClick(chore.id)}
+                      className="btn-primary hover:bg-red-500 bg-red-400 mb-12 items-center justify-center"
+                    >
+                      Delete
+                    </button>
+                    {!(
+                      choreList.find(
+                        (item: any) => item.chores_id === chore.id
+                      ) && !(profile.currentChore?.chores_id === chore.id)
+                    ) ? (
+                      <button
+                        className="btn-small"
+                        onClick={() => setAssignView(!assignView)}
+                      >
+                        Assign to:
+                      </button>
+                    ) : null}
+                    {assignView ? (
+                      <>
+                        <select
+                          onChange={handleAssignChange}
+                          value={selectedKid || ''}
+                        >
+                          {availableKids?.map((value, index) => (
+                            <option key={index} value={index}>
+                              {value.name}
+                            </option>
+                          ))}
+                        </select>
+                        <button
+                          className="btn-small"
+                          onClick={() =>
+                            handleAssignClick(chore.id, selectedKid)
+                          }
+                        >
+                          Confirm
+                        </button>
+                      </>
+                    ) : null}
+                  </>
                 ) : null}
                 {choreList.find((item: any) => item.chores_id === chore.id) &&
                 !(profile.currentChore?.chores_id === chore.id) ? (
@@ -181,12 +270,14 @@ const ChoreList = () => {
                         (item: any) => item.chores_id === chore.id
                       )?.name
                     }`}</h3>
-                    <button
-                      className="btn-small"
-                      onClick={() => handleRemoveClick(chore.id)}
-                    >
-                      Unassign
-                    </button>
+                    {profile.is_parent ? (
+                      <button
+                        className="btn-small"
+                        onClick={() => handleRemoveClick(chore.id)}
+                      >
+                        Unassign
+                      </button>
+                    ) : null}
                   </>
                 ) : null}
                 {profile.currentChore?.chores_id === chore.id ? (

@@ -39,6 +39,11 @@ export async function getUserId(auth_id: string) {
   return userId
 }
 
+export async function getUserIdFromName(name: string) {
+  const userId = await db('users').where('name', name).select('id').first()
+  return userId
+}
+
 export async function generateUniqueUsername(baseUsername: string) {
   let suffix = 1
   let newUsername = baseUsername
