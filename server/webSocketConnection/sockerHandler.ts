@@ -22,7 +22,7 @@ const handleSocketMessages = (io: SocketIoServer) => {
           'update_query_key',
           async (data: {
             queryKey: string[]
-            users: 'parent' | 'family' | 'user'
+            users: 'parents' | 'family' | 'user'
             notificationMessage: string
             pageUrl: string
           }) => {
@@ -32,19 +32,19 @@ const handleSocketMessages = (io: SocketIoServer) => {
             const pageUrl = data.pageUrl
 
             if (!socket.userId) return
-            const familyMembers: any = []
+            let familyMembers: any
             if (users === 'family') {
-              familyMembers.push(
-                await getFamilyMembersById(socket.userId, 'family')
+              familyMembers = await getFamilyMembersById(
+                socket.userId,
+                'family'
               )
-            } else if (users === 'parent') {
-              familyMembers.push(
-                await getFamilyMembersById(socket.userId, 'parent')
+            } else if (users === 'parents') {
+              familyMembers = await getFamilyMembersById(
+                socket.userId,
+                'parents'
               )
             } else if (users === 'user') {
-              familyMembers.push(
-                await getFamilyMembersById(socket.userId, 'user')
-              )
+              familyMembers = await getFamilyMembersById(socket.userId, 'user')
             }
 
             if (familyMembers.length === 0) return
