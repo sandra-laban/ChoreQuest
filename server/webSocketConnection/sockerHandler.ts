@@ -22,12 +22,17 @@ const handleSocketMessages = (io: SocketIoServer) => {
           const queryKey = data.queryKey
           const users = data.users
           const notificationMessage = data.notificationMessage
+          const pageUrl = data.pageUrl
 
           if (!socket.userId) return
           const familyMembers = await getFamilyMembersById(socket.userId)
           if (familyMembers.length === 0) return
           familyMembers.forEach(async (memberId) => {
-            await db.addUserNotification(memberId.auth_id, notificationMessage)
+            await db.addUserNotification(
+              memberId.auth_id,
+              notificationMessage,
+              pageUrl
+            )
             sendMessageToUser(memberId.id, { queryKey })
           })
         })

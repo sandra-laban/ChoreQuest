@@ -201,6 +201,7 @@ async function seedNotifications(trx) {
     {
       auth_id: 'auth0|656e8ad0b3f48a3f1d32e77d',
       message: 'Chore has been added',
+      page_url: '/chores',
     },
   ])
 }

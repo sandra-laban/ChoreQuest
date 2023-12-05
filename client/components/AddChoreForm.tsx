@@ -35,6 +35,7 @@ const AddChore = ({ setFormView }: Props) => {
         queryKey: ['chores', 'notifications'],
         users: 'all',
         notificationMessage: `Chore ${form.name} added!`,
+        pageUrl: '/chores',
       })
     },
   })

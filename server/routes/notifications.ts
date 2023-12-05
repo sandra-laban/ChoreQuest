@@ -28,4 +28,17 @@ router.get('/', jwtCheck, async (req, res) => {
   }
 })
 
+router.delete('/', jwtCheck, async (req, res) => {
+  try {
+    const notificationId = req.body.notification_id
+
+    await db.deleteNotification(notificationId)
+    return res.json({ message: 'Notification deleted' })
+  } catch (err) {
+    res.status(500).json({
+      message: err instanceof Error ? err.message : 'Unknown error',
+    })
+  }
+})
+
 export default router

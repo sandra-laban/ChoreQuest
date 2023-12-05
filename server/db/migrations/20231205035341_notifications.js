@@ -3,6 +3,7 @@ export async function up(knex) {
     table.increments('id').primary
     table.string('auth_id')
     table.string('message')
+    table.string('page_url')
   })
 }
 
