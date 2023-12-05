@@ -7,7 +7,6 @@ import {
   createParent,
 } from '../db/functions/users'
 import { auth } from 'express-oauth2-jwt-bearer'
-
 const router = express.Router()
 
 const jwtCheck = auth({
@@ -19,8 +18,7 @@ const jwtCheck = auth({
 router.get('/', jwtCheck, async (req, res) => {
   try {
     const authId = req.auth?.payload.sub as string
-    // console.log('route', authId)
-    // console.log('happy')
+    console.log('authId', authId)
 
     const profile = await fetchUser(authId)
 

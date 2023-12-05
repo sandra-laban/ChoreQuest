@@ -45,6 +45,18 @@ export async function acceptChore(
   return response.body
 }
 
+export async function completeChore(
+  token: string,
+  choreId: number
+): Promise<Chore> {
+  const response = await request
+    .patch('/api/v1/chores/complete')
+    .set('Authorization', `Bearer ${token}`)
+    .send({ choreId })
+  console.log('api compplete chore response', response.body)
+  return response.body
+}
+
 export async function deleteChore(
   token: string,
   choreId: number
@@ -54,4 +66,15 @@ export async function deleteChore(
     .set('Authorization', `Bearer ${token}`)
     .send({ choreId })
   return deletedChore.body
+}
+
+export async function unassignChore(
+  token: string,
+  choreId: number
+): Promise<void> {
+  const unassignedChore = await request
+    .delete(`/api/v1/chores/chorelist`)
+    .set('Authorization', `Bearer ${token}`)
+    .send({ choreId })
+  return unassignedChore.body
 }

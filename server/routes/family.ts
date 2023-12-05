@@ -28,7 +28,6 @@ router.post('/create', jwtCheck, upload.single('image'), async (req, res) => {
 
     res.json(family)
   } catch (err) {
-    console.error(err)
     res.status(500).json({ error: 'Internal server error' })
   }
 })
@@ -77,7 +76,6 @@ router.patch('/join', jwtCheck, async (req, res) => {
     const chores = await db.joinFamily(familyFormData, auth_id)
     res.json(chores)
   } catch (err) {
-    console.log(err)
     res.status(500).json({ error: 'Internal server error' })
   }
 })
