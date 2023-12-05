@@ -146,8 +146,10 @@ const ChoreList = () => {
 
   return (
     <>
-      <div className="container px-4 mx-auto">
-        <h1 className="main-title">{profile.family?.name} Family Chores</h1>
+      <div className="container px-4 py-8 mx-auto rounded-3xl bg-white h-18 z-10 shadow-2xl bg-gradient-to-r from-cyan-300 to-blue-300 border-b border-gray-300">
+        <h1 className="main-title d-text">
+          {profile.family?.name} Family Chores
+        </h1>
         <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 m-5 mb-10">
           {choreData?.map((chore: Chore) => (
             <ul className="card-chore" key={chore.id}>
