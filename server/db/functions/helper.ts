@@ -20,12 +20,12 @@ export async function fetchFamilyId(auth_id: string) {
 }
 
 export async function isAvailable(auth_id: string) {
-  console.log('availability')
+  // console.log('availability')
   const userChores = await db('chore_list')
     .join('users', 'users.id', 'chore_list.user_id')
     .where('auth_id', auth_id)
     .select('is_completed')
-  console.log('userChores', userChores)
+  // console.log('userChores', userChores)
   const available = userChores
     ? userChores.every((chore) => chore.is_completed)
     : true
@@ -49,7 +49,7 @@ export async function generateUniqueUsername(baseUsername: string) {
     suffix++
     newUsername = `${baseUsername}${suffix}`
   }
-  console.log('helper', newUsername)
+  // console.log('helper', newUsername)
   return newUsername
 }
 
@@ -63,7 +63,7 @@ export async function usernameCheck(auth_id: string, family_id: number) {
 
   if (existingUser.length > 1) {
     const newName = await generateUniqueUsername(username.name)
-    console.log('newName', newName)
+    // console.log('newName', newName)
     await db('users').where({ auth_id }).update({ name: newName })
   }
 }

@@ -10,6 +10,19 @@ export async function getAllPrizes(token: string): Promise<Prizes[]> {
   return response.body.prizes
 }
 
+// GET '/api/v1/prizes/:id'
+export async function getPrize(
+  prizeId: string,
+  token: string
+): Promise<Prizes> {
+  console.log('prizeId ', prizeId)
+  console.log('token ', token)
+  const response = await request
+    .get(`${serverUrl}/${prizeId}`)
+    .set('Authorization', `Bearer ${token}`)
+  return response.body.prize
+}
+
 // POST '/api/v1/prizes'
 export async function addPrize(
   newPrize: PrizeData,

@@ -10,9 +10,6 @@ import { useState } from 'react'
 export default function AllPrizes() {
   const { user, getAccessTokenSilently } = useAuth0()
   const accessTokenPromise = getAccessTokenSilently()
-  console.log('USER HERE')
-  console.log(user)
-  console.log(accessTokenPromise)
 
   const {
     data: allPrizes,

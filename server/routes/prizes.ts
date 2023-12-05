@@ -24,10 +24,10 @@ router.get('/', jwtCheck, async (req, res) => {
 
 router.get('/:id', jwtCheck, async (req, res) => {
   try {
-    const auth_id = req.auth?.payload.sub as string
+    // const auth_id = req.auth?.payload.sub as string
     const prizeId = Number(req.params.id)
     const prize = await db.getPrize(prizeId)
-    res.json({ prize })
+    res.status(200).json({ prize })
   } catch (error) {
     res.status(500).json({ message: 'Unable to get prize' })
   }

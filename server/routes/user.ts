@@ -19,8 +19,8 @@ const jwtCheck = auth({
 router.get('/', jwtCheck, async (req, res) => {
   try {
     const authId = req.auth?.payload.sub as string
-    console.log('route', authId)
-    console.log('happy')
+    // console.log('route', authId)
+    // console.log('happy')
 
     const profile = await fetchUser(authId)
 

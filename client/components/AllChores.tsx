@@ -40,7 +40,7 @@ const ChoreList = () => {
       return await getFamilyChorelist(accessToken)
     },
   })
-  console.log('allchores', choreList)
+  // console.log('allchores', choreList)
 
   const {
     data: profileData,
