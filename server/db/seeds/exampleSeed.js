@@ -117,18 +117,18 @@ async function seedUsers(trx) {
   await trx('users').del()
   await trx('users').insert([
     {
-      name: 'Riley',
-      is_parent: true,
+      name: 'Toby Kid',
+      is_parent: false,
       family_id: 1,
-      auth_id: '111',
+      auth_id: 'auth0|656e8b04c3392234349c6e69',
       points: null,
       picture: '/images/avatars/avatar-1.png',
     },
     {
-      name: 'Toby',
+      name: 'Toby Parent',
       is_parent: true,
       family_id: 1,
-      auth_id: process.env.TOBY_AUTH_ID,
+      auth_id: 'auth0|656e8ad0b3f48a3f1d32e77d',
       points: null,
       picture: '/images/avatars/avatar-2.png',
     },

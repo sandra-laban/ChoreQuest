@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import NavProfile from './NavProfile'
 import { useState } from 'react'
 import { FaTimes, FaBars } from 'react-icons/fa'
+import NotificationBar from './NotificationBar'
 
 function Nav() {
   const { user, isAuthenticated, logout, loginWithRedirect } = useAuth0()
@@ -27,6 +28,7 @@ function Nav() {
             {/* links */}
             <div className="hidden md:block">
               <div className="ml-10 flex items-center space-x-4">
+                <NotificationBar />
                 <Link to="/prizes">
                   <button className="btn-nav">Prizes</button>
                 </Link>
@@ -36,6 +38,7 @@ function Nav() {
                 <Link to="/profile">
                   <button className="btn-nav">Profile</button>
                 </Link>
+
                 {user ? (
                   <>
                     <NavProfile />

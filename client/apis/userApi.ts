@@ -2,8 +2,6 @@ import request from 'superagent'
 import { UserForm } from '../../models/Iforms'
 import { CompleteUser, User } from '../../models/Iusers'
 
-const usersUrl = '/api/v1/user'
-
 export async function getUser(
   token: string
 ): Promise<{ profile?: CompleteUser; message?: string }> {

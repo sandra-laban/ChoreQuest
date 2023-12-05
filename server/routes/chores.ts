@@ -61,7 +61,6 @@ router.post('/', jwtCheck, async (req, res) => {
   try {
     const authId = req.auth?.payload.sub as string
     const chore = req.body.chore
-    console.log(`Route:`, chore)
 
     const newChore = await db.addChore(authId, chore)
 
@@ -81,7 +80,6 @@ router.post('/accept', jwtCheck, async (req, res) => {
   try {
     const authId = req.auth?.payload.sub as string
     const choreId = req.body.choreId
-    console.log(`Route:`, choreId)
 
     const acceptedChore = await db.acceptChore(authId, choreId)
 
