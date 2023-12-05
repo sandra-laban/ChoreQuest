@@ -1,23 +1,21 @@
-// socketConfig.js
-
 import io from 'socket.io-client'
 
-const configureSocket = async (accessTokenPromise: any) => {
+let socketInstance: any = null
+
+const configureSocket = async () => {
   try {
-    // Get access token
-    const accessToken = await accessTokenPromise
-    // Create the WebSocket connection with the access token
+    if (socketInstance) {
+      return socketInstance
+    }
+
     const socket = io('http://localhost:3000', {
-      auth: {
-        token: accessToken,
-        user: 'test',
-      },
       transports: ['websocket'],
       reconnection: true,
       reconnectionAttempts: 10,
       reconnectionDelay: 2000,
     })
 
+    socketInstance = socket
     return socket
   } catch (error) {
     console.error('Error configuring WebSocket:', error)
@@ -25,4 +23,4 @@ const configureSocket = async (accessTokenPromise: any) => {
   }
 }
 
-export default configureSocket
+export { configureSocket, socketInstance }

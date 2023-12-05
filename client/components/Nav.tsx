@@ -28,6 +28,7 @@ function Nav() {
             {/* links */}
             <div className="hidden md:block">
               <div className="ml-10 flex items-center space-x-4">
+                <NotificationBar />
                 <Link to="/prizes">
                   <button className="btn-nav">Prizes</button>
                 </Link>
@@ -37,6 +38,7 @@ function Nav() {
                 <Link to="/profile">
                   <button className="btn-nav">Profile</button>
                 </Link>
+
                 {user ? (
                   <>
                     <NavProfile />

@@ -10,6 +10,7 @@ import AddChore from './AddChoreForm'
 import { useAuth0 } from '@auth0/auth0-react'
 import { getUser } from '../apis/userApi'
 import { useState } from 'react'
+import { socketInstance } from '../apis/websocket'
 
 const ChoreList = () => {
   const [formView, setFormView] = useState(false)
@@ -62,6 +63,11 @@ const ChoreList = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['chores'] })
+      socketInstance.emit('update_query_key', {
+        queryKey: ['chores'],
+        users: 'all',
+        notificationMessage: 'Chore added',
+      })
     },
   })
 

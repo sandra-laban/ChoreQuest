@@ -1,71 +1,60 @@
 import { Server as SocketIoServer, Socket } from 'socket.io'
-import { Secret, verify, JwtPayload, JsonWebTokenError } from 'jsonwebtoken'
-import jwks from 'jwks-rsa'
+import { getFamilyMembersById } from '../db/functions/websocketQureys'
 
-const domain = 'https://manaia-2023-pete.au.auth0.com'
-
-// Explicitly type getPublicKeyOrSecret as ExpressJwtSecret, which extends Secret
-const getPublicKeyOrSecret: any = jwks.expressJwtSecret({
-  cache: true,
-  rateLimit: true,
-  jwksRequestsPerMinute: 5,
-  jwksUri: `${domain}/.well-known/jwks.json`,
-})
-
-export const verifyJwt = async (token: string): Promise<JwtPayload> => {
-  return new Promise((resolve, reject) => {
-    // Ensure that getPublicKeyOrSecret is explicitly cast as Secret
-    verify(
-      token,
-      getPublicKeyOrSecret as Secret,
-      (error: JsonWebTokenError | null, decoded) => {
-        if (error) {
-          reject(error)
-        } else {
-          resolve(decoded as JwtPayload)
-        }
-      }
-    )
-  })
-}
+const userSocketMap = new Map<string, Socket>()
+let ioInstance: SocketIoServer // Variable to store the io instance
 
 const handleSocketMessages = (io: SocketIoServer) => {
-  io.on(
-    'connection',
-    async (socket: Socket & { decodedToken?: JwtPayload }) => {
-      try {
-        console.log('A user connected to WebSocket')
-        // Access user information from the authentication token
-        const authToken = socket.handshake.auth.token
+  ioInstance = io // Assign the io instance to the variable
 
-        console.log('authToken', authToken)
+  io.on('connection', (socket: Socket & { userId?: string }) => {
+    try {
+      console.log('A user connected to WebSocket')
 
-        // Verify the token asynchronously and store the decoded payload in the socket object
-        const decodedToken = await verifyJwt(authToken)
+      socket.on('link_user', (userId: string) => {
+        console.log('ooooo')
+        socket.userId = userId
+        userSocketMap.set(userId, socket)
+        console.log(`WebSocket connection linked to user ${userId}`)
 
-        console.log(decodedToken)
+        socket.on('update_query_key', async (data) => {
+          const queryKey = data.queryKey
+          const users = data.users
+          const notificationMessage = data.notificationMessage
 
-        // const user = socket.decodedToken.user
-
-        // console.log('A user connected:', user)
-
-        socket.on('update_query_key', (data) => {
-          console.log('Need to update this query key for', data)
+          if (!socket.userId) return
+          const familyMembers = await getFamilyMembersById(socket.userId)
+          if (familyMembers.length === 0) return
+          familyMembers.forEach((memberId) => {
+            sendMessageToUser(memberId.id, { queryKey, notificationMessage })
+          })
         })
 
         socket.on('disconnect', () => {
-          console.log('A user disconnected from WebSocket')
+          console.log(`User ${userId} disconnected from WebSocket`)
+          userSocketMap.delete(userId)
         })
-      } catch (error) {
-        console.error('Error during WebSocket connection:', error)
-        socket.disconnect(true)
-      }
+      })
+    } catch (error) {
+      console.error('Error during WebSocket connection:', error)
+      socket.disconnect(true)
     }
-  )
+  })
 
   io.on('error', (error) => {
     console.error('WebSocket server error:', error)
   })
 }
 
-export default handleSocketMessages
+const sendMessageToUser = (userId: string, message: any) => {
+  try {
+    const userSocket = userSocketMap.get(String(userId))
+    if (userSocket) {
+      userSocket.emit('notification_data', message)
+    }
+  } catch (error) {
+    console.error('Error sending message to user:', error)
+  }
+}
+
+export { handleSocketMessages, sendMessageToUser }

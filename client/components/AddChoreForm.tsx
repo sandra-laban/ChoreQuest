@@ -6,6 +6,7 @@ import { ChoreData } from '../../models/chores'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 import { useAuth0 } from '@auth0/auth0-react'
+import { socketInstance } from '../apis/websocket'
 
 const initalForm = {
   name: '',
@@ -30,6 +31,11 @@ const AddChore = ({ setFormView }: Props) => {
     },
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['chores'] })
+      socketInstance.emit('update_query_key', {
+        queryKey: ['chores'],
+        users: 'all',
+        notificationMessage: 'Chore added',
+      })
     },
   })
   function handleChange(

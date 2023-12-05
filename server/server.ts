@@ -10,7 +10,7 @@ import choresRoutes from './routes/chores'
 import usersRoutes from './routes/user'
 import familyRoutes from './routes/family'
 import prizesRoutes from './routes/prizes'
-import handleSocketMessages from './webSocketConnection/sockerHandler'
+import {handleSocketMessages} from './webSocketConnection/sockerHandler'
 
 const server = express()
 const httpServer = http.createServer(server)
