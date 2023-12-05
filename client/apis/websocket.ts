@@ -1,14 +1,14 @@
 import io from 'socket.io-client'
 
 let socketInstance: any = null
-
+const PORT = process.env.PORT || 3000
 const configureSocket = async () => {
   try {
     if (socketInstance) {
       return socketInstance
     }
 
-    const socket = io('http://localhost:3000', {
+    const socket = io(`http://localhost:${PORT}`, {
       transports: ['websocket'],
       reconnection: true,
       reconnectionAttempts: 10,
