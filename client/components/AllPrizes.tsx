@@ -8,6 +8,7 @@ import { getUser } from '../apis/userApi'
 import { useState } from 'react'
 
 export default function AllPrizes() {
+  const [formView, setFormView] = useState(false)
   const { user, getAccessTokenSilently } = useAuth0()
   const accessTokenPromise = getAccessTokenSilently()
 
@@ -66,8 +67,11 @@ export default function AllPrizes() {
           ))}
         </div>
         {profile?.is_parent ? (
-          <button className="btn-primary">Add a Prize?</button>
+          <button className="btn-primary" onClick={() => setFormView(true)}>
+            Add a Prize?
+          </button>
         ) : null}
+        {formView ? <AddPrize setFormView={setFormView} /> : null}
       </div>
     </>
   )
