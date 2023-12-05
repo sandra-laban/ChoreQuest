@@ -15,8 +15,6 @@ export async function getPrize(
   prizeId: string,
   token: string
 ): Promise<Prizes> {
-  console.log('prizeId ', prizeId)
-  console.log('token ', token)
   const response = await request
     .get(`${serverUrl}/${prizeId}`)
     .set('Authorization', `Bearer ${token}`)

@@ -5,6 +5,7 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { patchPrize } from '@/apis/prizes'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getPrize } from '../apis/prizes'
+import { getUser } from '../apis/userApi'
 
 export default function Prize() {
   const { user, getAccessTokenSilently } = useAuth0()
@@ -13,10 +14,7 @@ export default function Prize() {
   const queryClient = useQueryClient()
 
   const prizeId = useParams()
-  console.log('TOKEN HERE')
-  console.log(accessTokenPromise)
-  console.log('PRIZE ID')
-  console.log(prizeId.prize)
+
   const {
     data: prize,
     isError,
@@ -29,13 +27,33 @@ export default function Prize() {
     },
   })
 
-  if (isError) {
+  const {
+    data: profileData,
+    error: profileError,
+    isPending: profilePending,
+  } = useQuery({
+    queryKey: ['profile'],
+    queryFn: async () => {
+      const accessToken = await accessTokenPromise
+      return await getUser(accessToken)
+    },
+  })
+  const profile = profileData?.profile
+
+  if (isError || profileError) {
     return <div>There was an error getting the prize</div>
   }
 
-  if (isLoading || !prize) {
+  if (isLoading || !prize || profilePending || !profileData) {
     return <div>Loading the prize...</div>
   }
 
-  return <div> PLACEHOLDER FOR PRIZE: {prize.name}</div>
+  return (
+    <div className="border-2 rounded-lg m-5 gap-3 text-center bg-sky-200">
+      <h2>Prize: {prize.name}</h2>
+      <p>{prize.definition}</p>
+      <p>Price: {prize.price}</p>
+      <p>How many left: {prize.quantity}</p>
+    </div>
+  )
 }
