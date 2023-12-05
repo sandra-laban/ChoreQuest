@@ -1,6 +1,7 @@
 import { getAllPrizes } from '../apis/prizes'
 import { useQuery } from '@tanstack/react-query'
 import { useAuth0 } from '@auth0/auth0-react'
+import { Link } from 'react-router-dom'
 
 export default function AllPrizes() {
   const { user, getAccessTokenSilently } = useAuth0()
@@ -37,14 +38,15 @@ export default function AllPrizes() {
             key={prize.id}
             className="border-2 rounded-lg m-5 gap-3 text-center bg-sky-200"
           >
-            <h2>Prize: {prize.name}</h2>
-            <p>{prize.definition}</p>
-            <p>Price: {prize.price}</p>
-            <p>How many left: {prize.quantity}</p>
+            <Link to={`/mngprizes`}>
+              <h2>Prize: {prize.name}</h2>
+              <p>{prize.definition}</p>
+              <p>Price: {prize.price}</p>
+              <p>How many left: {prize.quantity}</p>
+            </Link>
           </div>
         ))}
       </div>
-      <button className="btn-primary">Manage Prizes</button>
     </>
   )
 }

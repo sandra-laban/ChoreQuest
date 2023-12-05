@@ -4,6 +4,7 @@ import LandingPage from './components/LandingPage'
 import ChoreList from './components/AllChores'
 import Profile from './components/Profile'
 import AllPrizes from './components/AllPrizes'
+import Prize from './components/Prize'
 import ManageFamily from './components/ManageFamily'
 import Home from './components/Home'
 import AuthCheck from './components/AuthCheck'
@@ -19,6 +20,7 @@ export const routes = createRoutesFromElements(
       element={<AuthCheck element={<EditProfileForm />} />}
     />
     <Route path="/prizes" element={<AuthCheck element={<AllPrizes />} />} />
+    <Route path="/mngprizes" element={<AuthCheck element={<Prize />} />} />
     <Route
       path="/manage-family"
       element={<AuthCheck element={<ManageFamily />} />}
