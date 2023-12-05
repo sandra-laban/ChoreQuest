@@ -182,7 +182,9 @@ function ChoreBox({ chore }: Props) {
     profilePending ||
     !profile ||
     chorePending ||
-    !choreList
+    !choreList ||
+    famPending ||
+    !familydata
   ) {
     return <p>Loading chores...</p>
   }
