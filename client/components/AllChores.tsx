@@ -4,12 +4,18 @@ import {
   deleteChore,
   getFamilyChores,
   getFamilyChorelist,
+  completeChore,
 } from '../apis/chores'
 import { DateTime } from 'luxon'
 import AddChore from './AddChoreForm'
 import { useAuth0 } from '@auth0/auth0-react'
 import { getUser } from '../apis/userApi'
 import { useState } from 'react'
+
+import { socketInstance } from '../apis/websocket'
+
+import { AssignedChore, Chore } from '@models/chores'
+
 
 const ChoreList = () => {
   const [formView, setFormView] = useState(false)
@@ -28,6 +34,8 @@ const ChoreList = () => {
       return await getFamilyChores(accessToken)
     },
   })
+
+  console.log('chore data', choreData)
 
   const {
     data: choreList,
@@ -62,6 +70,23 @@ const ChoreList = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['chores'] })
+      socketInstance.emit('update_query_key', {
+        queryKey: ['chores'],
+        users: 'all',
+        notificationMessage: 'Chore added',
+      })
+    },
+  })
+
+  const completeChoreMutation = useMutation({
+    mutationFn: async (choreId: number) => {
+      const accessToken = await accessTokenPromise
+      return await completeChore(accessToken, choreId)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['chores'] })
+      queryClient.invalidateQueries({ queryKey: ['chorelist'] })
+      queryClient.invalidateQueries({ queryKey: ['profile'] })
     },
   })
 
@@ -84,6 +109,10 @@ const ChoreList = () => {
     acceptChoreMutation.mutate(choreId)
   }
 
+  function handleCompleteClick(choreId: number) {
+    completeChoreMutation.mutate(choreId)
+  }
+
   if (error || profileError || choreError) {
     return <p>There was an error trying to load the chores!</p>
   }
@@ -98,12 +127,13 @@ const ChoreList = () => {
     return <p>Loading chores...</p>
   }
   //const choreDate = DateTime.fromMillis(chore.created)
+
   return (
     <>
       <div className="container px-4 mx-auto text-center">
         <h1>{profile.family?.name} Family Chores</h1>
         <div className="grid md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-3 m-5 mb-10">
-          {choreData?.map((chore) => (
+          {choreData?.map((chore: Chore) => (
             <ul
               className="bg-white overflow-hidden m-5 hover:bg-blue-100 border border-gray-200 p-3 text-center"
               key={chore.id}
@@ -134,7 +164,15 @@ const ChoreList = () => {
                   }`}</h3>
                 ) : null}
                 {profile.currentChore?.chores_id === chore.id ? (
-                  <h3 className="text-green-600">Accepted</h3>
+                  <>
+                    <h3 className="text-green-600">Accepted</h3>
+                    <button
+                      onClick={() => handleCompleteClick(chore.id)}
+                      className="btn-small"
+                    >
+                      Complete?
+                    </button>
+                  </>
                 ) : null}
                 {!choreList.find((item: any) => item.chores_id === chore.id) &&
                 !profile.currentChore &&

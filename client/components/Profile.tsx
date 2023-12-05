@@ -1,11 +1,10 @@
-import { getUser } from '../apis/userApi'
-import { Link, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
+import { getUser } from '../apis/userApi'
+import { Link } from 'react-router-dom'
 import { useAuth0 } from '@auth0/auth0-react'
 
 export default function Profile() {
-  const { getAccessTokenSilently, isAuthenticated } = useAuth0()
-  const navigate = useNavigate()
+  const { getAccessTokenSilently } = useAuth0()
 
   const accessTokenPromise = getAccessTokenSilently()
 

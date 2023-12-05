@@ -61,7 +61,6 @@ router.post('/', jwtCheck, async (req, res) => {
   try {
     const authId = req.auth?.payload.sub as string
     const chore = req.body.chore
-    console.log(`Route:`, chore)
 
     const newChore = await db.addChore(authId, chore)
 
@@ -81,14 +80,32 @@ router.post('/accept', jwtCheck, async (req, res) => {
   try {
     const authId = req.auth?.payload.sub as string
     const choreId = req.body.choreId
-    console.log(`Route:`, choreId)
 
     const acceptedChore = await db.acceptChore(authId, choreId)
 
     if (!acceptedChore) {
-      res.json({ message: "Couldn't add chores" })
+      res.json({ message: "Couldn't accept chore" })
     } else {
       res.json({ acceptedChore })
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: err instanceof Error ? err.message : 'Unknown error',
+    })
+  }
+})
+
+router.patch('/complete', jwtCheck, async (req, res) => {
+  try {
+    const authId = req.auth?.payload.sub as string
+    const choreId = req.body.choreId
+
+    const completedChore = await db.finishChore(authId, choreId)
+
+    if (!completedChore) {
+      res.json({ message: "Couldn't complete chore" })
+    } else {
+      res.json({ completedChore })
     }
   } catch (err) {
     res.status(500).json({

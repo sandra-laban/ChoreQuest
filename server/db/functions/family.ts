@@ -33,7 +33,7 @@ export async function createFamily(
         }
       }
     } catch (error) {
-      console.error('Error saving image:', error)
+      console.error('Error uploading image:', error)
     }
 
     const [familyId] = await trx('family').insert({
