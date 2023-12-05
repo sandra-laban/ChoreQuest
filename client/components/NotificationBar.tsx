@@ -3,7 +3,7 @@ import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { configureSocket } from '../apis/websocket'
 import { useAuth0 } from '@auth0/auth0-react'
-import { getNotifications, deleteNotification } from '../apis/Notifications'
+import { getNotifications, deleteNotification } from '../apis/notifications'
 import { useNavigate } from 'react-router-dom'
 
 const NotificationBar = () => {
