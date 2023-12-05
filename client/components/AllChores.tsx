@@ -17,6 +17,7 @@ import { ChangeEvent, FormEvent, useState } from 'react'
 import { AssignedChore, Chore } from '@models/chores'
 import { User } from '@models/Iusers'
 import { AssignmentForm } from '@models/Iforms'
+import ChoreBox from './Chore'
 
 const ChoreList = () => {
   const [formView, setFormView] = useState(false)
@@ -38,8 +39,6 @@ const ChoreList = () => {
     },
   })
 
-  console.log('chore data', choreData)
-
   const {
     data: choreList,
     error: choreError,
@@ -51,7 +50,6 @@ const ChoreList = () => {
       return await getFamilyChorelist(accessToken)
     },
   })
-  console.log('allchores', choreList)
 
   const {
     data: familydata,
@@ -196,105 +194,7 @@ const ChoreList = () => {
         <h1>{profile.family?.name} Family Chores</h1>
         <div className="grid md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-3 m-5 mb-10">
           {choreData?.map((chore: Chore) => (
-            <ul
-              className="bg-white overflow-hidden m-5 hover:bg-blue-100 border border-gray-200 p-3 text-center"
-              key={chore.id}
-            >
-              <li>
-                <h2>Chore name: {chore.name}</h2>
-                <p>Points: {chore.points}</p>
-                <p>
-                  Created:{' '}
-                  {typeof chore.created === 'number'
-                    ? DateTime.fromMillis(chore.created).toISODate()
-                    : DateTime.fromISO(chore.created).toISODate()}
-                </p>
-
-                {profile.is_parent ? (
-                  <>
-                    <button
-                      onClick={() => handleDeleteClick(chore.id)}
-                      className="btn-primary hover:bg-red-500 bg-red-400 mb-12 items-center justify-center"
-                    >
-                      Delete
-                    </button>
-                    {!(
-                      choreList.find(
-                        (item: any) => item.chores_id === chore.id
-                      ) && !(profile.currentChore?.chores_id === chore.id)
-                    ) ? (
-                      <button
-                        className="btn-small"
-                        onClick={() => setAssignView(!assignView)}
-                      >
-                        Assign to:
-                      </button>
-                    ) : null}
-                    {assignView ? (
-                      <>
-                        <input
-                          type="text"
-                          id="kid"
-                          name="kid"
-                          list="kidSuggestions"
-                          onChange={handleAssignChange}
-                        />
-                        <datalist id="kidSuggestions">
-                          {availableKids?.map((kid) => (
-                            <option key={kid.id} value={kid.name} />
-                          ))}
-                        </datalist>
-                        <button
-                          className="btn-small"
-                          onClick={() => handleAssignment(chore.id)}
-                        >
-                          Confirm
-                        </button>
-                      </>
-                    ) : null}
-                  </>
-                ) : null}
-                {choreList.find((item: any) => item.chores_id === chore.id) &&
-                !(profile.currentChore?.chores_id === chore.id) ? (
-                  <>
-                    <h3 className="text-red-600">{`Assigned to ${
-                      choreList?.find(
-                        (item: any) => item.chores_id === chore.id
-                      )?.name
-                    }`}</h3>
-                    {profile.is_parent ? (
-                      <button
-                        className="btn-small"
-                        onClick={() => handleRemoveClick(chore.id)}
-                      >
-                        Unassign
-                      </button>
-                    ) : null}
-                  </>
-                ) : null}
-                {profile.currentChore?.chores_id === chore.id ? (
-                  <>
-                    <h3 className="text-green-600">Accepted</h3>
-                    <button
-                      onClick={() => handleCompleteClick(chore.id)}
-                      className="btn-small"
-                    >
-                      Complete?
-                    </button>
-                  </>
-                ) : null}
-                {!choreList.find((item: any) => item.chores_id === chore.id) &&
-                !profile.currentChore &&
-                !profile.is_parent ? (
-                  <button
-                    onClick={() => handleAcceptClick(chore.id)}
-                    className="btn-primary hover:bg-cyan-500 bg-cyan-400 mb-12 items-center justify-center"
-                  >
-                    Do it!
-                  </button>
-                ) : null}
-              </li>
-            </ul>
+            <ChoreBox chore={chore} key={chore.id} />
           ))}
         </div>
         {profile.is_parent ? (
