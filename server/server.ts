@@ -10,7 +10,8 @@ import choresRoutes from './routes/chores'
 import usersRoutes from './routes/user'
 import familyRoutes from './routes/family'
 import prizesRoutes from './routes/prizes'
-import {handleSocketMessages} from './webSocketConnection/sockerHandler'
+import notificationsRoutes from './routes/notifications'
+import { handleSocketMessages } from './webSocketConnection/sockerHandler'
 
 const server = express()
 const httpServer = http.createServer(server)
@@ -23,6 +24,7 @@ server.use('/api/v1/chores', choresRoutes)
 server.use('/api/v1/user', usersRoutes)
 server.use('/api/v1/family', familyRoutes)
 server.use('/api/v1/prizes', prizesRoutes)
+server.use('/api/v1/notifications', notificationsRoutes)
 
 // Handle socket messages in a separate file
 handleSocketMessages(io)

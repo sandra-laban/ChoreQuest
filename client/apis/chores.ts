@@ -67,3 +67,14 @@ export async function deleteChore(
     .send({ choreId })
   return deletedChore.body
 }
+
+export async function unassignChore(
+  token: string,
+  choreId: number
+): Promise<void> {
+  const unassignedChore = await request
+    .delete(`/api/v1/chores/chorelist`)
+    .set('Authorization', `Bearer ${token}`)
+    .send({ choreId })
+  return unassignedChore.body
+}

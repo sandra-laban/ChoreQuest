@@ -126,4 +126,15 @@ router.delete('/', jwtCheck, async (req, res) => {
   }
 })
 
+router.delete('/chorelist', jwtCheck, async (req, res) => {
+  const authId = req.auth?.payload.sub as string
+  const choreId = req.body.choreId
+  try {
+    await db.unassignChore(authId, choreId)
+    res.sendStatus(204)
+  } catch (err) {
+    res.status(500).json({ err })
+  }
+})
+
 export default router

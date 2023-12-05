@@ -5,6 +5,7 @@ import {
   getFamilyChores,
   getFamilyChorelist,
   completeChore,
+  unassignChore,
 } from '../apis/chores'
 import { DateTime } from 'luxon'
 import AddChore from './AddChoreForm'
@@ -70,9 +71,9 @@ const ChoreList = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['chores'] })
       socketInstance.emit('update_query_key', {
-        queryKey: ['chores'],
+        queryKey: ['chores', 'notifications'],
         users: 'all',
-        notificationMessage: 'Chore added',
+        notificationMessage: 'Chore deleted',
       })
     },
   })
@@ -81,6 +82,18 @@ const ChoreList = () => {
     mutationFn: async (choreId: number) => {
       const accessToken = await accessTokenPromise
       return await completeChore(accessToken, choreId)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['chores'] })
+      queryClient.invalidateQueries({ queryKey: ['chorelist'] })
+      queryClient.invalidateQueries({ queryKey: ['profile'] })
+    },
+  })
+
+  const unassignChoreMutation = useMutation({
+    mutationFn: async (choreId: number) => {
+      const accessToken = await accessTokenPromise
+      return await unassignChore(accessToken, choreId)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['chores'] })
@@ -110,6 +123,10 @@ const ChoreList = () => {
 
   function handleCompleteClick(choreId: number) {
     completeChoreMutation.mutate(choreId)
+  }
+
+  function handleRemoveClick(choreId: number) {
+    unassignChoreMutation.mutate(choreId)
   }
 
   if (error || profileError || choreError) {
@@ -192,10 +209,19 @@ const ChoreList = () => {
                 ) : null}
                 {choreList.find((item: any) => item.chores_id === chore.id) &&
                 !(profile.currentChore?.chores_id === chore.id) ? (
-                  <h3 className="text-red-600">{`Assigned to ${
-                    choreList?.find((item: any) => item.chores_id === chore.id)
-                      ?.name
-                  }`}</h3>
+                  <>
+                    <h3 className="text-red-600">{`Assigned to ${
+                      choreList?.find(
+                        (item: any) => item.chores_id === chore.id
+                      )?.name
+                    }`}</h3>
+                    <button
+                      className="btn-small"
+                      onClick={() => handleRemoveClick(chore.id)}
+                    >
+                      Unassign
+                    </button>
+                  </>
                 ) : null}
                 {profile.currentChore?.chores_id === chore.id ? (
                   <>
