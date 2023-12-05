@@ -77,6 +77,16 @@ export async function acceptChore(
   return acceptedChore ? acceptedChore[0] : null
 }
 
+export async function unassignChore(authId: string, choreId: number) {
+  const authorised = await isParent(authId)
+
+  const unassignedChore = authorised
+    ? await db('chore_list').where('chores_id', choreId).del()
+    : false
+
+  return unassignedChore
+}
+
 export async function deleteChore(authId: string, choreId: number) {
   const familyId = await fetchFamilyId(authId)
   const authorised = await isParent(authId)
