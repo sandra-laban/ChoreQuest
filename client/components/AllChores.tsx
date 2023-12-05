@@ -11,18 +11,12 @@ import {
 import { DateTime } from 'luxon'
 import AddChore from './AddChoreForm'
 import { useAuth0 } from '@auth0/auth0-react'
-<<<<<<< Updated upstream
-import { getUser } from '../apis/userApi'
-import { useState } from 'react'
-
 import { socketInstance } from '../apis/websocket'
-
-=======
 import { getFamilyMembers, getUser } from '../apis/userApi'
-import { ChangeEvent, useState } from 'react'
->>>>>>> Stashed changes
+import { ChangeEvent, FormEvent, useState } from 'react'
 import { AssignedChore, Chore } from '@models/chores'
 import { User } from '@models/Iusers'
+import { AssignmentForm } from '@models/Iforms'
 
 const ChoreList = () => {
   const [formView, setFormView] = useState(false)
@@ -124,9 +118,9 @@ const ChoreList = () => {
   })
 
   const assignChoreMutation = useMutation({
-    mutationFn: async (choreAssignment: { choreId: number; kid: string }) => {
+    mutationFn: async (currentForm: AssignmentForm) => {
       const accessToken = await accessTokenPromise
-      return await assignChore(accessToken, choreAssignment)
+      return await assignChore(accessToken, currentForm)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['chores'] })
@@ -162,17 +156,16 @@ const ChoreList = () => {
     unassignChoreMutation.mutate(choreId)
   }
 
-  function handleAssignClick(choreId: number, kid: string) {
-    console.log('comp', kid)
-    const choreAssignment = {
+  async function handleAssignment(choreId: number) {
+    const currentForm = {
+      kid: selectedKid,
       choreId: choreId,
-      kid: kid,
     }
-    assignChoreMutation.mutate(choreAssignment)
+    await assignChoreMutation.mutate(currentForm)
+    setAssignView(false)
   }
 
-  const handleAssignChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    // Update the state with the currently selected value
+  const handleAssignChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSelectedKid(event.target.value)
   }
 
@@ -239,21 +232,21 @@ const ChoreList = () => {
                     ) : null}
                     {assignView ? (
                       <>
-                        <select
+                        <input
+                          type="text"
+                          id="kid"
+                          name="kid"
+                          list="kidSuggestions"
                           onChange={handleAssignChange}
-                          value={selectedKid || ''}
-                        >
-                          {availableKids?.map((value, index) => (
-                            <option key={index} value={index}>
-                              {value.name}
-                            </option>
+                        />
+                        <datalist id="kidSuggestions">
+                          {availableKids?.map((kid) => (
+                            <option key={kid.id} value={kid.name} />
                           ))}
-                        </select>
+                        </datalist>
                         <button
                           className="btn-small"
-                          onClick={() =>
-                            handleAssignClick(chore.id, selectedKid)
-                          }
+                          onClick={() => handleAssignment(chore.id)}
                         >
                           Confirm
                         </button>

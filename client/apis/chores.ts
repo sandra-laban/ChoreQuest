@@ -80,7 +80,7 @@ export async function unassignChore(
 }
 
 export async function assignChore(token: string, choreAssignment: any) {
-  const { choreId, kid } = choreAssignment
+  const { kid, choreId } = choreAssignment
   console.log(choreId, kid)
   const assignedChore = await request
     .post(`/api/v1/chores/chorelist`)
