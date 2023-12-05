@@ -20,7 +20,10 @@ export const routes = createRoutesFromElements(
       element={<AuthCheck element={<EditProfileForm />} />}
     />
     <Route path="/prizes" element={<AuthCheck element={<AllPrizes />} />} />
-    <Route path="/mngprizes" element={<AuthCheck element={<Prize />} />} />
+    <Route
+      path="/mngprizes/:prize"
+      element={<AuthCheck element={<Prize />} />}
+    />
     <Route
       path="/manage-family"
       element={<AuthCheck element={<ManageFamily />} />}

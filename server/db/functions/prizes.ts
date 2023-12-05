@@ -28,6 +28,11 @@ export async function addPrize(
   return prize ? prize[0] : null
 }
 
+export async function getPrize(prize_id: number): Promise<Prizes> {
+  const prize = await db('prizes').where('id', prize_id).select('*').first()
+  return prize
+}
+
 export async function editPrize(
   authId: string,
   prizesId: number,

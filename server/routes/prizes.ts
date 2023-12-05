@@ -21,6 +21,8 @@ router.get('/', jwtCheck, async (req, res) => {
   }
 })
 
+router.get('/')
+
 // POST /api/v1/prizes
 router.post('/', jwtCheck, async (req, res) => {
   try {
