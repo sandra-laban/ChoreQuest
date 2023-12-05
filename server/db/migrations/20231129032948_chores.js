@@ -3,6 +3,7 @@ export async function up(knex) {
     table.increments('id').primary
     table.string('name')
     table.integer('points')
+    // TODO: change created to due - will need to trace up through code
     table.date('created')
     table.integer('family_id')
   })
