@@ -64,12 +64,21 @@ export async function acceptChore(
   const assignedChore = {
     chores_id: choreId,
     user_id: userId.id,
-    assigned: DateTime.now(),
   }
   const acceptedChore = available
     ? await db('chore_list').insert(assignedChore).returning('*')
     : null
   return acceptedChore ? acceptedChore[0] : null
+}
+
+export async function unassignChore(authId: string, choreId: number) {
+  const authorised = await isParent(authId)
+
+  const unassignedChore = authorised
+    ? await db('chore_list').where('chores_id', choreId).del()
+    : false
+
+  return unassignedChore
 }
 
 export async function deleteChore(authId: string, choreId: number) {
