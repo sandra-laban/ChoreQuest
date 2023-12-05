@@ -10,7 +10,6 @@ const NotificationBar = () => {
   const [notifications, setNotifications] = useState<string[]>([])
 
   useEffect(() => {
-    console.log('web stuff')
     const connectWebSocket = async () => {
       const socket = await configureSocket()
 

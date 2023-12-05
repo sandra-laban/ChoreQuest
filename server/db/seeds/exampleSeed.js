@@ -117,18 +117,18 @@ async function seedUsers(trx) {
   await trx('users').del()
   await trx('users').insert([
     {
-      name: 'Toby Kid',
-      is_parent: false,
+      name: 'Riley',
+      is_parent: true,
       family_id: 1,
-      auth_id: 'auth0|656e8b04c3392234349c6e69',
+      auth_id: '111',
       points: null,
       picture: '/images/avatars/avatar-1.png',
     },
     {
-      name: 'Toby Parent',
+      name: 'Toby',
       is_parent: true,
       family_id: 1,
-      auth_id: 'auth0|656e8ad0b3f48a3f1d32e77d',
+      auth_id: process.env.TOBY_AUTH_ID,
       points: null,
       picture: '/images/avatars/avatar-2.png',
     },
@@ -189,6 +189,16 @@ async function seedUsers(trx) {
       family_id: 2,
       auth_id: 'auth0|116',
       points: null,
+    },
+  ])
+}
+
+async function seedNotifications(trx) {
+  await trx('notifications').del()
+  await trx('notifications').insert([
+    {
+      user_id: 2,
+      message: 'Chore has been added',
     },
   ])
 }
