@@ -169,6 +169,7 @@ function ChoreBox({ chore }: Props) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['chorelist'] })
       queryClient.invalidateQueries({ queryKey: ['profile'] })
+      queryClient.invalidateQueries({ queryKey: ['chores'] })
     },
   })
 

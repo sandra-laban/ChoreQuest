@@ -93,7 +93,8 @@ export async function assignChore(
   kid: string
 ) {
   const authorised = await isParent(authId)
-  const kidId = await getUserIdFromName(kid)
+  const family_id = await fetchFamilyId(authId)
+  const kidId = await getUserIdFromName(kid, family_id.family_id)
   const assignChore = {
     chores_id: choreId,
     user_id: kidId.id,

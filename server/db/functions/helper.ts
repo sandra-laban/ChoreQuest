@@ -39,8 +39,12 @@ export async function getUserId(auth_id: string) {
   return userId
 }
 
-export async function getUserIdFromName(name: string) {
-  const userId = await db('users').where('name', name).select('id').first()
+export async function getUserIdFromName(name: string, familyId: number) {
+  const userId = await db('users')
+    .where('family_id', familyId)
+    .where('name', name)
+    .select('id')
+    .first()
   return userId
 }
 
