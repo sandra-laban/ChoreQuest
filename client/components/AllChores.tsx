@@ -62,6 +62,7 @@ const ChoreList = () => {
       return await getFamilyMembers(accessToken)
     },
   })
+  // console.log('allchores', choreList)
 
   const {
     data: profileData,
@@ -84,9 +85,10 @@ const ChoreList = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['chores'] })
       socketInstance.emit('update_query_key', {
-        queryKey: ['chores', 'notifications'],
-        users: 'all',
-        notificationMessage: 'Chore deleted',
+        queryKey: ['chores'],
+        users: 'family',
+        notificationMessage: null,
+        pageUrl: null,
       })
     },
   })
@@ -100,6 +102,12 @@ const ChoreList = () => {
       queryClient.invalidateQueries({ queryKey: ['chores'] })
       queryClient.invalidateQueries({ queryKey: ['chorelist'] })
       queryClient.invalidateQueries({ queryKey: ['profile'] })
+      socketInstance.emit('update_query_key', {
+        queryKey: ['chores', 'chorelist', 'profile', 'notifications'],
+        users: 'parents',
+        notificationMessage: `Chore completed!`,
+        pageUrl: '/manage-family',
+      })
     },
   })
 

@@ -56,7 +56,7 @@ export async function generateUniqueUsername(baseUsername: string) {
     suffix++
     newUsername = `${baseUsername}${suffix}`
   }
-  console.log('helper', newUsername)
+  // console.log('helper', newUsername)
   return newUsername
 }
 
@@ -70,7 +70,7 @@ export async function usernameCheck(auth_id: string, family_id: number) {
 
   if (existingUser.length > 1) {
     const newName = await generateUniqueUsername(username.name)
-    console.log('newName', newName)
+    // console.log('newName', newName)
     await db('users').where({ auth_id }).update({ name: newName })
   }
 }
