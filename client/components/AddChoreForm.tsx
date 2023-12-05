@@ -6,6 +6,7 @@ import { ChoreData } from '../../models/chores'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 import { useAuth0 } from '@auth0/auth0-react'
+import { FaCalendarAlt } from 'react-icons/fa'
 
 const initalForm = {
   name: '',
@@ -32,6 +33,7 @@ const AddChore = ({ setFormView }: Props) => {
       queryClient.invalidateQueries({ queryKey: ['chores'] })
     },
   })
+
   function handleChange(
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
@@ -81,55 +83,51 @@ const AddChore = ({ setFormView }: Props) => {
           aria-label="Add Chore Form"
           className="flex flex-col items-center justify-center"
         >
-          <div className="border p-8 border-gray-900/10 m-8">
-            <h2 className="mx-auto mt-12 mb-6 text-center">Add new chore</h2>
-            <div className="space-y-12">
-              <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                <div className="sm:col-span-4">
-                  <label htmlFor="name" className="text-2xl">
-                    Name:
-                  </label>
-                  <input
-                    id="name"
-                    onChange={handleChange}
-                    name="name"
-                    value={form.name}
-                    className="m-4 border-solid border-2 border-black p-2 px-5 rounded-lg mb-12"
-                  ></input>
-                </div>
-              </div>
-              <div className="sm:col-span-4">
-                <label htmlFor="points" className="text-2xl">
-                  Points:
-                </label>
-                <input
-                  id="points"
-                  onChange={handleChange}
-                  name="points"
-                  value={form.points}
-                  className="m-4 border-solid border-2 border-black p-2 px-5 rounded-lg mb-12"
-                ></input>
-              </div>
-              <div className="form-group">
-                <DatePicker
-                  id="created"
-                  selected={DateTime.fromISO(form.created).toJSDate()} // Convert Luxon date to JavaScript Date
-                  onChange={(date) => {
-                    if (date) {
-                      const isoDate = DateTime.fromJSDate(date).toISODate()
-                      console.log('Luxon Formatted Date:', isoDate)
-                      handleChange({
-                        target: { name: 'created', value: isoDate },
-                      } as ChangeEvent<HTMLInputElement>)
-                    }
-                  }}
-                  dateFormat="yyyy-MM-dd"
-                />
-              </div>
+          <div className="border p-8 border-gray-900/10 m-8 bg-white">
+            <h2 className="mx-auto mt-6 mb-6 text-center">Add new chore</h2>
+            <div className="flex flex-col items-center justify-center">
+              <label htmlFor="name" className="text-2xl">
+                Name:
+              </label>
+              <input
+                id="name"
+                onChange={handleChange}
+                name="name"
+                value={form.name}
+                className="border-solid border-2 border-black rounded-lg"
+              ></input>
+              <label htmlFor="points" className="text-2xl">
+                Points:
+              </label>
+              <input
+                id="points"
+                onChange={handleChange}
+                name="points"
+                value={form.points}
+                className="border-solid border-2 border-black rounded-lg"
+              ></input>
+              <label htmlFor="date" className="text-2xl">
+                Pick a date:
+              </label>
+              <DatePicker
+                className="border-solid border-2 border-black rounded-lg"
+                id="created"
+                selected={DateTime.fromISO(form.created).toJSDate()} // Convert Luxon date to JavaScript Date
+                onChange={(date) => {
+                  if (date) {
+                    const isoDate = DateTime.fromJSDate(date).toISODate()
+                    console.log('Luxon Formatted Date:', isoDate)
+                    handleChange({
+                      target: { name: 'created', value: isoDate },
+                    } as ChangeEvent<HTMLInputElement>)
+                  }
+                }}
+                dateFormat="yyyy-MM-dd"
+              />
               <div className="flex justify-center items-center">
-                <button className="btn-primary mb-12">Add Chore</button>
+                <button className="btn-primary mb-6 mt-6">Add Chore</button>
                 <button
-                  className="btn-primary mb-12"
+                  className="btn-primary mb-6 mt-6"
                   onClick={() => setFormView(false)}
                 >
                   Cancel
