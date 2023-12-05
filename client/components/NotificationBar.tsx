@@ -16,23 +16,18 @@ const NotificationBar = () => {
 
       if (socket) {
         const handleData = (receivedData: any) => {
-          console.log('receivedData', receivedData)
-          setNotifications((prevNotifications) => [
-            ...prevNotifications,
+          setNotifications(() => [
+            ...notifications,
             receivedData.notificationMessage,
           ])
         }
 
         socket.on('notification_data', handleData)
-
-        return () => {
-          socket.off('notification_data', handleData)
-        }
       }
     }
 
     connectWebSocket()
-  }, [accessTokenPromise])
+  }, [accessTokenPromise, notifications])
 
   return (
     <div>

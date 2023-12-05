@@ -50,6 +50,7 @@ const sendMessageToUser = (userId: string, message: any) => {
   try {
     const userSocket = userSocketMap.get(String(userId))
     if (userSocket) {
+      console.log(`Sending message to user: ${userId}`, message)
       userSocket.emit('notification_data', message)
     }
   } catch (error) {

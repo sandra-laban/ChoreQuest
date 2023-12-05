@@ -34,7 +34,7 @@ const AddChore = ({ setFormView }: Props) => {
       socketInstance.emit('update_query_key', {
         queryKey: ['chores'],
         users: 'all',
-        notificationMessage: 'Chore added',
+        notificationMessage: `Chore ${form.name} added!`,
       })
     },
   })
