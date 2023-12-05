@@ -70,6 +70,12 @@ const ChoreList = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['chores'] })
+      socketInstance.emit('update_query_key', {
+        queryKey: ['chores'],
+        users: 'family',
+        notificationMessage: null,
+        pageUrl: null,
+      })
     },
   })
 

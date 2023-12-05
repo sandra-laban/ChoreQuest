@@ -51,11 +51,13 @@ const handleSocketMessages = (io: SocketIoServer) => {
 
             console.log('familyMembers', familyMembers)
             familyMembers.forEach(async (memberId: any) => {
-              await db.addUserNotification(
-                memberId.auth_id,
-                notificationMessage,
-                pageUrl
-              )
+              if (notificationMessage !== null) {
+                await db.addUserNotification(
+                  memberId.auth_id,
+                  notificationMessage,
+                  pageUrl
+                )
+              }
               sendMessageToUser(memberId.id, { queryKey })
             })
           }
