@@ -6,7 +6,6 @@ import { ChoreData } from '../../models/chores'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 import { useAuth0 } from '@auth0/auth0-react'
-import { FaCalendarAlt } from 'react-icons/fa'
 import { socketInstance } from '../apis/websocket'
 
 const initalForm = {
