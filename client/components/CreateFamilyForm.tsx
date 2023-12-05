@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import '../styles/CreateFamilyForm.css'
-import { createFamily } from '../apis/Family'
+import { createFamily } from '../apis/family.ts'
 import { useAuth0 } from '@auth0/auth0-react'
 import { useNavigate } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'

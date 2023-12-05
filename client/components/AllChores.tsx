@@ -24,7 +24,6 @@ import { ChangeEvent, useState } from 'react'
 import { AssignedChore, Chore } from '@models/chores'
 import { User } from '@models/Iusers'
 
-
 const ChoreList = () => {
   const [formView, setFormView] = useState(false)
   const [assignView, setAssignView] = useState(false)
@@ -93,9 +92,9 @@ const ChoreList = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['chores'] })
       socketInstance.emit('update_query_key', {
-        queryKey: ['chores'],
+        queryKey: ['chores', 'notifications'],
         users: 'all',
-        notificationMessage: 'Chore added',
+        notificationMessage: 'Chore deleted',
       })
     },
   })
