@@ -6,23 +6,17 @@ export async function getFamilyMembersById(
   user_id: string,
   usersToGet: 'family' | 'parent' | 'user'
 ): Promise<{ id: string; auth_id: string }[]> {
+  const [user] = await db('users').select('family_id').where('id', user_id)
+
   if (usersToGet === 'family') {
-    const [family_id] = await db('users')
-      .select('family_id')
-      .where('id', user_id)
-
     const familyMembers = await db('users')
-      .where('family_id', family_id.family_id)
+      .where('family_id', user.family_id)
       .select('id', 'auth_id')
-
     return familyMembers
   } else if (usersToGet === 'parent') {
-    const [parent_id] = await db('users')
-      .select('parent_id')
-      .where('id', user_id)
-
     const familyMembers = await db('users')
-      .where('parent_id', parent_id.parent_id)
+      .where('family_id', user.family_id)
+      .where('is_parent', true)
       .select('id', 'auth_id')
 
     return familyMembers
@@ -30,7 +24,6 @@ export async function getFamilyMembersById(
     const familyMembers = await db('users')
       .where('id', user_id)
       .select('id', 'auth_id')
-
     return familyMembers
   }
   return []
