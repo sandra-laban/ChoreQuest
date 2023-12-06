@@ -58,7 +58,7 @@ function EditProfileForm() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     currentForm = { ...form }
-    console.log('component', form)
+    // console.log('component', form)
     await updateProfileMutation.mutate()
   }
 

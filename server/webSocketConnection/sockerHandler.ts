@@ -18,25 +18,50 @@ const handleSocketMessages = (io: SocketIoServer) => {
         userSocketMap.set(userId, socket)
         console.log(`WebSocket connection linked to user ${userId}`)
         socket.removeAllListeners('update_query_key')
-        socket.on('update_query_key', async (data) => {
-          const queryKey = data.queryKey
-          const users = data.users
-          const notificationMessage = data.notificationMessage
-          const pageUrl = data.pageUrl
+        socket.on(
+          'update_query_key',
+          async (data: {
+            queryKey: string[]
+            users: 'parents' | 'family' | 'user'
+            notificationMessage: string
+            pageUrl: string
+          }) => {
+            const queryKey = data.queryKey
+            const users = data.users
+            const notificationMessage = data.notificationMessage
+            const pageUrl = data.pageUrl
 
-          if (!socket.userId) return
-          const familyMembers = await getFamilyMembersById(socket.userId)
-          console.log(familyMembers)
-          if (familyMembers.length === 0) return
-          familyMembers.forEach(async (memberId) => {
-            await db.addUserNotification(
-              memberId.auth_id,
-              notificationMessage,
-              pageUrl
-            )
-            sendMessageToUser(memberId.id, { queryKey })
-          })
-        })
+            if (!socket.userId) return
+            let familyMembers: any
+            if (users === 'family') {
+              familyMembers = await getFamilyMembersById(
+                socket.userId,
+                'family'
+              )
+            } else if (users === 'parents') {
+              familyMembers = await getFamilyMembersById(
+                socket.userId,
+                'parents'
+              )
+            } else if (users === 'user') {
+              familyMembers = await getFamilyMembersById(socket.userId, 'user')
+            }
+
+            if (familyMembers.length === 0) return
+
+            console.log('familyMembers', familyMembers)
+            familyMembers.forEach(async (memberId: any) => {
+              if (notificationMessage !== null) {
+                await db.addUserNotification(
+                  memberId.auth_id,
+                  notificationMessage,
+                  pageUrl
+                )
+              }
+              sendMessageToUser(memberId.id, { queryKey })
+            })
+          }
+        )
 
         socket.on('disconnect', () => {
           console.log(`User ${userId} disconnected from WebSocket`)

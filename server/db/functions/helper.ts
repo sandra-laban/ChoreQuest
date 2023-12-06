@@ -39,6 +39,15 @@ export async function getUserId(auth_id: string) {
   return userId
 }
 
+export async function getUserIdFromName(name: string, familyId: number) {
+  const userId = await db('users')
+    .where('family_id', familyId)
+    .where('name', name)
+    .select('id')
+    .first()
+  return userId
+}
+
 export async function generateUniqueUsername(baseUsername: string) {
   let suffix = 1
   let newUsername = baseUsername
@@ -47,7 +56,7 @@ export async function generateUniqueUsername(baseUsername: string) {
     suffix++
     newUsername = `${baseUsername}${suffix}`
   }
-  console.log('helper', newUsername)
+  // console.log('helper', newUsername)
   return newUsername
 }
 
@@ -61,7 +70,7 @@ export async function usernameCheck(auth_id: string, family_id: number) {
 
   if (existingUser.length > 1) {
     const newName = await generateUniqueUsername(username.name)
-    console.log('newName', newName)
+    // console.log('newName', newName)
     await db('users').where({ auth_id }).update({ name: newName })
   }
 }

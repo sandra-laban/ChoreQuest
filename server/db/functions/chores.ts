@@ -2,7 +2,13 @@ import { DateTime } from 'luxon'
 import { AssignedChore, Chore, ChoreData } from '../../../models/chores'
 import connection from '../connection'
 import db from '../connection'
-import { fetchFamilyId, getUserId, isAvailable, isParent } from './helper.ts'
+import {
+  fetchFamilyId,
+  getUserId,
+  getUserIdFromName,
+  isAvailable,
+  isParent,
+} from './helper.ts'
 
 export function getAllChores() {
   return db('chores').select('*')
@@ -79,6 +85,25 @@ export async function unassignChore(authId: string, choreId: number) {
     : false
 
   return unassignedChore
+}
+
+export async function assignChore(
+  authId: string,
+  choreId: number,
+  kid: string
+) {
+  const authorised = await isParent(authId)
+  const family_id = await fetchFamilyId(authId)
+  const kidId = await getUserIdFromName(kid, family_id.family_id)
+  const assignChore = {
+    chores_id: choreId,
+    user_id: kidId.id,
+  }
+  console.log('assignChore', assignChore)
+  const assignedChore = authorised
+    ? await db('chore_list').insert(assignChore)
+    : null
+  return assignedChore
 }
 
 export async function deleteChore(authId: string, choreId: number) {

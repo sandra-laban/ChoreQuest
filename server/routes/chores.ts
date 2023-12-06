@@ -137,4 +137,17 @@ router.delete('/chorelist', jwtCheck, async (req, res) => {
   }
 })
 
+router.post('/chorelist', jwtCheck, async (req, res) => {
+  const authId = req.auth?.payload.sub as string
+  const choreId = req.body.choreId
+  const kid = req.body.kid
+  console.log(choreId, kid)
+  try {
+    await db.assignChore(authId, choreId, kid)
+    res.sendStatus(204)
+  } catch (err) {
+    res.status(500).json({ err })
+  }
+})
+
 export default router
