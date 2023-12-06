@@ -145,7 +145,7 @@ router.delete('/', jwtCheck, async (req, res) => {
   const choreId = req.body.choreId
   try {
     await db.deleteChore(authId, choreId)
-    res.sendStatus(204)
+    res.sendStatus(201)
   } catch (err) {
     res.status(500).json({ err })
   }
