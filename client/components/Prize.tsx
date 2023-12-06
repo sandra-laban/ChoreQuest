@@ -40,19 +40,19 @@ export default function Prize() {
   const profile = profileData?.profile
 
   const claimPrizeMutation = useMutation({
-    mutationFn: async (choreId: number) => {
+    mutationFn: async (prizeId: number) => {
       const accessToken = await accessTokenPromise
-      return await claimPrize(accessToken, choreId)
+      return await claimPrize(accessToken, prizeId)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['chores'] })
-      queryClient.invalidateQueries({ queryKey: ['chorelist'] })
+      queryClient.invalidateQueries({ queryKey: ['prizes'] })
+      queryClient.invalidateQueries({ queryKey: ['prize', prizeId] })
       queryClient.invalidateQueries({ queryKey: ['profile'] })
     },
   })
 
   if (isError || profileError) {
-    return <div>There was an error getting the prize</div>
+    return <h1 className="text-center">None left!</h1>
   }
 
   if (isLoading || !prize || profilePending || !profileData) {
@@ -62,6 +62,8 @@ export default function Prize() {
   function handleClaimClick(prizeId: number) {
     claimPrizeMutation.mutate(prizeId)
   }
+
+  if (prize.quantity < 1) return <h1 className="text-center">None left!</h1>
 
   return (
     <div className="border-2 rounded-lg m-5 gap-3 text-center bg-sky-200">

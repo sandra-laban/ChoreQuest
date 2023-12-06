@@ -10,6 +10,14 @@ export async function getAllPrizes(token: string): Promise<Prizes[]> {
   return response.body.prizes
 }
 
+export async function getRecentClaims(token: string): Promise<any> {
+  const response = await request
+    .get(`${serverUrl}/recent`)
+    .set('Authorization', `Bearer ${token}`)
+  console.log('claim response', response.body)
+  return response.body.prizes
+}
+
 // GET '/api/v1/prizes/:id'
 export async function getPrize(
   prizeId: string,
@@ -19,6 +27,17 @@ export async function getPrize(
     .get(`${serverUrl}/${prizeId}`)
     .set('Authorization', `Bearer ${token}`)
   return response.body.prize
+}
+
+export async function deliverPrize(
+  token: string,
+  prizeId: number
+): Promise<Prizes> {
+  const response = await request
+    .patch(`${serverUrl}/deliver`)
+    .set('Authorization', `Bearer ${token}`)
+    .send({ prizeId })
+  return response.body
 }
 
 // POST '/api/v1/prizes'

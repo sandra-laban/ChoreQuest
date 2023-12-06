@@ -1,5 +1,5 @@
-import { getAllPrizes } from '../apis/prizes'
-import { useQuery } from '@tanstack/react-query'
+import { deliverPrize, getAllPrizes, getRecentClaims } from '../apis/prizes'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAuth0 } from '@auth0/auth0-react'
 import { Link } from 'react-router-dom'
 
@@ -9,8 +9,10 @@ import { useState } from 'react'
 
 export default function AllPrizes() {
   const [formView, setFormView] = useState(false)
+  const [claimsView, setClaimsView] = useState(false)
   const { user, getAccessTokenSilently } = useAuth0()
   const accessTokenPromise = getAccessTokenSilently()
+  const queryClient = useQueryClient()
 
   const {
     data: allPrizes,
@@ -25,6 +27,20 @@ export default function AllPrizes() {
   })
 
   const {
+    data: recentClaims,
+    isError: claimError,
+    isLoading: claimLoading,
+  } = useQuery({
+    queryKey: ['claimedprizes'],
+    queryFn: async () => {
+      const token = await accessTokenPromise
+      return await getRecentClaims(token)
+    },
+  })
+
+  console.log('recent claims', recentClaims)
+
+  const {
     data: profileData,
     error: profileError,
     isPending: profilePending,
@@ -37,6 +53,18 @@ export default function AllPrizes() {
   })
   const profile = profileData?.profile
 
+  const deliverPrizeMutation = useMutation({
+    mutationFn: async (prizeId: number) => {
+      const accessToken = await accessTokenPromise
+      return await deliverPrize(accessToken, prizeId)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['prizes'] })
+      queryClient.invalidateQueries({ queryKey: ['claimedprizes'] })
+      queryClient.invalidateQueries({ queryKey: ['profile'] })
+    },
+  })
+
   if (isError || profileError) {
     return <div>There was an error getting your prizes</div>
   }
@@ -45,33 +73,65 @@ export default function AllPrizes() {
     return <div>Loading your prizes...</div>
   }
 
+  function handleDeliverClick(prizeId: number) {
+    deliverPrizeMutation.mutate(prizeId)
+  }
+
   return (
     <>
       <div className="container px-4 mx-auto text-center">
         <h1 className="text-center">{profile?.family?.name} Family Prizes:</h1>
         <h2 className="text-center">What do you want for your points?</h2>
         <div className="grid md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-3 mx-5 mb-10">
-          {allPrizes.map((prize) => (
-            <div
-              key={prize.id}
-              className="border-2 rounded-lg m-5 gap-3 text-center bg-sky-200"
-            >
-              <Link to={`/mngprizes/${prize.id}`}>
-                <h2>Prize: {prize.name}</h2>
-                <p>{prize.definition}</p>
-                <p>Price: {prize.price}</p>
-                <p>How many left: {prize.quantity}</p>
-              </Link>
-              {}
-            </div>
-          ))}
+          {allPrizes
+            .filter((prize) => prize.quantity > 0)
+            .map((prize) => (
+              <div
+                key={prize.id}
+                className="border-2 rounded-lg m-5 gap-3 text-center bg-sky-200"
+              >
+                <Link to={`/mngprizes/${prize.id}`}>
+                  <h2>Prize: {prize.name}</h2>
+                  <p>{prize.definition}</p>
+                  <p>Price: {prize.price}</p>
+                  <p>How many left: {prize.quantity}</p>
+                </Link>
+                {}
+              </div>
+            ))}
         </div>
         {profile?.is_parent ? (
-          <button className="btn-primary" onClick={() => setFormView(true)}>
-            Add a Prize?
-          </button>
+          <div>
+            <button className="btn-primary" onClick={() => setFormView(true)}>
+              Add a Prize?
+            </button>
+            <button
+              className="btn-primary"
+              onClick={() => setClaimsView(!claimsView)}
+            >
+              Recently Claimed
+            </button>
+          </div>
         ) : null}
         {formView ? <AddPrize setFormView={setFormView} /> : null}
+        {claimsView
+          ? recentClaims.map((claim: any) => (
+              <div
+                key={claim.id}
+                className="border-2 rounded-lg m-5 gap-3 text-center bg-sky-200"
+              >
+                <h2>Prize: {claim.name}</h2>
+                <p>{claim.definition}</p>
+                <p>Claimed by: {claim.user_name}</p>
+                <button
+                  onClick={() => handleDeliverClick(claim.id)}
+                  className="btn-small"
+                >
+                  Delivered?
+                </button>
+              </div>
+            ))
+          : null}
       </div>
     </>
   )
