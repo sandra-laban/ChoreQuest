@@ -9,7 +9,7 @@ const configureSocket = async () => {
       return socketInstance
     }
 
-    const socket = io('https://chorequest.pushed.nz', {
+    const socket = io('http://localhost:3000', {
       transports: ['websocket'],
       reconnection: true,
       reconnectionAttempts: 10,
