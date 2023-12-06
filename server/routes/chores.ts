@@ -57,6 +57,24 @@ router.get('/list', jwtCheck, async (req, res) => {
   }
 })
 
+router.get('/list/recent', jwtCheck, async (req, res) => {
+  try {
+    const auth_id = req.auth?.payload.sub as string
+    console.log('routerecent')
+    const chores = await db.fetchFamilyRecents(auth_id)
+
+    if (!chores) {
+      res.json({ message: "Couldn't find chores!" })
+    } else {
+      res.json({ chores })
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: err instanceof Error ? err.message : 'Unknown error',
+    })
+  }
+})
+
 router.post('/', jwtCheck, async (req, res) => {
   try {
     const authId = req.auth?.payload.sub as string
@@ -114,6 +132,25 @@ router.patch('/complete', jwtCheck, async (req, res) => {
   }
 })
 
+router.patch('/complete/confirm', jwtCheck, async (req, res) => {
+  try {
+    const authId = req.auth?.payload.sub as string
+    const choreId = req.body.choreId
+
+    const confirmedChore = await db.confirmChore(authId, choreId)
+
+    if (!confirmedChore) {
+      res.json({ message: "Couldn't complete chore" })
+    } else {
+      res.json({ confirmedChore })
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: err instanceof Error ? err.message : 'Unknown error',
+    })
+  }
+})
+
 // DELETE /api/v1/chores/:id
 router.delete('/', jwtCheck, async (req, res) => {
   const authId = req.auth?.payload.sub as string
@@ -144,6 +181,17 @@ router.post('/chorelist', jwtCheck, async (req, res) => {
   console.log(choreId, kid)
   try {
     await db.assignChore(authId, choreId, kid)
+    res.sendStatus(204)
+  } catch (err) {
+    res.status(500).json({ err })
+  }
+})
+
+router.patch('/chorelist', jwtCheck, async (req, res) => {
+  const authId = req.auth?.payload.sub as string
+  const choreId = req.body.choreId
+  try {
+    await db.rejectChore(authId, choreId)
     res.sendStatus(204)
   } catch (err) {
     res.status(500).json({ err })

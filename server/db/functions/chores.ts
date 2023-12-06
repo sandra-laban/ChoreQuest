@@ -1,6 +1,5 @@
 import { DateTime } from 'luxon'
 import { AssignedChore, Chore, ChoreData } from '../../../models/chores'
-import connection from '../connection'
 import db from '../connection'
 import {
   fetchFamilyId,
@@ -25,6 +24,18 @@ export async function fetchFamilyChores(authId: string): Promise<Chore[]> {
         .whereNull('chore_list.is_completed')
         .orWhere('chore_list.is_completed', false)
     })
+
+  return chores
+}
+
+export async function fetchFamilyRecents(authId: string): Promise<Chore[]> {
+  const familyId = await fetchFamilyId(authId)
+  const chores = await db('chores')
+    .join('chore_list', 'chores.id', 'chore_list.chores_id')
+    .where('family_id', familyId.family_id)
+    .where('is_completed', true)
+    .where('reviewed', false)
+  console.log('completed chores', chores)
   return chores
 }
 
@@ -136,19 +147,68 @@ export async function finishChore(authId: string, choreId: number) {
     .where('user_id', userId.id)
     .update({
       is_completed: true,
+      completed: Number(DateTime.now().toFormat('yyyyMMddHHmmss')),
     })
-  await getPoints(authId, choreId)
+  // await getPoints(authId, choreId)
   return completedChore
 }
 
-async function getPoints(authId: string, choreId: number) {
-  const userId = await getUserId(authId)
+export async function rejectChore(authId: string, choreId: number) {
+  const authorisation = await isParent(authId)
+
+  if (!authorisation) return null
+
+  const kidId = await db('chore_list')
+    .where('chores_id', choreId)
+    .select('user_id')
+    .first()
+
+  const removeList = await db('chore_list')
+    .where('user_id', kidId.user_id)
+    .whereNot('chores_id', choreId)
+    .whereNot('is_completed', true)
+    .del()
+
+  console.log('removeList', removeList)
+
+  const rejectedChore = await db('chore_list')
+    .where('chores_id', choreId)
+    .update({
+      is_completed: false,
+      completed: null,
+    })
+
+  console.log('completedChore', rejectedChore)
+  return rejectedChore
+}
+
+export async function confirmChore(authId: string, choreId: number) {
+  const authorisation = await isParent(authId)
+  if (!authorisation) return null
+
+  const kidId = await db('chore_list')
+    .where('chores_id', choreId)
+    .select('user_id')
+    .first()
+
+  const confirmedChore = await db('chore_list')
+    .where('chores_id', choreId)
+    .update({
+      reviewed: true,
+    })
+
+  await getPoints(kidId.user_id, choreId)
+
+  return confirmedChore
+}
+
+async function getPoints(userId: string, choreId: number) {
   const points = await db('chores')
     .where('id', choreId)
     .select('points')
     .first()
   const userPoints = await db('users')
-    .where('id', userId.id)
+    .where('id', userId)
     .increment('points', points.points)
 
   return userPoints
