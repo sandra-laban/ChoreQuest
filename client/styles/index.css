@@ -90,4 +90,11 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
+  /* famyly-member */
+  .is-perent {
+    @apply bg-purple-950 text-yellow-400 ml-5 p-2 rounded text-lg absolute top-0 left-0 w-20 text-cente;
+  }
+  .card-family-member {
+    @apply relative bg-purple-800 block p-6 rounded-lg text-white;
+  }
 }

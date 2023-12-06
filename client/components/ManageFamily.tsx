@@ -68,40 +68,50 @@ function ManageFamily() {
 
   return (
     <div className="flex flex-col justify-center items-center">
-      <h1>Manage {profile?.family?.name} Family</h1>
+      <div className="container px-4 py-8 mx-auto rounded-3xl bg-white h-18 shadow-2xl bg-gradient-to-r from-cyan-300 to-blue-300 border-b border-gray-300 relative">
+        <h1 className="main-title d-text">
+          Manage {profile?.family?.name} Family
+        </h1>
 
-      {family?.picture !== null && (
-        <img src={`images/familyIcons/${family?.picture}`} alt={family?.name} />
-      )}
-
-      <div className="flex justify-center items-center">
-        <button className="btn-primary" onClick={handleClick}>
-          View Parents
-        </button>
-        <button className="btn-primary" onClick={handleClick}>
-          View Kids
-        </button>
-        <button className="btn-primary" onClick={handleClick}>
-          View All
-        </button>
-      </div>
-      {familyView === 'View All' &&
-        sortedFamily?.map((member) => (
-          <ManagementProfile member={member} key={member.id} />
-        ))}
-      {familyView === 'View Parents' &&
-        sortedFamily?.map((member) =>
-          member.is_parent ? (
-            <ManagementProfile member={member} key={member.id} />
-          ) : null
+        {family?.picture !== null && (
+          <img
+            src={`images/familyIcons/${family?.picture}`}
+            alt={family?.name}
+          />
         )}
-      {familyView === 'View Kids' &&
-        sortedFamily?.map(
-          (member) =>
-            !member.is_parent && (
+
+        <div className="flex justify-center items-center">
+          <button className="btn-primary" onClick={handleClick}>
+            View Parents
+          </button>
+          <button className="btn-primary" onClick={handleClick}>
+            View Kids
+          </button>
+          <button className="btn-primary" onClick={handleClick}>
+            View All
+          </button>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 m-5 mb-10">
+          {familyView === 'View All' &&
+            sortedFamily?.map((member) => (
               <ManagementProfile member={member} key={member.id} />
-            )
-        )}
+            ))}
+          {familyView === 'View Parents' &&
+            sortedFamily?.map((member) =>
+              member.is_parent ? (
+                <ManagementProfile member={member} key={member.id} />
+              ) : null
+            )}
+          {familyView === 'View Kids' &&
+            sortedFamily?.map(
+              (member) =>
+                !member.is_parent && (
+                  <ManagementProfile member={member} key={member.id} />
+                )
+            )}
+        </div>
+      </div>
     </div>
   )
 }
