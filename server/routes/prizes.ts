@@ -45,6 +45,7 @@ router.post('/', jwtCheck, async (req, res) => {
       res.json({ addedPrize })
     }
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: 'Unable to add prize' })
   }
 })

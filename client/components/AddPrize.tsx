@@ -37,6 +37,7 @@ export default function AddPrize({ setFormView }: Props) {
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     console.log(form)
+    // const newForm = {...form,}
     addPrizeMutation.mutate(form)
     setForm(initialForm)
     setFormView(false)
