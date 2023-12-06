@@ -2,7 +2,7 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { completeChore } from '../apis/chores'
 import { CompleteUser, User } from '@models/Iusers'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-
+import { socketInstance } from '../apis/websocket.ts'
 interface Props {
   member: CompleteUser
 }
@@ -21,6 +21,12 @@ function HomeProfile({ member }: Props) {
       queryClient.invalidateQueries({ queryKey: ['chores'] })
       queryClient.invalidateQueries({ queryKey: ['chorelist'] })
       queryClient.invalidateQueries({ queryKey: ['profile'] })
+      socketInstance.emit('update_query_key', {
+        queryKey: ['notifications', 'chores', 'profile', 'chorelist'],
+        users: 'family',
+        notificationMessage: null,
+        pageUrl: null,
+      })
     },
   })
 
