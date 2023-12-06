@@ -161,16 +161,10 @@ export default function AllPrizes() {
             <button className="btn-primary" onClick={() => setFormView(true)}>
               Add a Prize?
             </button>
-            <button
-              className="btn-primary"
-              onClick={() => setClaimsView(!claimsView)}
-            >
-              Recently Claimed
-            </button>
           </div>
         ) : null}
         {formView ? <AddPrize setFormView={setFormView} /> : null}
-        {claimsView
+        {profile?.is_parent
           ? recentClaims.map((claim: any) => (
               <div
                 key={claim.assigned}
