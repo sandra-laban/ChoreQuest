@@ -10,7 +10,7 @@ const configureSocket = async () => {
       return socketInstance
     }
 
-    const socket = io('http://localhost:3000', {
+    const socket = io('https://chorequest.devacademy.nz', {
       transports: ['websocket'],
       reconnection: true,
       reconnectionAttempts: 10,

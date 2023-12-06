@@ -131,7 +131,8 @@ function ChoreBox({ chore, completed }: Props) {
       socketInstance.emit('update_query_key', {
         queryKey: ['chores', 'notifications'],
         users: 'family',
-        notificationMessage: 'Chore deleted',
+        notificationMessage: null,
+        pageUrl: null,
       })
     },
   })
@@ -225,15 +226,16 @@ function ChoreBox({ chore, completed }: Props) {
       const accessToken = await accessTokenPromise
       return await assignChore(accessToken, currentForm)
     },
-    onSuccess: () => {
+    onSuccess: ({ chore, user }: { chore: any; user: any }) => {
       queryClient.invalidateQueries({ queryKey: ['chores'] })
       queryClient.invalidateQueries({ queryKey: ['chorelist'] })
       queryClient.invalidateQueries({ queryKey: ['profile'] })
+
       socketInstance.emit('update_query_key', {
         queryKey: ['notifications', 'chores', 'profile', 'chorelist'],
-        users: 'family',
-        notificationMessage: null,
-        pageUrl: null,
+        users: user.id,
+        notificationMessage: `${chore.name} has been assigned to you`,
+        pageUrl: '/chores',
       })
     },
   })
