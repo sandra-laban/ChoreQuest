@@ -141,15 +141,21 @@ function ChoreBox({ chore, completed }: Props) {
       const accessToken = await accessTokenPromise
       return await completeChore(accessToken, choreId)
     },
-    onSuccess: (data) => {
-      console.log(data)
+    onSuccess: ({ chore, user }: { chore: any; user: any }) => {
       queryClient.invalidateQueries({
-        queryKey: ['chores', 'profile', 'chorelist'],
+        queryKey: ['chorelist'],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['profile'],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['chores'],
       })
       socketInstance.emit('update_query_key', {
         queryKey: ['notifications', 'chores', 'profile', 'chorelist'],
         users: 'parents',
-        notificationMessage: 'Chore completed!',
+        notificationMessage: `${chore.name} completed by ${user.name}!`,
+        pageUrl: '/chores',
       })
     },
   })
@@ -160,9 +166,9 @@ function ChoreBox({ chore, completed }: Props) {
       return await confirmChore(accessToken, choreId)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['chores'] })
-      queryClient.invalidateQueries({ queryKey: ['chorelist'] })
-      queryClient.invalidateQueries({ queryKey: ['completedchores'] })
+      queryClient.invalidateQueries({
+        queryKey: ['chores', 'completedchores', 'chorelist'],
+      })
     },
   })
 
@@ -171,10 +177,19 @@ function ChoreBox({ chore, completed }: Props) {
       const accessToken = await accessTokenPromise
       return await rejectChore(accessToken, choreId)
     },
-    onSuccess: () => {
+    onSuccess: ({ chore, user }: { chore: any; user: any }) => {
+      console.log('chore', chore)
+      console.log('user', user)
+      console.log(typeof user.id)
       queryClient.invalidateQueries({ queryKey: ['chores'] })
       queryClient.invalidateQueries({ queryKey: ['chorelist'] })
       queryClient.invalidateQueries({ queryKey: ['completedchores'] })
+      socketInstance.emit('update_query_key', {
+        queryKey: ['notifications', 'chores', 'completedchores', 'chorelist'],
+        users: user.id,
+        notificationMessage: `${chore.name} not completed to standard`,
+        pageUrl: '/chores',
+      })
     },
   })
 

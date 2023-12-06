@@ -12,8 +12,6 @@ export async function getUser(
 }
 
 export async function getFamilyMembers(token: string): Promise<User[]> {
-  console.log('token', token)
-  console.log('api familyrequest')
   const response = await request
     .get('api/v1/family/members')
     .set('Authorization', `Bearer ${token}`)
@@ -38,7 +36,6 @@ export async function updateProfile(
   token: string,
   newUser: UserForm
 ): Promise<User> {
-  console.log('api', newUser)
   const updatedUser = {
     username: newUser.username,
     picture: newUser.picture,

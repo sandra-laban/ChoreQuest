@@ -35,7 +35,6 @@ export async function fetchFamilyRecents(authId: string): Promise<Chore[]> {
     .where('family_id', familyId.family_id)
     .where('is_completed', true)
     .where('reviewed', false)
-  console.log('completed chores', chores)
   return chores
 }
 
@@ -141,16 +140,24 @@ export async function deleteChore(authId: string, choreId: number) {
 }
 
 export async function finishChore(authId: string, choreId: number) {
-  const userId = await getUserId(authId)
-  const completedChore = await db('chore_list')
+  const user = await getUserId(authId)
+  const completedChoreId = await db('chore_list')
     .where('chores_id', choreId)
-    .where('user_id', userId.id)
+    .where('user_id', user.id)
     .update({
       is_completed: true,
       completed: Number(DateTime.now().toFormat('yyyyMMddHHmmss')),
     })
-  // await getPoints(authId, choreId)
-  return completedChore
+  if (!completedChoreId) return null
+
+  const userName = await db('users').select('name').where('id', user.id).first()
+  user.name = userName.name
+
+  const [chore] = await db('chores')
+    .select('name', 'points')
+    .where('id', choreId)
+
+  return { chore, user }
 }
 
 export async function rejectChore(authId: string, choreId: number) {
@@ -163,23 +170,23 @@ export async function rejectChore(authId: string, choreId: number) {
     .select('user_id')
     .first()
 
-  const removeList = await db('chore_list')
+  await db('chore_list')
     .where('user_id', kidId.user_id)
     .whereNot('chores_id', choreId)
     .whereNot('is_completed', true)
     .del()
 
-  console.log('removeList', removeList)
+  await db('chore_list').where('chores_id', choreId).update({
+    is_completed: false,
+    completed: null,
+  })
 
-  const rejectedChore = await db('chore_list')
-    .where('chores_id', choreId)
-    .update({
-      is_completed: false,
-      completed: null,
-    })
+  const [chore] = await db('chores').select('name').where('id', choreId)
+  const [user] = await db('users')
+    .select('name', 'id')
+    .where('id', kidId.user_id)
 
-  console.log('completedChore', rejectedChore)
-  return rejectedChore
+  return { chore, user }
 }
 
 export async function confirmChore(authId: string, choreId: number) {

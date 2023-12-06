@@ -10,17 +10,6 @@ const jwtCheck = auth({
   tokenSigningAlg: 'RS256',
 })
 
-//GET /api/v1/chores
-// router.get('/', async (req, res) => {
-//   try {
-//     const chores = await db.getAllChores()
-//     res.json(chores)
-//   } catch (err) {
-//     console.log(err)
-//     res.status(500).json({ error: 'Internal server error' })
-//   }
-// })
-
 router.get('/', jwtCheck, async (req, res) => {
   try {
     const auth_id = req.auth?.payload.sub as string
@@ -118,12 +107,12 @@ router.patch('/complete', jwtCheck, async (req, res) => {
     const authId = req.auth?.payload.sub as string
     const choreId = req.body.choreId
 
-    const completedChore = await db.finishChore(authId, choreId)
+    const completedChoreData = await db.finishChore(authId, choreId)
 
-    if (!completedChore) {
+    if (!completedChoreData) {
       res.json({ message: "Couldn't complete chore" })
     } else {
-      res.json({ completedChore })
+      res.json(completedChoreData)
     }
   } catch (err) {
     res.status(500).json({
@@ -191,8 +180,9 @@ router.patch('/chorelist', jwtCheck, async (req, res) => {
   const authId = req.auth?.payload.sub as string
   const choreId = req.body.choreId
   try {
-    await db.rejectChore(authId, choreId)
-    res.sendStatus(204)
+    const choreData = await db.rejectChore(authId, choreId)
+
+    res.status(201).json(choreData)
   } catch (err) {
     res.status(500).json({ err })
   }

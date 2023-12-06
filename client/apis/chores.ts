@@ -17,7 +17,6 @@ export async function getFamilyChorelist(token: string): Promise<any> {
   const response = await request
     .get('/api/v1/chores/list')
     .set('Authorization', `Bearer ${token}`)
-  console.log('response', response.body)
   return response.body.chores
 }
 
@@ -56,7 +55,7 @@ export async function acceptChore(
 export async function completeChore(
   token: string,
   choreId: number
-): Promise<Chore> {
+): Promise<{ chore: Chore; user: any }> {
   const response = await request
     .patch('/api/v1/chores/complete')
     .set('Authorization', `Bearer ${token}`)
@@ -90,7 +89,7 @@ export async function deleteChore(
 export async function rejectChore(
   token: string,
   choreId: number
-): Promise<void> {
+): Promise<{ chore: any; user: any }> {
   const rejectedChore = await request
     .patch(`/api/v1/chores/chorelist`)
     .set('Authorization', `Bearer ${token}`)
