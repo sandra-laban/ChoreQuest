@@ -60,24 +60,23 @@ const NotificationBar = () => {
     deleteNotificationMutation.mutate(id)
     navigate(pageUrl)
   }
-  return (
-    <div>
-      <h2>NotificationBar</h2>
-      {notifications && notifications.length > 0 ? (
-        notifications.map((notification) => (
-          <button
-            key={notification.id}
-            onClick={() => handleClick(notification.pageUrl, notification.id)}
-            className="text-sm border-none"
-          >
-            {notification.message}
-          </button>
-        ))
-      ) : (
-        <p>No notifications available.</p>
-      )}
-    </div>
-  )
+  return null
+  // <div>
+  //   <h2>NotificationBar</h2>
+  //   {notifications && notifications.length > 0 ? (
+  //     notifications.map((notification) => (
+  //       <button
+  //         key={notification.id}
+  //         onClick={() => handleClick(notification.pageUrl, notification.id)}
+  //         className="text-sm border-none"
+  //       >
+  //         {notification.message}
+  //       </button>
+  //     ))
+  //   ) : (
+  //     <p>No notifications available.</p>
+  //   )}
+  // </div>
 }
 
 export default NotificationBar
