@@ -30,14 +30,48 @@ function HomeProfile({ member }: Props) {
 
   return (
     <>
-      <div className="flex items-center justify-around border border-4 border-white p-1 rounded-md w-1/2 my-8">
-        <div className="flex flex-col items-center justify-center my-6">
+      <div className="card-family-member">
+        <div className="flex flex-col items-center justify-center">
           <h3>{member.name}</h3>
           <img src={member.picture} alt={member.name} className="my-4" />
         </div>
         <div className="flex flex-col items-center justify-center my-6 mx-8">
-          <h3>Points - {member.points}</h3>
-          <h3> Current Chore - {member.currentChore?.name}</h3>
+          <h3 className=" text-yellow-400 grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 text-center">
+            {member.points}
+            <span className="svg-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <g fill="none" fillRule="evenodd">
+                  <path fill="#24CC8F" d="M0 9l5-7h14l5 7-12 13z"></path>
+                  <path
+                    fill="#FFF"
+                    opacity=".25"
+                    d="M7 8.8L6 4h6zM17 8.8L18 4h-6z"
+                  ></path>
+                  <path
+                    fill="#FFF"
+                    opacity=".5"
+                    d="M7 8.8L12 4l5 4.8zM2.6 8.8L6 4l1 4.8z"
+                  ></path>
+                  <path
+                    fill="#34313A"
+                    opacity=".11"
+                    d="M21.4 8.8L18 4l-1 4.8zM2.6 8.8H7l5 10.3z"
+                  ></path>
+                  <path
+                    fill="#FFF"
+                    opacity=".5"
+                    d="M21.4 8.8H17l-5 10.3z"
+                  ></path>
+                  <path fill="#FFF" opacity=".25" d="M7 8.8h10l-5 10.3z"></path>
+                </g>
+              </svg>
+            </span>
+          </h3>
+          <p> CURRENT CHORE </p>
+          <h2>
+            {member.currentChore?.name}
+            {member.chore_name}
+          </h2>
           {member.currentChore ? (
             <button
               className="btn-small"
@@ -48,8 +82,13 @@ function HomeProfile({ member }: Props) {
               Complete?
             </button>
           ) : null}
-          <h3> Current Goal - {member.currentGoal?.name}</h3>
+          <p> CURRENT GOAL </p>
+          <h2>
+            {member.currentGoal?.name}
+            {member.goal_name}
+          </h2>
         </div>
+        <span className="colour-border"></span>
       </div>
     </>
   )
