@@ -12,7 +12,7 @@ function App() {
         </header>
       )}
 
-      <section className="bg-gradient-to-r from-indigo-500 to-purple-500 min-h-screen pt-56">
+      <section className="bg-gradient-to-r from-indigo-500 to-purple-500 min-h-screen pt-40">
         <Outlet />
       </section>
       <footer className="footer"></footer>

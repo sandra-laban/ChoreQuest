@@ -253,25 +253,53 @@ function ChoreBox({ chore, completed }: Props) {
   )
 
   return (
-    <ul
-      className="bg-white overflow-hidden m-5 hover:bg-blue-100 border border-gray-200 p-3 text-center"
-      key={chore.id}
-    >
+    <ul className="card-chore" key={chore.id}>
+      <div className="flex flex-col absolute top-0 right-0 h-24 w-24 bg-purple-950 justify-center rounded-bl-lg rounded-tr-lg">
+        <span className="svg-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <g fill="none" fillRule="evenodd">
+              <path fill="#24CC8F" d="M0 9l5-7h14l5 7-12 13z"></path>
+              <path
+                fill="#FFF"
+                opacity=".25"
+                d="M7 8.8L6 4h6zM17 8.8L18 4h-6z"
+              ></path>
+              <path
+                fill="#FFF"
+                opacity=".5"
+                d="M7 8.8L12 4l5 4.8zM2.6 8.8L6 4l1 4.8z"
+              ></path>
+              <path
+                fill="#34313A"
+                opacity=".11"
+                d="M21.4 8.8L18 4l-1 4.8zM2.6 8.8H7l5 10.3z"
+              ></path>
+              <path fill="#FFF" opacity=".5" d="M21.4 8.8H17l-5 10.3z"></path>
+              <path fill="#FFF" opacity=".25" d="M7 8.8h10l-5 10.3z"></path>
+            </g>
+          </svg>
+        </span>
+        <span className="points-fixed">{chore.points}</span>
+      </div>
+      <span className="colour-border"></span>
       <li>
-        <h2>Chore name: {chore.name}</h2>
-        <p>Points: {chore.points}</p>
-        <p>
-          Due:{' '}
-          {typeof chore.created === 'number'
-            ? DateTime.fromMillis(chore.created).toISODate()
-            : DateTime.fromISO(chore.created).toISODate()}
-        </p>
+        <div className="my-4">
+          <h2 className="text-white text-2xl font-bold pb-2 w-4/5">
+            {chore.name}
+          </h2>
+          <p className="text-gray-300 py-1">
+            Due:{' '}
+            {typeof chore.created === 'number'
+              ? DateTime.fromMillis(chore.created).toISODate()
+              : DateTime.fromISO(chore.created).toISODate()}
+          </p>
+        </div>
 
         {profile.is_parent && !completed ? (
           <>
             <button
               onClick={() => handleDeleteClick(chore.id)}
-              className="btn-primary hover:bg-red-500 bg-red-400 mb-12 items-center justify-center"
+              className="btn-primary"
             >
               Delete
             </button>
@@ -280,7 +308,7 @@ function ChoreBox({ chore, completed }: Props) {
               !(profile.currentChore?.chores_id === chore.id)
             ) ? (
               <button
-                className="btn-small"
+                className="btn-primary"
                 onClick={() => setAssignView(!assignView)}
               >
                 Assign to:
@@ -301,7 +329,7 @@ function ChoreBox({ chore, completed }: Props) {
                   ))}
                 </datalist>
                 <button
-                  className="btn-small"
+                  className="btn-primary"
                   onClick={() => handleAssignment(chore.id)}
                 >
                   Confirm
@@ -329,7 +357,7 @@ function ChoreBox({ chore, completed }: Props) {
         {choreList.find((item: any) => item.chores_id === chore.id) &&
         !(profile.currentChore?.chores_id === chore.id) ? (
           <>
-            <h3 className="text-red-600">{`Assigned to ${
+            <h3 className="text-yellow-400 text-base">{`Assigned to ${
               choreList?.find((item: any) => item.chores_id === chore.id)?.name
             }`}</h3>
             {profile.is_parent ? (
