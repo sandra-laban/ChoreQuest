@@ -49,8 +49,9 @@ router.get('/list', jwtCheck, async (req, res) => {
 router.get('/list/recent', jwtCheck, async (req, res) => {
   try {
     const auth_id = req.auth?.payload.sub as string
-    console.log('routerecent')
     const chores = await db.fetchFamilyRecents(auth_id)
+
+    console.log(chores)
 
     if (!chores) {
       res.json({ message: "Couldn't find chores!" })
@@ -146,7 +147,7 @@ router.delete('/', jwtCheck, async (req, res) => {
   const choreId = req.body.choreId
   try {
     await db.deleteChore(authId, choreId)
-    res.sendStatus(204)
+    res.sendStatus(201)
   } catch (err) {
     res.status(500).json({ err })
   }

@@ -30,11 +30,14 @@ export async function fetchFamilyChores(authId: string): Promise<Chore[]> {
 
 export async function fetchFamilyRecents(authId: string): Promise<Chore[]> {
   const familyId = await fetchFamilyId(authId)
+  console.log(familyId)
   const chores = await db('chores')
     .join('chore_list', 'chores.id', 'chore_list.chores_id')
     .where('family_id', familyId.family_id)
     .where('is_completed', true)
     .where('reviewed', false)
+
+  console.log(chores)
   return chores
 }
 
@@ -76,6 +79,7 @@ export async function acceptChore(
 ): Promise<AssignedChore | null> {
   const available = await isAvailable(authId)
   const userId = await getUserId(authId)
+
 
   const assignedChore = {
     chores_id: choreId,

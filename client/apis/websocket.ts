@@ -2,6 +2,7 @@ import io from 'socket.io-client'
 
 let socketInstance: any = null
 ;('https://chorequest.pushed.nz')
+;('https://chorequest.devacademy.nz')
 ;('http://localhost:3000')
 const configureSocket = async () => {
   try {
@@ -9,7 +10,7 @@ const configureSocket = async () => {
       return socketInstance
     }
 
-    const socket = io('http://localhost:3000', {
+    const socket = io('https://chorequest.devacademy.nz', {
       transports: ['websocket'],
       reconnection: true,
       reconnectionAttempts: 10,

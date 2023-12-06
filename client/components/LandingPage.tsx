@@ -39,7 +39,7 @@ function LandingPage() {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center min-h-screen">
+      <div className="flex flex-col items-center  min-h-screen">
         <img
           src="images/chorequest.png"
           alt="ChoreQuest Logo"
