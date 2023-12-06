@@ -253,7 +253,6 @@ function ChoreBox({ chore, completed }: Props) {
   ) {
     return <p>Loading chores...</p>
   }
-  //const choreDate = DateTime.fromMillis(chore.created)
 
   const availableKids = familydata?.filter(
     (user) =>
