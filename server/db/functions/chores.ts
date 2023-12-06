@@ -15,6 +15,7 @@ export function getAllChores() {
 
 export async function fetchFamilyChores(authId: string): Promise<Chore[]> {
   const familyId = await fetchFamilyId(authId)
+
   const chores = await db('chores')
     .leftJoin('chore_list', 'chores.id', 'chore_list.chores_id')
     .where('family_id', familyId.family_id)
@@ -24,6 +25,11 @@ export async function fetchFamilyChores(authId: string): Promise<Chore[]> {
         .whereNull('chore_list.is_completed')
         .orWhere('chore_list.is_completed', false)
     })
+
+  await db('notifications')
+    .delete()
+    .where('auth_id', authId)
+    .where('page_url', '/chores')
 
   return chores
 }
@@ -79,7 +85,6 @@ export async function acceptChore(
 ): Promise<AssignedChore | null> {
   const available = await isAvailable(authId)
   const userId = await getUserId(authId)
-
 
   const assignedChore = {
     chores_id: choreId,
