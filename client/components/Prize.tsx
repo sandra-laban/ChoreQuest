@@ -81,11 +81,14 @@ export default function Prize() {
   if (prize.quantity < 1) return <h1 className="text-center">None left!</h1>
 
   return (
-    <div className="border-2 rounded-lg m-5 gap-3 text-center bg-sky-200">
-      <h2>Prize: {prize.name}</h2>
-      <p>{prize.definition}</p>
-      <p>Price: {prize.price}</p>
-      <p>How many left: {prize.quantity}</p>
+    <div className="card-family-member w-1/2 mx-auto flex flex-col justify-center">
+      <span className="gift-svg"></span>
+      <h2 className="text-center mt-6">{prize.name}</h2>
+      <p className="text-center mt-4 text-xl text-yellow-400">
+        {prize.definition}
+      </p>
+      <p className="text-center mt-3 text-2xl">Price: {prize.price}</p>
+      <p className="text-center mt-3 text-2xl"> Only {prize.quantity} Left!</p>
       {!profile?.is_parent &&
       profile?.points &&
       profile?.points >= prize.price ? (
@@ -93,7 +96,7 @@ export default function Prize() {
           onClick={() => {
             handleClaimClick(prize.id)
           }}
-          className="btn-primary"
+          className="btn-primary my-6 w-2/3 mx-auto"
         >
           Claim Prize!
         </button>
@@ -103,11 +106,12 @@ export default function Prize() {
           onClick={() => {
             handleGoalClick(prize.id)
           }}
-          className="btn-primary"
+          className="btn-primary mb-4 w-2/3 mx-auto"
         >
           Set as Goal!
         </button>
       ) : null}
+      <span className="colour-border"></span>
     </div>
   )
 }
