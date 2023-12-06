@@ -173,17 +173,23 @@ export default function AllPrizes() {
             {recentClaims.map((claim: any) => (
               <div
                 key={claim.assigned}
-                className="border-2 rounded-lg m-5 gap-3 text-center bg-sky-200"
+                className="card-family-member w-1/2 mx-auto flex flex-col justify-center my-6"
               >
-                <h2>Prize: {claim.name}</h2>
-                <p>{claim.definition}</p>
-                <p>Claimed by: {claim.user_name}</p>
+                <span className="gift-svg"></span>
+                <h2 className="text-center mt-6">Prize: {claim.name}</h2>
+                <p className="text-center mt-4 text-xl text-yellow-400">
+                  {claim.definition}
+                </p>
+                <p className="text-center mt-3 text-2xl">
+                  Claimed by: {claim.user_name}
+                </p>
                 <button
                   onClick={() => handleDeliverClick(claim.id, claim.assigned)}
-                  className="btn-small"
+                  className="btn-small w-1/3 mx-auto mt-6"
                 >
                   Delivered?
                 </button>
+                <span className="colour-border"></span>
               </div>
             ))}
           </div>
