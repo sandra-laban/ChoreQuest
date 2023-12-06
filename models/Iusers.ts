@@ -17,4 +17,10 @@ export interface CompleteUser extends User {
     chores_id: number
     name: string
   }
+  currentGoal?: {
+    name: string
+    id: number
+  }
+  goal_name?: string
+  chore_name?: string
 }

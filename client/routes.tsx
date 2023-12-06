@@ -28,6 +28,6 @@ export const routes = createRoutesFromElements(
       path="/manage-family"
       element={<AuthCheck element={<ManageFamily />} />}
     />
-    <Route path="/home" element={<AuthCheck element={<Profile />} />} />
+    <Route path="/home" element={<AuthCheck element={<Home />} />} />
   </Route>
 )

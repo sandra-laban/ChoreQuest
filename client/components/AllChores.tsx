@@ -82,7 +82,7 @@ const ChoreList = () => {
               className="btn-primary"
               onClick={() => setRecentsView(!recentsView)}
             >
-              Recently Completed{' '}
+              Recently Completed
             </button>
           </div>
         ) : // <div className="grid md:grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 m-5 mb-10">

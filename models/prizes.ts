@@ -13,3 +13,8 @@ export interface PrizeData {
   price: number
   quantity: number
 }
+
+export interface Delivery {
+  prizeId: number
+  assigned: number
+}
