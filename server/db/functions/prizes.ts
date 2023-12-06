@@ -25,6 +25,7 @@ export async function addPrize(
   const prize = authorised
     ? await db('prizes').insert(addPrize).returning('*')
     : null
+  console.log(prize)
   return prize ? prize[0] : null
 }
 
