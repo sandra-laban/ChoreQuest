@@ -29,8 +29,8 @@ export async function addPrize(
   const response = await request
     .post('/api/v1/prizes')
     .set('Authorization', `Bearer ${token}`)
-    .send(newPrize)
-  return response.body.prizes
+    .send({ prize: newPrize })
+  return response.body.prize
 }
 
 // PATCH '/api/v1/prizes'
