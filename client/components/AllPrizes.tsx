@@ -164,7 +164,7 @@ export default function AllPrizes() {
           </div>
         ) : null}
         {formView ? <AddPrize setFormView={setFormView} /> : null}
-        {profile?.is_parent ? (
+        {profile?.is_parent && recentClaims?.length > 0 ? (
           <div>
             <h1 className="main-title d-text">Prizes earned</h1>
             {recentClaims.map((claim: any) => (
