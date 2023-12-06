@@ -13,7 +13,7 @@ function Nav() {
   }
   return (
     <>
-      <div className="bg-white h-18 z-10 shadow-2xl bg-gradient-to-r from-cyan-300 to-blue-300 border-b border-gray-300">
+      <div className="bg-white h-18 z-10 shadow-2xl bg-gradient-to-r from-cyan-300 to-blue-300 border-b border-gray-300 relative">
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-30">
             <div className="hidden md:block">
