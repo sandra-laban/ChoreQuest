@@ -325,7 +325,7 @@ function ChoreBox({ chore, completed }: Props) {
           <>
             <button
               onClick={() => handleDeleteClick(chore.id)}
-              className="btn-primary"
+              className="btn-primary mx-4"
             >
               Delete
             </button>
@@ -341,13 +341,14 @@ function ChoreBox({ chore, completed }: Props) {
               </button>
             ) : null}
             {assignView ? (
-              <>
+              <div className="flex flex-col justify-center w-1/2 mx-auto">
                 <input
                   type="text"
                   id="kid"
                   name="kid"
                   list="kidSuggestions"
                   onChange={handleAssignChange}
+                  className="mt-4"
                 />
                 <datalist id="kidSuggestions">
                   {availableKids?.map((kid) => (
@@ -355,12 +356,12 @@ function ChoreBox({ chore, completed }: Props) {
                   ))}
                 </datalist>
                 <button
-                  className="btn-primary"
+                  className="btn-primary mt-4"
                   onClick={() => handleAssignment(chore.id)}
                 >
                   Confirm
                 </button>
-              </>
+              </div>
             ) : null}
           </>
         ) : null}
@@ -383,7 +384,7 @@ function ChoreBox({ chore, completed }: Props) {
         {choreList.find((item: any) => item.chores_id === chore.id) &&
         !(profile.currentChore?.chores_id === chore.id) ? (
           <>
-            <h3 className="text-yellow-400 text-base">{`Assigned to ${
+            <h3 className="text-yellow-400 text-base my-4">{`Assigned to ${
               choreList?.find((item: any) => item.chores_id === chore.id)?.name
             }`}</h3>
             {profile.is_parent ? (
