@@ -84,12 +84,16 @@ const ChoreList = () => {
         // </div>
         null}
         {formView ? <AddChore setFormView={setFormView} /> : null}
-        <h1 className="main-title d-text">Approve or Reject</h1>
-        <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 m-5 mb-10">
-          {recentsData?.map((chore: Chore) => (
-            <ChoreBox chore={chore} key={chore.id} completed={true} />
-          ))}
-        </div>
+        {profile?.is_parent ? (
+          <div>
+            <h1 className="main-title d-text">Approve or Reject</h1>
+            <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 m-5 mb-10">
+              {recentsData?.map((chore: Chore) => (
+                <ChoreBox chore={chore} key={chore.id} completed={true} />
+              ))}
+            </div>
+          </div>
+        ) : null}
       </div>
     </>
   )
