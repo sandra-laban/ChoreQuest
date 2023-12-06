@@ -34,8 +34,7 @@ export async function fetchFamilyRecents(authId: string): Promise<Chore[]> {
     .join('chore_list', 'chores.id', 'chore_list.chores_id')
     .where('family_id', familyId.family_id)
     .where('is_completed', true)
-    .orderBy('completed', 'desc')
-    .limit(5)
+    .where('reviewed', false)
   console.log('completed chores', chores)
   return chores
 }
@@ -183,14 +182,33 @@ export async function rejectChore(authId: string, choreId: number) {
   return rejectedChore
 }
 
-async function getPoints(authId: string, choreId: number) {
-  const userId = await getUserId(authId)
+export async function confirmChore(authId: string, choreId: number) {
+  const authorisation = await isParent(authId)
+  if (!authorisation) return null
+
+  const kidId = await db('chore_list')
+    .where('chores_id', choreId)
+    .select('user_id')
+    .first()
+
+  const confirmedChore = await db('chore_list')
+    .where('chores_id', choreId)
+    .update({
+      reviewed: true,
+    })
+
+  await getPoints(kidId.user_id, choreId)
+
+  return confirmedChore
+}
+
+async function getPoints(userId: string, choreId: number) {
   const points = await db('chores')
     .where('id', choreId)
     .select('points')
     .first()
   const userPoints = await db('users')
-    .where('id', userId.id)
+    .where('id', userId)
     .increment('points', points.points)
 
   return userPoints

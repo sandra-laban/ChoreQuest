@@ -65,6 +65,17 @@ export async function completeChore(
   return response.body
 }
 
+export async function confirmChore(
+  token: string,
+  choreId: number
+): Promise<Chore> {
+  const response = await request
+    .patch('/api/v1/chores/complete/confirm')
+    .set('Authorization', `Bearer ${token}`)
+    .send({ choreId })
+  console.log(response.body)
+  return response.body
+}
 export async function deleteChore(
   token: string,
   choreId: number

@@ -132,6 +132,25 @@ router.patch('/complete', jwtCheck, async (req, res) => {
   }
 })
 
+router.patch('/complete/confirm', jwtCheck, async (req, res) => {
+  try {
+    const authId = req.auth?.payload.sub as string
+    const choreId = req.body.choreId
+
+    const confirmedChore = await db.confirmChore(authId, choreId)
+
+    if (!confirmedChore) {
+      res.json({ message: "Couldn't complete chore" })
+    } else {
+      res.json({ confirmedChore })
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: err instanceof Error ? err.message : 'Unknown error',
+    })
+  }
+})
+
 // DELETE /api/v1/chores/:id
 router.delete('/', jwtCheck, async (req, res) => {
   const authId = req.auth?.payload.sub as string

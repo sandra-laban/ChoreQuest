@@ -17,6 +17,7 @@ import {
   getFamilyChores,
   rejectChore,
   unassignChore,
+  confirmChore,
 } from '../apis/chores.ts'
 import { ChangeEvent, useState } from 'react'
 import { User } from '../../models/Iusers.ts'
@@ -99,6 +100,10 @@ function ChoreBox({ chore, completed }: Props) {
     completeChoreMutation.mutate(choreId)
   }
 
+  function handleConfirmClick(choreId: number) {
+    confirmChoreMutation.mutate(choreId)
+  }
+
   function handleRejectClick(choreId: number) {
     rejectChoreMutation.mutate(choreId)
   }
@@ -140,6 +145,18 @@ function ChoreBox({ chore, completed }: Props) {
       queryClient.invalidateQueries({ queryKey: ['chores'] })
       queryClient.invalidateQueries({ queryKey: ['chorelist'] })
       queryClient.invalidateQueries({ queryKey: ['profile'] })
+    },
+  })
+
+  const confirmChoreMutation = useMutation({
+    mutationFn: async (choreId: number) => {
+      const accessToken = await accessTokenPromise
+      return await confirmChore(accessToken, choreId)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['chores'] })
+      queryClient.invalidateQueries({ queryKey: ['chorelist'] })
+      queryClient.invalidateQueries({ queryKey: ['completedchores'] })
     },
   })
 
@@ -273,12 +290,20 @@ function ChoreBox({ chore, completed }: Props) {
           </>
         ) : null}
         {profile.is_parent && completed ? (
-          <button
-            className="btn-small"
-            onClick={() => handleRejectClick(chore.id)}
-          >
-            Reject!
-          </button>
+          <div>
+            <button
+              className="btn-small"
+              onClick={() => handleRejectClick(chore.id)}
+            >
+              Reject!
+            </button>
+            <button
+              className="btn-small"
+              onClick={() => handleConfirmClick(chore.id)}
+            >
+              Mark Complete
+            </button>
+          </div>
         ) : null}
         {choreList.find((item: any) => item.chores_id === chore.id) &&
         !(profile.currentChore?.chores_id === chore.id) ? (
