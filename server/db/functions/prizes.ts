@@ -72,10 +72,13 @@ export async function claimPrize(authId: string, prizesId: number) {
     .first()
 
   const goal = await db('users').where('auth_id', authId).select('goal').first()
-
-  const reachedGoal = goal.goal === prizesId
+  console.log(goal)
 
   const affordable = userPoints.points >= prizeCost.price
+  const newUserPoints = userPoints.points - prizeCost.price
+
+  console.log(affordable)
+  console.log(newUserPoints)
 
   if (!affordable) return null
 
@@ -88,14 +91,11 @@ export async function claimPrize(authId: string, prizesId: number) {
   const trx = await db.transaction()
 
   const claimed = await trx('prize_list').insert(claimedPrize)
+
   await trx('prizes').where('id', prizesId).decrement('quantity', 1)
-  if (reachedGoal) {
-    await trx('users').where('auth_id', authId).update({ goal: null })
-    const [currentUserPoints] = await trx('points').where('auth_id', authId)
-    await trx('users')
-      .update('points', currentUserPoints.points - prizeCost)
-      .where('auth_id', authId)
-  }
+  await trx('users').where('auth_id', authId).update({ goal: null })
+
+  await trx('users').update('points', newUserPoints).where('auth_id', authId)
 
   trx.commit()
   // await qtyCheck(prizesId)
