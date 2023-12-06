@@ -68,10 +68,14 @@ function HomeProfile({ member }: Props) {
             </span>
           </h3>
           <p> CURRENT CHORE </p>
-          <h2>
-            {member.currentChore?.name}
-            {member.chore_name}
-          </h2>
+          {member.currentChore?.name || member.chore_name ? (
+            <h2>
+              {member.currentChore?.name}
+              {member.chore_name}
+            </h2>
+          ) : (
+            <h2>No current chore</h2>
+          )}
           {member.currentChore ? (
             <button
               className="btn-small"
@@ -83,10 +87,14 @@ function HomeProfile({ member }: Props) {
             </button>
           ) : null}
           <p> CURRENT GOAL </p>
-          <h2>
-            {member.currentGoal?.name}
-            {member.goal_name}
-          </h2>
+          {member.currentGoal?.name || member.goal_name ? (
+            <h2>
+              {member.currentGoal?.name}
+              {member.goal_name}
+            </h2>
+          ) : (
+            <h2>No current goal</h2>
+          )}
         </div>
         <span className="colour-border"></span>
       </div>
