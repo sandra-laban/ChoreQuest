@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import '../styles/CreateFamilyForm.css'
 import { joinFamily } from '../apis/family.ts'
 import { useAuth0 } from '@auth0/auth0-react'
 import { useNavigate } from 'react-router-dom'
@@ -43,28 +42,35 @@ const JoinFamilyForm = () => {
 
   return (
     <>
-      <form className="CreateFamilyFrom">
-        <h2>Join Family</h2>
-        <label htmlFor="name">Family Name</label>
-        <input
-          type="text"
-          name="name"
-          id="name"
-          value={familyForm.name}
-          onChange={handleChange}
-        />
+      <div className="card-family-member mt-8">
+        <form className="flex flex-col items-center justify-center">
+          <h2>Join Family</h2>
+          <label htmlFor="name" className="mt-8">
+            Family Name
+          </label>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            value={familyForm.name}
+            onChange={handleChange}
+          />
 
-        <label htmlFor="password">Family Password</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          value={familyForm.password}
-          onChange={handleChange}
-        />
+          <label htmlFor="password">Family Password</label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            value={familyForm.password}
+            onChange={handleChange}
+          />
 
-        <button onClick={formSubmit}>Join the family</button>
-      </form>
+          <button className="btn-primary text-center mt-8" onClick={formSubmit}>
+            Join the family
+          </button>
+        </form>
+        <span className="colour-border"></span>
+      </div>
     </>
   )
 }

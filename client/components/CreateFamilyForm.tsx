@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import '../styles/CreateFamilyForm.css'
 import { createFamily } from '../apis/family.ts'
 import { useAuth0 } from '@auth0/auth0-react'
 import { useNavigate } from 'react-router-dom'
@@ -51,70 +50,79 @@ const CreateFamilyForm = () => {
 
   return (
     <>
-      <form className="CreateFamilyFrom">
-        <h2>Create Family</h2>
-        <label htmlFor="name">Family Name</label>
-        <input
-          type="text"
-          name="name"
-          id="name"
-          value={familyFrom.name}
-          onChange={handleChange}
-        />
+      <div className="card-family-member mt-8">
+        <form className="flex flex-col items-center justify-center">
+          <h2>Create Family</h2>
+          <label htmlFor="name" className="mt-8">
+            Family Name
+          </label>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            value={familyFrom.name}
+            onChange={handleChange}
+          />
 
-        <label htmlFor="password">Family Password</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          value={familyFrom.password}
-          onChange={handleChange}
-        />
+          <label htmlFor="password">Family Password</label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            value={familyFrom.password}
+            onChange={handleChange}
+          />
 
-        {familyFrom.image === null ? (
-          <>
-            <label htmlFor="familyImg">Upload an image</label>
-            <input
-              type="file"
-              className="familyImg"
-              name="familyImg"
-              id="familyImg"
-              onChange={handleChange}
-            />
-          </>
-        ) : (
-          <div style={{ position: 'relative', display: 'inline-block' }}>
-            <img
-              className="previewImage"
-              src={URL.createObjectURL(familyFrom.image)}
-              alt="Preview"
-            />
-            <button
-              className="removeImageButton"
-              style={{
-                position: 'absolute',
-                top: 10,
-                right: -10,
-                backgroundColor: 'transparent',
-                border: 'none',
-                cursor: 'pointer',
-                color: 'red',
-              }}
-              onClick={(e) => {
-                e.preventDefault()
-                setFamilyForm((prevForm) => ({
-                  ...prevForm,
-                  image: null,
-                }))
-              }}
-            >
-              ✖
-            </button>
-          </div>
-        )}
+          {familyFrom.image === null ? (
+            <>
+              <label htmlFor="familyImg" className="mt-8 mb-2">
+                Upload an image
+              </label>
+              <input
+                type="file"
+                className="familyImg"
+                name="familyImg"
+                id="familyImg"
+                onChange={handleChange}
+              />
+            </>
+          ) : (
+            <div style={{ position: 'relative', display: 'inline-block' }}>
+              <img
+                className="previewImage mt-8"
+                src={URL.createObjectURL(familyFrom.image)}
+                alt="Preview"
+              />
+              <button
+                className="removeImageButton"
+                style={{
+                  position: 'absolute',
+                  top: 10,
+                  right: -10,
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: 'red',
+                }}
+                onClick={(e) => {
+                  e.preventDefault()
+                  setFamilyForm((prevForm) => ({
+                    ...prevForm,
+                    image: null,
+                  }))
+                }}
+              >
+                ✖
+              </button>
+            </div>
+          )}
 
-        <button onClick={formSubmit}>Create your family</button>
-      </form>
+          <button className="btn-primary mt-8" onClick={formSubmit}>
+            Create your family
+          </button>
+        </form>
+        <span className="colour-border"></span>
+      </div>
     </>
   )
 }
