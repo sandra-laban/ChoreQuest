@@ -49,9 +49,11 @@ const ChoreList = () => {
 
   return (
     <>
-      <div className="container px-4 mx-auto text-center">
-        <h1>{profile?.family?.name} Family Chores</h1>
-        <div className="grid md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-3 m-5 mb-10">
+      <div className="container px-4 py-8 mx-auto rounded-3xl bg-white h-18 z-10 shadow-2xl bg-gradient-to-r from-cyan-300 to-blue-300 border-b border-gray-300">
+        <h1 className="main-title d-text">
+          {profile?.family?.name} Family Chores
+        </h1>
+        <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 m-5 mb-10">
           {choreData?.map((chore: Chore) => (
             <ChoreBox chore={chore} key={chore.id} />
           ))}
@@ -60,10 +62,7 @@ const ChoreList = () => {
           <button className="btn-primary" onClick={() => setFormView(true)}>
             Add Chore?
           </button>
-        ) : // <div className="grid md:grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 m-5 mb-10">
-        //   <AddChore />
-        // </div>
-        null}
+        ) : null}
         {formView ? <AddChore setFormView={setFormView} /> : null}
       </div>
     </>
