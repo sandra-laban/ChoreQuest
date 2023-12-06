@@ -65,3 +65,11 @@ export async function deleteUser(token: string, userId: number): Promise<void> {
     .send({ userId })
   return response.body
 }
+
+export async function setGoal(token: string, prizeId: number): Promise<any> {
+  const response = await request
+    .patch('/api/v1/user/goal')
+    .set('Authorization', `Bearer ${token}`)
+    .send({ prizeId })
+  return response.body
+}

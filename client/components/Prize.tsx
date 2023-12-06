@@ -4,7 +4,7 @@ import { ChangeEvent, FormEvent, useState } from 'react'
 import { useAuth0 } from '@auth0/auth0-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getPrize, patchPrize, claimPrize } from '../apis/prizes'
-import { getUser } from '../apis/userApi'
+import { getUser, setGoal } from '../apis/userApi'
 
 export default function Prize() {
   const { user, getAccessTokenSilently } = useAuth0()
@@ -51,6 +51,17 @@ export default function Prize() {
     },
   })
 
+  const chooseGoalMutation = useMutation({
+    mutationFn: async (prizeId: number) => {
+      const accessToken = await accessTokenPromise
+      return await setGoal(accessToken, prizeId)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['prize', prizeId] })
+      queryClient.invalidateQueries({ queryKey: ['profile'] })
+    },
+  })
+
   if (isError || profileError) {
     return <h1 className="text-center">None left!</h1>
   }
@@ -61,6 +72,10 @@ export default function Prize() {
 
   function handleClaimClick(prizeId: number) {
     claimPrizeMutation.mutate(prizeId)
+  }
+
+  function handleGoalClick(prizeId: number) {
+    chooseGoalMutation.mutate(prizeId)
   }
 
   if (prize.quantity < 1) return <h1 className="text-center">None left!</h1>
@@ -81,6 +96,16 @@ export default function Prize() {
           className="btn-primary"
         >
           Claim Prize!
+        </button>
+      ) : null}
+      {!profile?.is_parent && !(profile?.currentGoal?.id === prize.id) ? (
+        <button
+          onClick={() => {
+            handleGoalClick(prize.id)
+          }}
+          className="btn-primary"
+        >
+          Set as Goal!
         </button>
       ) : null}
     </div>
