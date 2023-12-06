@@ -49,7 +49,6 @@ router.get('/list', jwtCheck, async (req, res) => {
 router.get('/list/recent', jwtCheck, async (req, res) => {
   try {
     const auth_id = req.auth?.payload.sub as string
-    console.log('routerecent')
     const chores = await db.fetchFamilyRecents(auth_id)
 
     if (!chores) {
