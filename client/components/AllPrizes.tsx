@@ -160,7 +160,7 @@ export default function AllPrizes() {
           <div>
             <button
               className="btn-primary mx-4"
-              onClick={() => setFormView(true)}
+              onClick={() => setFormView(!formView)}
             >
               Add a Prize?
             </button>

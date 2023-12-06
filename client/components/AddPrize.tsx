@@ -67,7 +67,7 @@ export default function AddPrize({ setFormView }: Props) {
                 onChange={handleChange}
                 name="name"
                 value={form.name}
-                className="mb-6"
+                className="border-solid border-2 border-black rounded-lg mb-6"
               />
               <label htmlFor="definition" className="text-2xl  text-white">
                 Definition:
@@ -78,7 +78,7 @@ export default function AddPrize({ setFormView }: Props) {
                 onChange={handleChange}
                 name="definition"
                 value={form.definition}
-                className="mb-6"
+                className="border-solid border-2 border-black rounded-lg mb-6"
               />
               <label htmlFor="price" className="text-2xl  text-white">
                 Price:
@@ -89,7 +89,7 @@ export default function AddPrize({ setFormView }: Props) {
                 onChange={handleChange}
                 name="price"
                 value={form.price}
-                className="mb-6"
+                className="border-solid border-2 border-black rounded-lg mb-6"
               />
               <label htmlFor="quantity" className="text-2xl  text-white">
                 Quantity:
@@ -100,7 +100,7 @@ export default function AddPrize({ setFormView }: Props) {
                 onChange={handleChange}
                 name="quantity"
                 value={form.quantity}
-                className="mb-6"
+                className="border-solid border-2 border-black rounded-lg mb-6"
               />
               <div className="flex justify-center items-center">
                 <button className="btn-primary mx-4 ">Add Prize!</button>
