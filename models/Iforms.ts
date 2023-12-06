@@ -12,3 +12,8 @@ export interface UserForm {
 export interface UpdateUserForm extends UserForm {
   auth_id: string
 }
+
+export interface AssignmentForm {
+  kid: string
+  choreId: number
+}
