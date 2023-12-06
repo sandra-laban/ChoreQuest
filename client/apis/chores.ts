@@ -21,6 +21,14 @@ export async function getFamilyChorelist(token: string): Promise<any> {
   return response.body.chores
 }
 
+export async function getFamilyRecents(token: string): Promise<any> {
+  const response = await request
+    .get('/api/v1/chores/list/recent')
+    .set('Authorization', `Bearer ${token}`)
+  console.log('response', response.body)
+  return response.body.chores
+}
+
 export async function addChore(
   token: string,
   chore: ChoreData
@@ -57,6 +65,17 @@ export async function completeChore(
   return response.body
 }
 
+export async function confirmChore(
+  token: string,
+  choreId: number
+): Promise<Chore> {
+  const response = await request
+    .patch('/api/v1/chores/complete/confirm')
+    .set('Authorization', `Bearer ${token}`)
+    .send({ choreId })
+  console.log(response.body)
+  return response.body
+}
 export async function deleteChore(
   token: string,
   choreId: number
@@ -66,6 +85,17 @@ export async function deleteChore(
     .set('Authorization', `Bearer ${token}`)
     .send({ choreId })
   return deletedChore.body
+}
+
+export async function rejectChore(
+  token: string,
+  choreId: number
+): Promise<void> {
+  const rejectedChore = await request
+    .patch(`/api/v1/chores/chorelist`)
+    .set('Authorization', `Bearer ${token}`)
+    .send({ choreId })
+  return rejectedChore.body
 }
 
 export async function unassignChore(

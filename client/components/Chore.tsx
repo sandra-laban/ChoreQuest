@@ -15,7 +15,9 @@ import {
   deleteChore,
   getFamilyChorelist,
   getFamilyChores,
+  rejectChore,
   unassignChore,
+  confirmChore,
 } from '../apis/chores.ts'
 import { ChangeEvent, useState } from 'react'
 import { User } from '../../models/Iusers.ts'
@@ -24,8 +26,9 @@ import { AssignmentForm } from '../../models/Iforms.ts'
 
 interface Props {
   chore: Chore
+  completed?: boolean
 }
-function ChoreBox({ chore }: Props) {
+function ChoreBox({ chore, completed }: Props) {
   const [assignView, setAssignView] = useState(false)
   const [selectedKid, setSelectedKid] = useState('')
   const { getAccessTokenSilently } = useAuth0()
@@ -97,6 +100,14 @@ function ChoreBox({ chore }: Props) {
     completeChoreMutation.mutate(choreId)
   }
 
+  function handleConfirmClick(choreId: number) {
+    confirmChoreMutation.mutate(choreId)
+  }
+
+  function handleRejectClick(choreId: number) {
+    rejectChoreMutation.mutate(choreId)
+  }
+
   function handleRemoveClick(choreId: number) {
     unassignChoreMutation.mutate(choreId)
   }
@@ -134,6 +145,30 @@ function ChoreBox({ chore }: Props) {
       queryClient.invalidateQueries({ queryKey: ['chores'] })
       queryClient.invalidateQueries({ queryKey: ['chorelist'] })
       queryClient.invalidateQueries({ queryKey: ['profile'] })
+    },
+  })
+
+  const confirmChoreMutation = useMutation({
+    mutationFn: async (choreId: number) => {
+      const accessToken = await accessTokenPromise
+      return await confirmChore(accessToken, choreId)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['chores'] })
+      queryClient.invalidateQueries({ queryKey: ['chorelist'] })
+      queryClient.invalidateQueries({ queryKey: ['completedchores'] })
+    },
+  })
+
+  const rejectChoreMutation = useMutation({
+    mutationFn: async (choreId: number) => {
+      const accessToken = await accessTokenPromise
+      return await rejectChore(accessToken, choreId)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['chores'] })
+      queryClient.invalidateQueries({ queryKey: ['chorelist'] })
+      queryClient.invalidateQueries({ queryKey: ['completedchores'] })
     },
   })
 
@@ -205,13 +240,13 @@ function ChoreBox({ chore }: Props) {
         <h2>Chore name: {chore.name}</h2>
         <p>Points: {chore.points}</p>
         <p>
-          Created:{' '}
+          Due:{' '}
           {typeof chore.created === 'number'
             ? DateTime.fromMillis(chore.created).toISODate()
             : DateTime.fromISO(chore.created).toISODate()}
         </p>
 
-        {profile.is_parent ? (
+        {profile.is_parent && !completed ? (
           <>
             <button
               onClick={() => handleDeleteClick(chore.id)}
@@ -253,6 +288,22 @@ function ChoreBox({ chore }: Props) {
               </>
             ) : null}
           </>
+        ) : null}
+        {profile.is_parent && completed ? (
+          <div>
+            <button
+              className="btn-small"
+              onClick={() => handleRejectClick(chore.id)}
+            >
+              Reject!
+            </button>
+            <button
+              className="btn-small"
+              onClick={() => handleConfirmClick(chore.id)}
+            >
+              Mark Complete
+            </button>
+          </div>
         ) : null}
         {choreList.find((item: any) => item.chores_id === chore.id) &&
         !(profile.currentChore?.chores_id === chore.id) ? (
