@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { getFamilyChores } from '../apis/chores'
+import { getFamilyChores, getFamilyRecents } from '../apis/chores'
 
 import AddChore from './AddChoreForm'
 import { useAuth0 } from '@auth0/auth0-react'
@@ -11,7 +11,7 @@ import { Chore } from '../../models/chores'
 
 const ChoreList = () => {
   const [formView, setFormView] = useState(false)
-
+  const [recentsView, setRecentsView] = useState(false)
   const { getAccessTokenSilently } = useAuth0()
   const accessTokenPromise = getAccessTokenSilently()
 
@@ -24,6 +24,18 @@ const ChoreList = () => {
     queryFn: async () => {
       const accessToken = await accessTokenPromise
       return await getFamilyChores(accessToken)
+    },
+  })
+
+  const {
+    data: recentsData,
+    error: recentsError,
+    isPending: recentsPending,
+  } = useQuery({
+    queryKey: ['completedchores'],
+    queryFn: async () => {
+      const accessToken = await accessTokenPromise
+      return await getFamilyRecents(accessToken)
     },
   })
 
@@ -57,14 +69,32 @@ const ChoreList = () => {
           ))}
         </div>
         {profile?.is_parent ? (
-          <button className="btn-primary" onClick={() => setFormView(true)}>
-            Add Chore?
-          </button>
+          <div>
+            <button
+              className="btn-primary"
+              onClick={() => setFormView(!formView)}
+            >
+              Add Chore?
+            </button>
+            <button
+              className="btn-primary"
+              onClick={() => setRecentsView(!recentsView)}
+            >
+              Recently Completed{' '}
+            </button>
+          </div>
         ) : // <div className="grid md:grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 m-5 mb-10">
         //   <AddChore />
         // </div>
         null}
         {formView ? <AddChore setFormView={setFormView} /> : null}
+        {recentsView ? (
+          <div className="grid md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-3 m-5 mb-10">
+            {recentsData?.map((chore: Chore) => (
+              <ChoreBox chore={chore} key={chore.id} completed={true} />
+            ))}
+          </div>
+        ) : null}
       </div>
     </>
   )
