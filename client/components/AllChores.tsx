@@ -39,8 +39,6 @@ const ChoreList = () => {
     },
   })
 
-  
-
   const {
     data: profileData,
     error: profileError,
@@ -93,7 +91,7 @@ const ChoreList = () => {
         null}
         {formView ? <AddChore setFormView={setFormView} /> : null}
         {recentsView ? (
-          <div className="grid md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-3 m-5 mb-10">
+          <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 m-5 mb-10">
             {recentsData?.map((chore: Chore) => (
               <ChoreBox chore={chore} key={chore.id} completed={true} />
             ))}
