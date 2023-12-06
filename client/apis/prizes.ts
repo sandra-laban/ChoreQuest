@@ -26,6 +26,7 @@ export async function addPrize(
   newPrize: PrizeData,
   token: string
 ): Promise<Prizes> {
+  console.log('api prize', newPrize)
   const response = await request
     .post('/api/v1/prizes')
     .set('Authorization', `Bearer ${token}`)
