@@ -109,16 +109,32 @@ export async function fetchFamily(auth_id: string) {
   return family
 }
 
+// export async function fetchFamilyMembers(auth_id: string) {
+//   const familyId = await fetchFamilyId(auth_id)
+
+//   console.log(familyId)
+
+//   const family = await db('users')
+//     .join('prizes', 'prizes.id', 'users.goal')
+//     .leftJoin('chore_list', 'users.id', 'chore_list.user_id')
+//     .leftJoin('chores', 'chore_list.chores_id', 'chores.id')
+//     .where('users.family_id', familyId.family_id)
+//     .where('is_completed', false)
+//     .select('users.*', 'prizes.name as goal_name', 'chores.name as chore_name')
+
+//   console.log(family)
+//   return family
+// }
+
 export async function fetchFamilyMembers(auth_id: string) {
   const familyId = await fetchFamilyId(auth_id)
 
+  console.log(familyId)
+
   const family = await db('users')
-    .join('prizes', 'prizes.id', 'users.goal')
-    .leftJoin('chore_list', 'users.id', 'chore_list.user_id')
-    .leftJoin('chores', 'chore_list.chores_id', 'chores.id')
     .where('users.family_id', familyId.family_id)
-    .where('is_completed', false)
-    .select('users.*', 'prizes.name as goal_name', 'chores.name as chore_name')
+    .select('*')
+
   console.log(family)
   return family
 }

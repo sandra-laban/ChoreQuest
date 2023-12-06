@@ -2,6 +2,7 @@ import io from 'socket.io-client'
 
 let socketInstance: any = null
 ;('https://chorequest.pushed.nz')
+;('https://chorequest.devacademy.nz')
 ;('http://localhost:3000')
 const configureSocket = async () => {
   try {
