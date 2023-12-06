@@ -168,10 +168,14 @@ router.post('/chorelist', jwtCheck, async (req, res) => {
   const authId = req.auth?.payload.sub as string
   const choreId = req.body.choreId
   const kid = req.body.kid
-  console.log(choreId, kid)
+  console.log('hey')
+
   try {
-    await db.assignChore(authId, choreId, kid)
-    res.sendStatus(204)
+    console.log('hey2')
+    const choreData = await db.assignChore(authId, choreId, kid)
+    console.log(choreData)
+
+    res.status(201).json(choreData)
   } catch (err) {
     res.status(500).json({ err })
   }

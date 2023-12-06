@@ -118,11 +118,14 @@ export async function assignChore(
     chores_id: choreId,
     user_id: kidId.id,
   }
-  console.log('assignChore', assignChore)
-  const assignedChore = authorised
-    ? await db('chore_list').insert(assignChore)
-    : null
-  return assignedChore
+
+  if (!authorised) return null
+  await db('chore_list').insert(assignChore)
+  const [chore] = await db('chores').select('name').where('id', choreId)
+
+  const [user] = await db('users').select('name', 'id').where('id', kidId.id)
+
+  return { chore, user }
 }
 
 export async function deleteChore(authId: string, choreId: number) {

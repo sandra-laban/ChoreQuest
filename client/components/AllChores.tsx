@@ -1,11 +1,11 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getFamilyChores, getFamilyRecents } from '../apis/chores'
 
 import AddChore from './AddChoreForm'
 import { useAuth0 } from '@auth0/auth0-react'
 
 import ChoreBox from './Chore'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getUser } from '../apis/userApi'
 import { Chore } from '../../models/chores'
 
@@ -14,6 +14,7 @@ const ChoreList = () => {
   const [recentsView, setRecentsView] = useState(false)
   const { getAccessTokenSilently } = useAuth0()
   const accessTokenPromise = getAccessTokenSilently()
+  const queryClient = useQueryClient()
 
   const {
     data: choreData,
@@ -26,6 +27,10 @@ const ChoreList = () => {
       return await getFamilyChores(accessToken)
     },
   })
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ['notifications'] })
+  }, [choreData, queryClient])
 
   const {
     data: recentsData,
