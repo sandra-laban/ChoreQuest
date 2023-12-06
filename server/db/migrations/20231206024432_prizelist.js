@@ -4,7 +4,8 @@ export async function up(knex) {
   return knex.schema.createTable('prize_list', (table) => {
     table.integer('prizes_id')
     table.integer('user_id')
-    table.date('assigned').defaultsTo(DateTime.now().toISODate())
+    table.date('assigned')
+
     table.boolean('delivered').defaultsTo(false)
   })
 }

@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon'
 import { Prizes, PrizeData } from '../../../models/prizes'
 import db from '../connection'
 import { fetchFamilyId, getUserId, isParent } from './helper'
@@ -77,6 +78,7 @@ export async function claimPrize(authId: string, prizesId: number) {
   const claimedPrize = {
     prizes_id: prizesId,
     user_id: userId.id,
+    assigned: Number(DateTime.local().toFormat('yyyyMMddHHmmssSSS')),
   }
 
   const trx = await db.transaction()
@@ -90,10 +92,14 @@ export async function claimPrize(authId: string, prizesId: number) {
   return claimed
 }
 
-export async function deliverPrize(authId: string, prizeId: number) {
+export async function deliverPrize(
+  authId: string,
+  prizeId: number,
+  assignment: number
+) {
   const authorisation = await isParent(authId)
   if (!authorisation) return null
-
+  console.log(assignment)
   const kidId = await db('prize_list')
     .where('prizes_id', prizeId)
     .select('user_id')
@@ -101,6 +107,7 @@ export async function deliverPrize(authId: string, prizeId: number) {
 
   const deliveredPrize = await db('prize_list')
     .where('prizes_id', prizeId)
+    .where('assigned', assignment)
     .update({
       delivered: true,
     })
@@ -139,7 +146,8 @@ export async function getRecentClaims(auth_id: string) {
       'prizes.name as name',
       'users.name as user_name',
       'definition',
-      'prizes.id as id'
+      'prizes.id as id',
+      'assigned'
     )
 
   console.log('claims', claims)

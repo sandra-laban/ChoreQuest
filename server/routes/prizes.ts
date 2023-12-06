@@ -97,8 +97,8 @@ router.patch('/claim', jwtCheck, async (req, res) => {
 router.patch('/deliver', jwtCheck, async (req, res) => {
   try {
     const authId = req.auth?.payload.sub as string
-    const prizeId = req.body.prizeId
-    const deliveredPrize = await db.deliverPrize(authId, prizeId)
+    const { prizeId, assigned } = req.body.delivery
+    const deliveredPrize = await db.deliverPrize(authId, prizeId, assigned)
     if (!deliveredPrize) {
       res.json({ message: 'Unable to edit prize' })
     } else {

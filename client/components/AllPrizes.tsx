@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import AddPrize from './AddPrize'
 import { getUser } from '../apis/userApi'
 import { useState } from 'react'
+import { Delivery } from '../../models/prizes'
 
 export default function AllPrizes() {
   const [formView, setFormView] = useState(false)
@@ -54,9 +55,9 @@ export default function AllPrizes() {
   const profile = profileData?.profile
 
   const deliverPrizeMutation = useMutation({
-    mutationFn: async (prizeId: number) => {
+    mutationFn: async (delivery: Delivery) => {
       const accessToken = await accessTokenPromise
-      return await deliverPrize(accessToken, prizeId)
+      return await deliverPrize(accessToken, delivery)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['prizes'] })
@@ -73,8 +74,12 @@ export default function AllPrizes() {
     return <div>Loading your prizes...</div>
   }
 
-  function handleDeliverClick(prizeId: number) {
-    deliverPrizeMutation.mutate(prizeId)
+  function handleDeliverClick(prizeId: number, assigned: number) {
+    const delivery = {
+      prizeId: prizeId,
+      assigned: assigned,
+    }
+    deliverPrizeMutation.mutate(delivery)
   }
 
   return (
@@ -117,14 +122,14 @@ export default function AllPrizes() {
         {claimsView
           ? recentClaims.map((claim: any) => (
               <div
-                key={claim.id}
+                key={claim.assigned}
                 className="border-2 rounded-lg m-5 gap-3 text-center bg-sky-200"
               >
                 <h2>Prize: {claim.name}</h2>
                 <p>{claim.definition}</p>
                 <p>Claimed by: {claim.user_name}</p>
                 <button
-                  onClick={() => handleDeliverClick(claim.id)}
+                  onClick={() => handleDeliverClick(claim.id, claim.assigned)}
                   className="btn-small"
                 >
                   Delivered?

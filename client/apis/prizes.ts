@@ -1,5 +1,5 @@
 import request from 'superagent'
-import { PrizeData, Prizes } from '../../models/prizes'
+import { Delivery, PrizeData, Prizes } from '../../models/prizes'
 
 const serverUrl = '/api/v1/prizes'
 // GET '/api/v1/prizes'
@@ -31,12 +31,12 @@ export async function getPrize(
 
 export async function deliverPrize(
   token: string,
-  prizeId: number
+  delivery: Delivery
 ): Promise<Prizes> {
   const response = await request
     .patch(`${serverUrl}/deliver`)
     .set('Authorization', `Bearer ${token}`)
-    .send({ prizeId })
+    .send({ delivery })
   return response.body
 }
 
