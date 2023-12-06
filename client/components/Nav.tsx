@@ -16,6 +16,15 @@ function Nav() {
       <div className="bg-white h-18 z-10 shadow-2xl bg-gradient-to-r from-cyan-300 to-blue-300 border-b border-gray-300 relative">
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-30">
+            <div className="flex items-center">
+              <Link to="/" className="text-white">
+                <img
+                  src="/images/chorequest.png"
+                  alt="ChoreQuest Logo"
+                  className="h-24"
+                />
+              </Link>
+            </div>
             <div className="hidden md:block">
               <div className="ml-10 flex items-center space-x-4">
                 <NotificationBar />
