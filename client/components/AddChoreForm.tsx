@@ -73,7 +73,7 @@ const AddChore = ({ setFormView }: Props) => {
 
   return (
     <>
-      <div>
+      <div className="family-form mt-8 w-1/2 mx-auto">
         <form
           action=""
           onSubmit={handleAddChange}
@@ -81,11 +81,9 @@ const AddChore = ({ setFormView }: Props) => {
           className="flex flex-col items-center justify-center"
         >
           <div className="border p-8 border-gray-900/10 m-8">
-            <h2 className="text-center text-purple-950 mt-4 mb-8 text-3xl">
-              Add new chore
-            </h2>
+            <h2 className="main-title d-text">Add new chore</h2>
             <div className="flex flex-col items-center justify-center">
-              <label htmlFor="name" className="text-2xl  text-purple-950">
+              <label htmlFor="name" className="text-2xl  text-white">
                 What to do:
               </label>
               <input
@@ -93,9 +91,9 @@ const AddChore = ({ setFormView }: Props) => {
                 onChange={handleChange}
                 name="name"
                 value={form.name}
-                className="border-solid border-2 border-black rounded-lg"
+                className="border-solid border-2 border-black rounded-lg mb-6"
               ></input>
-              <label htmlFor="points" className="text-2xl  text-purple-950">
+              <label htmlFor="points" className="text-2xl  text-white">
                 Add few points:
               </label>
               <input
@@ -103,13 +101,13 @@ const AddChore = ({ setFormView }: Props) => {
                 onChange={handleChange}
                 name="points"
                 value={form.points}
-                className="border-solid border-2 border-black rounded-lg"
+                className="border-solid border-2 border-black rounded-lg mb-6"
               ></input>
-              <label htmlFor="date" className="text-2xl  text-purple-950">
+              <label htmlFor="date" className="text-2xl  text-white">
                 Pick a due date:
               </label>
               <DatePicker
-                className="border-solid border-2 border-black rounded-lg"
+                className="border-solid border-2 border-black rounded-lg mb-6"
                 id="created"
                 selected={DateTime.fromISO(form.created).toJSDate()} // Convert Luxon date to JavaScript Date
                 onChange={(date) => {
@@ -124,7 +122,7 @@ const AddChore = ({ setFormView }: Props) => {
                 dateFormat="yyyy-MM-dd"
               />
               <div className="flex justify-center items-center">
-                <button className="btn-primary mb-6 mt-6">Add Chore</button>
+                <button className="btn-primary mx-4">Add Chore</button>
                 <button
                   className="btn-primary mb-6 mt-6"
                   onClick={() => setFormView(false)}
