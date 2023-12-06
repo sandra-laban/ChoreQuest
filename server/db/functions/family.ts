@@ -109,31 +109,28 @@ export async function fetchFamily(auth_id: string) {
   return family
 }
 
-// export async function fetchFamilyMembers(auth_id: string) {
-//   const familyId = await fetchFamilyId(auth_id)
-
-//   console.log(familyId)
-
-//   const family = await db('users')
-//     .join('prizes', 'prizes.id', 'users.goal')
-//     .leftJoin('chore_list', 'users.id', 'chore_list.user_id')
-//     .leftJoin('chores', 'chore_list.chores_id', 'chores.id')
-//     .where('users.family_id', familyId.family_id)
-//     .where('is_completed', false)
-//     .select('users.*', 'prizes.name as goal_name', 'chores.name as chore_name')
-
-//   console.log(family)
-//   return family
-// }
-
 export async function fetchFamilyMembers(auth_id: string) {
   const familyId = await fetchFamilyId(auth_id)
 
   console.log(familyId)
 
   const family = await db('users')
+    .leftJoin('prizes', 'prizes.id', 'users.goal')
+    .leftJoin(
+      db.raw(
+        '(SELECT * FROM chore_list WHERE chore_list.is_completed IS NULL OR chore_list.is_completed = false) AS cl'
+      ),
+      'users.id',
+      '=',
+      'cl.user_id'
+    )
+    .leftJoin('chores', 'cl.chores_id', 'chores.id')
     .where('users.family_id', familyId.family_id)
-    .select('*')
+    .select(
+      'users.*',
+      db.raw('coalesce(prizes.name, "Nothing") as goal_name'),
+      db.raw('coalesce(chores.name, "Nothing") as chore_name')
+    )
 
   console.log(family)
   return family
