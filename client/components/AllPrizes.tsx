@@ -47,22 +47,65 @@ export default function AllPrizes() {
 
   return (
     <>
-      <div className="container px-4 mx-auto text-center">
-        <h1 className="text-center">{profile?.family?.name} Family Prizes:</h1>
-        <h2 className="text-center">What do you want for your points?</h2>
-        <div className="grid md:grid-cols-2 sm:grid-cols-1 lg:grid-cols-3 mx-5 mb-10">
+      <div className="container px-4 py-8 mx-auto rounded-3xl bg-white h-18 z-10 shadow-2xl bg-gradient-to-r from-cyan-300 to-blue-300 border-b border-gray-300">
+        <h1 className="main-title d-text">
+          {profile?.family?.name} Family Prizes
+        </h1>
+        <h2 className="text-center text-purple-950 mt-4 mb-8 text-3xl">
+          What awesome reward would you like to redeem with your points?
+        </h2>
+        <div className="grid gap-4 sm:grid-col-1  md:grid-cols-2 lg:grid-cols-3 mx-5 mb-10 text-white">
           {allPrizes.map((prize) => (
-            <div
-              key={prize.id}
-              className="border-2 rounded-lg m-5 gap-3 text-center bg-sky-200"
-            >
+            <div key={prize.id} className="card-chore">
+              <div className="flex flex-col absolute top-0 right-0 h-24 w-24 bg-purple-950 justify-center rounded-bl-lg rounded-tr-lg">
+                <span className="gift-svg content-center"></span>
+                <span className="points-fixed">{prize.quantity}</span>
+              </div>
               <Link to={`/mngprizes/${prize.id}`}>
-                <h2>Prize: {prize.name}</h2>
-                <p>{prize.definition}</p>
-                <p>Price: {prize.price}</p>
-                <p>How many left: {prize.quantity}</p>
+                <h2 className="text-white text-2xl font-bold pb-2 w-4/5">
+                  {prize.name}
+                </h2>
+                <p className="text-white text-base pb-2 w-4/5">
+                  {prize.definition}
+                </p>
+                <h3 className="text-yellow-400 grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 text-center w-1/3">
+                  <span className="svg-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <g fill="none" fillRule="evenodd">
+                        <path fill="#24CC8F" d="M0 9l5-7h14l5 7-12 13z"></path>
+                        <path
+                          fill="#FFF"
+                          opacity=".25"
+                          d="M7 8.8L6 4h6zM17 8.8L18 4h-6z"
+                        ></path>
+                        <path
+                          fill="#FFF"
+                          opacity=".5"
+                          d="M7 8.8L12 4l5 4.8zM2.6 8.8L6 4l1 4.8z"
+                        ></path>
+                        <path
+                          fill="#34313A"
+                          opacity=".11"
+                          d="M21.4 8.8L18 4l-1 4.8zM2.6 8.8H7l5 10.3z"
+                        ></path>
+                        <path
+                          fill="#FFF"
+                          opacity=".5"
+                          d="M21.4 8.8H17l-5 10.3z"
+                        ></path>
+                        <path
+                          fill="#FFF"
+                          opacity=".25"
+                          d="M7 8.8h10l-5 10.3z"
+                        ></path>
+                      </g>
+                    </svg>
+                  </span>
+                  {prize.price}
+                </h3>
               </Link>
               {}
+              <span className="colour-border"></span>
             </div>
           ))}
         </div>

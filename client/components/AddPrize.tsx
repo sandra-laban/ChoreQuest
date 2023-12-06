@@ -49,63 +49,57 @@ export default function AddPrize({ setFormView }: Props) {
 
   return (
     <>
-      <form
-        onSubmit={handleSubmit}
-        aria-label="Add prize form"
-        className="flex flex-col items-center justify-center"
-      >
-        <div className="border p-8 border-gray-900/10 m-8">
-          <h2 className="mx-auto mt-12 mb-6 text-center">Add a new prize!</h2>
-          <div className="space-y-12">
-            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-              <div className="sm:col-span-4">
-                <label htmlFor="name" className="text-2xl">
-                  Name:
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  onChange={handleChange}
-                  name="name"
-                  value={form.name}
-                />
-              </div>
-              <div className="sm:col-span-4">
-                <label htmlFor="definition" className="text-2xl">
-                  Definition:
-                </label>
-                <input
-                  type="text"
-                  id="definition"
-                  onChange={handleChange}
-                  name="definition"
-                  value={form.definition}
-                />
-              </div>
-              <div className="sm:col-span-4">
-                <label htmlFor="price" className="text-2xl">
-                  Price:
-                </label>
-                <input
-                  type="text"
-                  id="price"
-                  onChange={handleChange}
-                  name="price"
-                  value={form.price}
-                />
-              </div>
-              <div className="sm:col-span-4">
-                <label htmlFor="quantity" className="text-2xl">
-                  Quantity:
-                </label>
-                <input
-                  type="text"
-                  id="quantity"
-                  onChange={handleChange}
-                  name="quantity"
-                  value={form.quantity}
-                />
-              </div>
+      <div>
+        <form
+          onSubmit={handleSubmit}
+          aria-label="Add prize form"
+          className="flex flex-col items-center justify-center"
+        >
+          <div className="border p-8 border-gray-900/10 m-8">
+            <h2 className="text-center text-purple-950 mt-4 mb-8 text-3xl">
+              Add a new prize!
+            </h2>
+            <div className="flex flex-col items-center justify-center">
+              <label htmlFor="name" className="text-2xl">
+                Name:
+              </label>
+              <input
+                type="text"
+                id="name"
+                onChange={handleChange}
+                name="name"
+                value={form.name}
+              />
+              <label htmlFor="definition" className="text-2xl  text-purple-950">
+                Definition:
+              </label>
+              <input
+                type="text"
+                id="definition"
+                onChange={handleChange}
+                name="definition"
+                value={form.definition}
+              />
+              <label htmlFor="price" className="text-2xl  text-purple-950">
+                Price:
+              </label>
+              <input
+                type="text"
+                id="price"
+                onChange={handleChange}
+                name="price"
+                value={form.price}
+              />
+              <label htmlFor="quantity" className="text-2xl  text-purple-950">
+                Quantity:
+              </label>
+              <input
+                type="text"
+                id="quantity"
+                onChange={handleChange}
+                name="quantity"
+                value={form.quantity}
+              />
               <div className="flex justify-center items-center">
                 <button className="btn-primary mb-12">Add Prize!</button>
                 <button
@@ -117,8 +111,8 @@ export default function AddPrize({ setFormView }: Props) {
               </div>
             </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </>
   )
 }

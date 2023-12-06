@@ -81,9 +81,11 @@ const AddChore = ({ setFormView }: Props) => {
           className="flex flex-col items-center justify-center"
         >
           <div className="border p-8 border-gray-900/10 m-8">
-            <h2 className="mx-auto mt-6 mb-6 text-center">Add new chore</h2>
+            <h2 className="text-center text-purple-950 mt-4 mb-8 text-3xl">
+              Add new chore
+            </h2>
             <div className="flex flex-col items-center justify-center">
-              <label htmlFor="name" className="text-2xl">
+              <label htmlFor="name" className="text-2xl  text-purple-950">
                 What to do:
               </label>
               <input
@@ -93,7 +95,7 @@ const AddChore = ({ setFormView }: Props) => {
                 value={form.name}
                 className="border-solid border-2 border-black rounded-lg"
               ></input>
-              <label htmlFor="points" className="text-2xl">
+              <label htmlFor="points" className="text-2xl  text-purple-950">
                 Add few points:
               </label>
               <input
@@ -103,7 +105,7 @@ const AddChore = ({ setFormView }: Props) => {
                 value={form.points}
                 className="border-solid border-2 border-black rounded-lg"
               ></input>
-              <label htmlFor="date" className="text-2xl">
+              <label htmlFor="date" className="text-2xl  text-purple-950">
                 Pick a due date:
               </label>
               <DatePicker
