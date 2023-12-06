@@ -80,7 +80,6 @@ export async function acceptChore(
   const available = await isAvailable(authId)
   const userId = await getUserId(authId)
 
-  console.log('available', available)
 
   const assignedChore = {
     chores_id: choreId,
