@@ -34,6 +34,8 @@ export default function Profile() {
           <h1 className="main-title d-text">{profile.name}</h1>
           <img src={profile.picture} alt={profile.name} />
           <h2>Family - {profile.family?.name}</h2>
+          {!profile.is_parent && <h2>Points - {profile.points}</h2>}
+
           <Link to="/profile/edit">
             <button className="btn-primary">Edit Profile?</button>
           </Link>

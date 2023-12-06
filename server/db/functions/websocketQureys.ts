@@ -4,7 +4,7 @@ const db = connection
 
 export async function getFamilyMembersById(
   user_id: string,
-  usersToGet: 'family' | 'parents' | 'user'
+  usersToGet: 'family' | 'parents' | number
 ): Promise<{ id: string; auth_id: string }[]> {
   const [user] = await db('users').select('family_id').where('id', user_id)
   let familyMembers: any
@@ -17,9 +17,9 @@ export async function getFamilyMembersById(
       .where('family_id', user.family_id)
       .where('is_parent', true)
       .select('id', 'auth_id')
-  } else if (usersToGet === 'user') {
+  } else if (typeof usersToGet === 'number') {
     familyMembers = await db('users')
-      .where('id', user_id)
+      .where('id', usersToGet)
       .select('id', 'auth_id')
   }
   return familyMembers

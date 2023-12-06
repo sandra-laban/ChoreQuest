@@ -141,10 +141,22 @@ function ChoreBox({ chore, completed }: Props) {
       const accessToken = await accessTokenPromise
       return await completeChore(accessToken, choreId)
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['chores'] })
-      queryClient.invalidateQueries({ queryKey: ['chorelist'] })
-      queryClient.invalidateQueries({ queryKey: ['profile'] })
+    onSuccess: ({ chore, user }: { chore: any; user: any }) => {
+      queryClient.invalidateQueries({
+        queryKey: ['chorelist'],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['profile'],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['chores'],
+      })
+      socketInstance.emit('update_query_key', {
+        queryKey: ['notifications', 'chores', 'profile', 'chorelist'],
+        users: 'parents',
+        notificationMessage: `${chore.name} completed by ${user.name}!`,
+        pageUrl: '/chores',
+      })
     },
   })
 
@@ -153,10 +165,22 @@ function ChoreBox({ chore, completed }: Props) {
       const accessToken = await accessTokenPromise
       return await confirmChore(accessToken, choreId)
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['chores'] })
-      queryClient.invalidateQueries({ queryKey: ['chorelist'] })
-      queryClient.invalidateQueries({ queryKey: ['completedchores'] })
+    onSuccess: ({ chore, user }: { chore: any; user: any }) => {
+      queryClient.invalidateQueries({
+        queryKey: ['chores'],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['completedchores'],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['chorelist'],
+      })
+      socketInstance.emit('update_query_key', {
+        queryKey: ['notifications', 'chores', 'profile', 'chorelist'],
+        users: user.id,
+        notificationMessage: `${chore.name} completed you got ${chore.points} points!`,
+        pageUrl: '/profile',
+      })
     },
   })
 
@@ -165,10 +189,16 @@ function ChoreBox({ chore, completed }: Props) {
       const accessToken = await accessTokenPromise
       return await rejectChore(accessToken, choreId)
     },
-    onSuccess: () => {
+    onSuccess: ({ chore, user }: { chore: any; user: any }) => {
       queryClient.invalidateQueries({ queryKey: ['chores'] })
       queryClient.invalidateQueries({ queryKey: ['chorelist'] })
       queryClient.invalidateQueries({ queryKey: ['completedchores'] })
+      socketInstance.emit('update_query_key', {
+        queryKey: ['notifications', 'chores', 'completedchores', 'chorelist'],
+        users: user.id,
+        notificationMessage: `${chore.name} not completed to standard`,
+        pageUrl: '/chores',
+      })
     },
   })
 

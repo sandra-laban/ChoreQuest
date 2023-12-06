@@ -21,8 +21,6 @@ function Home() {
 
   const {
     data: familyData,
-    error: errorfam,
-    isPending: pendingfam,
   } = useQuery({
     queryKey: ['familymembers'],
     queryFn: async () => {

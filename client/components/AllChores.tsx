@@ -39,8 +39,6 @@ const ChoreList = () => {
     },
   })
 
-  
-
   const {
     data: profileData,
     error: profileError,

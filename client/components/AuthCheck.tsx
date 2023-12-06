@@ -26,7 +26,6 @@ function AuthCheck({ element }: AuthCheckProps): ReactElement {
     if (isSuccess) {
       if (data.profile?.id) {
         if (socketInstance) {
-          console.log('Profile data fetched successfully:', data.profile?.id)
           socketInstance.emit('link_user', String(data.profile?.id))
         }
       }

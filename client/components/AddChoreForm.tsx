@@ -34,8 +34,8 @@ const AddChore = ({ setFormView }: Props) => {
       socketInstance.emit('update_query_key', {
         queryKey: ['chores', 'notifications'],
         users: 'family',
-        notificationMessage: `Chore ${form.name} added!`,
-        pageUrl: '/chores',
+        notificationMessage: null,
+        pageUrl: null,
       })
     },
   })
@@ -49,21 +49,14 @@ const AddChore = ({ setFormView }: Props) => {
 
     // If the input is the 'created' date, value will be a Date object or null
     if (name === 'created') {
-      console.log('value, type', value, typeof value)
       if (value instanceof Date) {
-        console.log('2')
         newValue = DateTime.fromJSDate(value).toISODate() || null
-        console.log('Luxon Formatted Date:', newValue)
       } else if (typeof value === 'string') {
-        console.log('value is string')
         newValue = value //Date.parse(value)
       } else if (value === null) {
-        console.log('3')
         newValue = null
       }
-      console.log('newValue', newValue)
     } else {
-      console.log('4')
       newValue = value as string | null
     }
 
@@ -74,10 +67,8 @@ const AddChore = ({ setFormView }: Props) => {
   async function handleAddChange(e: ChangeEvent<HTMLFormElement>) {
     e.preventDefault()
     await addChoreMutation.mutate()
-    console.log(form, typeof form.created)
     setForm(initalForm)
     setFormView(false)
-    console.log(initalForm, typeof initalForm.created)
   }
 
   return (

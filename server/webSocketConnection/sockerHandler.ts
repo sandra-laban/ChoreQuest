@@ -22,7 +22,7 @@ const handleSocketMessages = (io: SocketIoServer) => {
           'update_query_key',
           async (data: {
             queryKey: string[]
-            users: 'parents' | 'family' | 'user'
+            users: 'parents' | 'family' | number
             notificationMessage: string
             pageUrl: string
           }) => {
@@ -32,24 +32,12 @@ const handleSocketMessages = (io: SocketIoServer) => {
             const pageUrl = data.pageUrl
 
             if (!socket.userId) return
-            let familyMembers: any
-            if (users === 'family') {
-              familyMembers = await getFamilyMembersById(
-                socket.userId,
-                'family'
-              )
-            } else if (users === 'parents') {
-              familyMembers = await getFamilyMembersById(
-                socket.userId,
-                'parents'
-              )
-            } else if (users === 'user') {
-              familyMembers = await getFamilyMembersById(socket.userId, 'user')
-            }
+            const familyMembers = await getFamilyMembersById(
+              socket.userId,
+              users
+            )
 
             if (familyMembers.length === 0) return
-
-            console.log('familyMembers', familyMembers)
             familyMembers.forEach(async (memberId: any) => {
               if (notificationMessage !== null) {
                 await db.addUserNotification(
@@ -64,7 +52,6 @@ const handleSocketMessages = (io: SocketIoServer) => {
         )
 
         socket.on('disconnect', () => {
-          console.log(`User ${userId} disconnected from WebSocket`)
           userSocketMap.delete(userId)
         })
       })
