@@ -126,12 +126,12 @@ router.patch('/complete/confirm', jwtCheck, async (req, res) => {
     const authId = req.auth?.payload.sub as string
     const choreId = req.body.choreId
 
-    const confirmedChore = await db.confirmChore(authId, choreId)
+    const choreData = await db.confirmChore(authId, choreId)
 
-    if (!confirmedChore) {
+    if (!choreData) {
       res.json({ message: "Couldn't complete chore" })
     } else {
-      res.json({ confirmedChore })
+      res.json(choreData)
     }
   } catch (err) {
     res.status(500).json({

@@ -165,9 +165,21 @@ function ChoreBox({ chore, completed }: Props) {
       const accessToken = await accessTokenPromise
       return await confirmChore(accessToken, choreId)
     },
-    onSuccess: () => {
+    onSuccess: ({ chore, user }: { chore: any; user: any }) => {
       queryClient.invalidateQueries({
-        queryKey: ['chores', 'completedchores', 'chorelist'],
+        queryKey: ['chores'],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['completedchores'],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['chorelist'],
+      })
+      socketInstance.emit('update_query_key', {
+        queryKey: ['notifications', 'chores', 'profile', 'chorelist'],
+        users: user.id,
+        notificationMessage: `${chore.name} completed you got ${chore.points} points!`,
+        pageUrl: '/profile',
       })
     },
   })
@@ -178,9 +190,6 @@ function ChoreBox({ chore, completed }: Props) {
       return await rejectChore(accessToken, choreId)
     },
     onSuccess: ({ chore, user }: { chore: any; user: any }) => {
-      console.log('chore', chore)
-      console.log('user', user)
-      console.log(typeof user.id)
       queryClient.invalidateQueries({ queryKey: ['chores'] })
       queryClient.invalidateQueries({ queryKey: ['chorelist'] })
       queryClient.invalidateQueries({ queryKey: ['completedchores'] })

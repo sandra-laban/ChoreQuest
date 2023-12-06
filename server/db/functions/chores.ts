@@ -191,6 +191,7 @@ export async function rejectChore(authId: string, choreId: number) {
 
 export async function confirmChore(authId: string, choreId: number) {
   const authorisation = await isParent(authId)
+
   if (!authorisation) return null
 
   const kidId = await db('chore_list')
@@ -198,15 +199,18 @@ export async function confirmChore(authId: string, choreId: number) {
     .select('user_id')
     .first()
 
-  const confirmedChore = await db('chore_list')
-    .where('chores_id', choreId)
-    .update({
-      reviewed: true,
-    })
+  await db('chore_list').where('chores_id', choreId).update({
+    reviewed: true,
+  })
 
-  await getPoints(kidId.user_id, choreId)
+  const [chore] = await db('chores')
+    .select('name', 'points')
+    .where('id', choreId)
+  const [user] = await db('users')
+    .select('name', 'id')
+    .where('id', kidId.user_id)
 
-  return confirmedChore
+  return { chore, user }
 }
 
 async function getPoints(userId: string, choreId: number) {
