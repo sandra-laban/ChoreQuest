@@ -123,7 +123,7 @@ export async function deliverPrize(
       delivered: true,
     })
 
-  await removePoints(kidId.user_id, prizeId)
+  // await removePoints(kidId.user_id, prizeId)
 
   return deliveredPrize
 }
