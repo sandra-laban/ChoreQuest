@@ -31,7 +31,7 @@ export default function Profile() {
     return (
       <>
         <div className="flex flex-col items-center h-screen">
-          <h1>{profile.name}</h1>
+          <h1 className="main-title d-text">{profile.name}</h1>
           <img src={profile.picture} alt={profile.name} />
           <h2>Family - {profile.family?.name}</h2>
           <Link to="/profile/edit">
