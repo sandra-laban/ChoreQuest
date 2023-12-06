@@ -42,10 +42,10 @@ const JoinFamilyForm = () => {
 
   return (
     <>
-      <div className="card-family-member mt-8">
+      <div className="family-form mt-8">
         <form className="flex flex-col items-center justify-center">
-          <h2>Join Family</h2>
-          <label htmlFor="name" className="mt-8">
+          <h2 className="text-white">Join Family</h2>
+          <label htmlFor="name" className="mt-8 text-white">
             Family Name
           </label>
           <input
@@ -56,7 +56,9 @@ const JoinFamilyForm = () => {
             onChange={handleChange}
           />
 
-          <label htmlFor="password">Family Password</label>
+          <label htmlFor="password" className="mt-8 text-white">
+            Family Password
+          </label>
           <input
             type="password"
             name="password"

@@ -50,10 +50,10 @@ const CreateFamilyForm = () => {
 
   return (
     <>
-      <div className="card-family-member mt-8">
+      <div className="family-form mt-8">
         <form className="flex flex-col items-center justify-center">
-          <h2>Create Family</h2>
-          <label htmlFor="name" className="mt-8">
+          <h2 className="text-white">Create Family</h2>
+          <label htmlFor="name" className="mt-8 text-white">
             Family Name
           </label>
           <input
@@ -64,7 +64,9 @@ const CreateFamilyForm = () => {
             onChange={handleChange}
           />
 
-          <label htmlFor="password">Family Password</label>
+          <label htmlFor="password" className="mt-8 text-white">
+            Family Password
+          </label>
           <input
             type="password"
             name="password"
@@ -75,12 +77,12 @@ const CreateFamilyForm = () => {
 
           {familyFrom.image === null ? (
             <>
-              <label htmlFor="familyImg" className="mt-8 mb-2">
+              <label htmlFor="familyImg" className="mt-8 mb-2 text-white">
                 Upload an image
               </label>
               <input
                 type="file"
-                className="familyImg"
+                className="familyImg text-white"
                 name="familyImg"
                 id="familyImg"
                 onChange={handleChange}
