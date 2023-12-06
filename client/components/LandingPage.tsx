@@ -28,7 +28,7 @@ function LandingPage() {
   useEffect(() => {
     if (!isLoading) {
       if (isAuthenticated && profile?.family_id) {
-        navigate('/profile')
+        navigate('/home')
       }
     }
   }, [isLoading, isAuthenticated, navigate, profile?.family_id])

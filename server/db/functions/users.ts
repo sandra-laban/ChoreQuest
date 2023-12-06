@@ -8,6 +8,11 @@ const db = connection
 
 export async function fetchUser(authid: string): Promise<CompleteUser> {
   const user = await db('users').where('auth_id', authid).select('*').first()
+  const currentGoal = await db('users')
+    .join('prizes', 'prizes.id', 'users.goal')
+    .where('auth_id', authid)
+    .select('prizes.name', 'prizes.id')
+    .first()
   const currentChore = await db('users')
     .join('chore_list', 'users.id', 'chore_list.user_id')
     .join('chores', 'chores.id', 'chore_list.chores_id')
@@ -25,6 +30,9 @@ export async function fetchUser(authid: string): Promise<CompleteUser> {
     }
     if (currentChore) {
       user.currentChore = currentChore
+    }
+    if (currentGoal) {
+      user.currentGoal = currentGoal
     }
   }
 
@@ -57,6 +65,19 @@ export async function updateUser(
   const family_id = await fetchFamily(authId)
   console.log('family_id', family_id)
   await usernameCheck(authId, family_id.id)
+
+  const user = await db('users').where('auth_id', authId).select('*').first()
+
+  return user
+}
+
+export async function setGoal(
+  authId: string,
+  prizeId: number
+): Promise<User[]> {
+  await db('users').where('auth_id', authId).update({
+    goal: prizeId,
+  })
 
   const user = await db('users').where('auth_id', authId).select('*').first()
 
