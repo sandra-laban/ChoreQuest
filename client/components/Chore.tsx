@@ -235,6 +235,12 @@ function ChoreBox({ chore, completed }: Props) {
       queryClient.invalidateQueries({ queryKey: ['chorelist'] })
       queryClient.invalidateQueries({ queryKey: ['profile'] })
       queryClient.invalidateQueries({ queryKey: ['chores'] })
+      socketInstance.emit('update_query_key', {
+        queryKey: ['notifications', 'chores', 'profile', 'chorelist'],
+        users: 'family',
+        notificationMessage: null,
+        pageUrl: null,
+      })
     },
   })
 
