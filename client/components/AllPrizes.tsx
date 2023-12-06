@@ -161,17 +161,13 @@ export default function AllPrizes() {
             <button className="btn-primary" onClick={() => setFormView(true)}>
               Add a Prize?
             </button>
-            <button
-              className="btn-primary"
-              onClick={() => setClaimsView(!claimsView)}
-            >
-              Recently Claimed
-            </button>
           </div>
         ) : null}
         {formView ? <AddPrize setFormView={setFormView} /> : null}
-        {claimsView
-          ? recentClaims.map((claim: any) => (
+        {profile?.is_parent && recentClaims?.length > 0 ? (
+          <div>
+            <h1 className="main-title d-text">Prizes earned</h1>
+            {recentClaims.map((claim: any) => (
               <div
                 key={claim.assigned}
                 className="border-2 rounded-lg m-5 gap-3 text-center bg-sky-200"
@@ -186,8 +182,9 @@ export default function AllPrizes() {
                   Delivered?
                 </button>
               </div>
-            ))
-          : null}
+            ))}
+          </div>
+        ) : null}
       </div>
     </>
   )

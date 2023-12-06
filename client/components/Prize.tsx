@@ -5,7 +5,7 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getPrize, patchPrize, claimPrize } from '../apis/prizes'
 import { getUser, setGoal } from '../apis/userApi'
-
+import { socketInstance } from '../apis/websocket.ts'
 export default function Prize() {
   const { user, getAccessTokenSilently } = useAuth0()
   const accessTokenPromise = getAccessTokenSilently()
@@ -48,6 +48,11 @@ export default function Prize() {
       queryClient.invalidateQueries({ queryKey: ['prizes'] })
       queryClient.invalidateQueries({ queryKey: ['prize', prizeId] })
       queryClient.invalidateQueries({ queryKey: ['profile'] })
+      socketInstance.emit('update_query_key', {
+        queryKey: ['prizes', 'notifications'],
+        users: 'family',
+        notificationMessage: null,
+      })
     },
   })
 
