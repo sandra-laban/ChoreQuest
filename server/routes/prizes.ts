@@ -22,6 +22,17 @@ router.get('/', jwtCheck, async (req, res) => {
   }
 })
 
+router.get('/recent', jwtCheck, async (req, res) => {
+  try {
+    const auth_id = req.auth?.payload.sub as string
+    const prizes = await db.getRecentClaims(auth_id)
+    console.log('route', prizes)
+    res.status(200).json({ prizes })
+  } catch (error) {
+    res.status(500).json({ message: 'Unable to get prizes' })
+  }
+})
+
 router.get('/:id', jwtCheck, async (req, res) => {
   try {
     // const auth_id = req.auth?.payload.sub as string
@@ -62,6 +73,36 @@ router.patch('/', jwtCheck, async (req, res) => {
       res.json({ message: 'Unable to edit prize' })
     } else {
       res.json({ editedPrize })
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Unable to edit prizze' })
+  }
+})
+
+router.patch('/claim', jwtCheck, async (req, res) => {
+  try {
+    const authId = req.auth?.payload.sub as string
+    const prizeId = req.body.prizeId
+    const claimedPrize = await db.claimPrize(authId, prizeId)
+    if (!claimedPrize) {
+      res.json({ message: 'Unable to edit prize' })
+    } else {
+      res.json({ claimedPrize })
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Unable to edit prizze' })
+  }
+})
+
+router.patch('/deliver', jwtCheck, async (req, res) => {
+  try {
+    const authId = req.auth?.payload.sub as string
+    const { prizeId, assigned } = req.body.delivery
+    const deliveredPrize = await db.deliverPrize(authId, prizeId, assigned)
+    if (!deliveredPrize) {
+      res.json({ message: 'Unable to edit prize' })
+    } else {
+      res.json({ deliveredPrize })
     }
   } catch (error) {
     res.status(500).json({ message: 'Unable to edit prizze' })

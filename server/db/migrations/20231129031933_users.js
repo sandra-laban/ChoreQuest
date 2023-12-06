@@ -8,6 +8,7 @@ export async function up(knex) {
     // table.string('user_type')
     table.integer('points').defaultsTo(0)
     table.boolean('is_parent').defaultsTo(null)
+    table.integer('goal')
     // table.foreign('id').references('jobs.user_id').onDelete('cascade')
   })
 }

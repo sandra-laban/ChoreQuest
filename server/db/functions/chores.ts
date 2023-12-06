@@ -214,6 +214,7 @@ export async function confirmChore(authId: string, choreId: number) {
     .select('name', 'id')
     .where('id', kidId.user_id)
 
+  await getPoints(kidId.user_id, choreId)
   return { chore, user }
 }
 
