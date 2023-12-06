@@ -75,7 +75,7 @@ function HomeProfile({ member }: Props) {
           </h3>
           <p> CURRENT CHORE </p>
           {member.currentChore?.name || member.chore_name ? (
-            <h2>
+            <h2 className="text-center my-3">
               {member.currentChore?.name}
               {member.chore_name}
             </h2>
@@ -94,7 +94,7 @@ function HomeProfile({ member }: Props) {
           ) : null}
           <p> CURRENT GOAL </p>
           {member.currentGoal?.name || member.goal_name ? (
-            <h2>
+            <h2 className="text-center my-3">
               {member.currentGoal?.name}
               {member.goal_name}
             </h2>

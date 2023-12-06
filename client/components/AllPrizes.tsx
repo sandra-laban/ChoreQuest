@@ -106,7 +106,7 @@ export default function AllPrizes() {
                   <h2 className="text-white text-2xl font-bold pb-2 w-4/5">
                     {prize.name}
                   </h2>
-                  <p className="text-white text-base pb-2 w-4/5">
+                  <p className="text-white text-base pb-2 w-1/2">
                     {prize.definition}
                   </p>
                   <h3 className="text-yellow-400 grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 text-center w-1/3">
@@ -158,7 +158,10 @@ export default function AllPrizes() {
         </div>
         {profile?.is_parent ? (
           <div>
-            <button className="btn-primary" onClick={() => setFormView(true)}>
+            <button
+              className="btn-primary mx-4"
+              onClick={() => setFormView(true)}
+            >
               Add a Prize?
             </button>
           </div>

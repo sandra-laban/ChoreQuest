@@ -128,8 +128,8 @@ export async function fetchFamilyMembers(auth_id: string) {
     .where('users.family_id', familyId.family_id)
     .select(
       'users.*',
-      db.raw('coalesce(prizes.name, "Nothing") as goal_name'),
-      db.raw('coalesce(chores.name, "Nothing") as chore_name')
+      db.raw('coalesce(prizes.name, "None") as goal_name'),
+      db.raw('coalesce(chores.name, "None") as chore_name')
     )
 
   console.log(family)
