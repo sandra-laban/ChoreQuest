@@ -51,6 +51,8 @@ router.get('/list/recent', jwtCheck, async (req, res) => {
     const auth_id = req.auth?.payload.sub as string
     const chores = await db.fetchFamilyRecents(auth_id)
 
+    console.log(chores)
+
     if (!chores) {
       res.json({ message: "Couldn't find chores!" })
     } else {
