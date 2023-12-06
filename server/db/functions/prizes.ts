@@ -91,6 +91,10 @@ export async function claimPrize(authId: string, prizesId: number) {
   await trx('prizes').where('id', prizesId).decrement('quantity', 1)
   if (reachedGoal) {
     await trx('users').where('auth_id', authId).update({ goal: null })
+    const [currentUserPoints] = await trx('points').where('auth_id', authId)
+    await trx('users')
+      .update('points', currentUserPoints.points - prizeCost)
+      .where('auth_id', authId)
   }
 
   trx.commit()
