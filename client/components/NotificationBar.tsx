@@ -62,7 +62,7 @@ const NotificationBar = () => {
   }
   return (
     <div>
-      <h2>NotificationBar</h2>
+      <h2>Notifications</h2>
       {notifications && notifications.length > 0 ? (
         notifications.map((notification) => (
           <button
