@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
+@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -11,8 +13,10 @@
   }
   h1 {
     @apply text-5xl;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 52px;
   }
+
   h2 {
     @apply text-4xl;
     font-family: 'Poppins', sans-serif;
@@ -27,27 +31,33 @@
   .btn-primary {
     @apply cursor-pointer transition-all bg-blue-300 text-purple-950 px-6 py-3 rounded-lg text-3xl
     border-blue-400 
-    border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px]
+    border-b-[6px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px]
     active:border-b-[2px] active:brightness-90 active:translate-y-[2px];
+  }
+  .d-text {
+    text-shadow: -1px -1px 1px #ffd505, 0px 1px 0 #81176d, 0px 2px 0 #81176d,
+      0px 3px 0 #510a71, 0px 4px 0 #282828, 0px 5px 0 #510a71, 0px 6px 0 #510a71,
+      5px 10px 5px rgba(0, 0, 0, 0.1), 8px 10px 8px rgba(0, 0, 0, 0.2),
+      8px 10px 15px rgba(0, 0, 0, 0.2);
   }
 
   .btn-nav {
     @apply cursor-pointer transition-all bg-white text-purple-950 px-6 py-3 rounded-lg text-xl
     border-gray-400 
-    border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px]
+    border-b-[6px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px]
     active:border-b-[2px] active:brightness-90 active:translate-y-[2px];
   }
   .btn-nav-mob {
     @apply cursor-pointer transition-all bg-white text-purple-950 px-6 py-3 rounded-lg text-xl
     border-gray-400 
-    border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px]
+    border-b-[6px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px]
     active:border-b-[2px] active:brightness-90 active:translate-y-[2px] block;
   }
 
   .btn-small {
     @apply cursor-pointer transition-all bg-white text-purple-950 px-4 py-0 rounded-lg text-lg
     border-gray-400 
-    border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px]
+    border-b-[6px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px]
     active:border-b-[2px] active:brightness-90 active:translate-y-[2px];
   }
 
@@ -56,5 +66,28 @@
   }
   .nav-link-mob {
     @apply text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium;
+  }
+  span.svg-icon {
+    width: 40px;
+    height: 40px;
+    -o-object-fit: contain;
+    object-fit: contain;
+    margin: 0 auto;
+  }
+  .points-fixed {
+    text-align: center;
+    @apply text-xl text-yellow-400;
+  }
+  .card-chore {
+    @apply relative bg-purple-800 block p-6 rounded-lg;
+  }
+  .colour-border {
+    @apply absolute inset-x-0 bottom-0 h-2 bg-gradient-to-r from-green-300 via-blue-500 to-purple-600;
+  }
+  .main-title {
+    @apply flex justify-center mb-8 mt-6 uppercase;
+    background: -webkit-linear-gradient(#141414, #a5a8a4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 }
