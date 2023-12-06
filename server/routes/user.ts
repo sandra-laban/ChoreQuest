@@ -5,6 +5,7 @@ import {
   removeUser,
   updateUser,
   createParent,
+  setGoal,
 } from '../db/functions/users'
 import { auth } from 'express-oauth2-jwt-bearer'
 const router = express.Router()
@@ -43,6 +44,25 @@ router.patch('/parentify', jwtCheck, async (req, res) => {
 
     if (!newParent) {
       res.json({ message: 'Could not make parent' })
+    } else {
+      res.json({ newParent })
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: err instanceof Error ? err.message : 'Unknown error',
+    })
+  }
+})
+
+router.patch('/goal', jwtCheck, async (req, res) => {
+  try {
+    const authId = req.auth?.payload.sub as string
+    const prizeId = req.body.prizeId
+
+    const newParent = await setGoal(authId, prizeId)
+
+    if (!newParent) {
+      res.json({ message: 'Could not set goal' })
     } else {
       res.json({ newParent })
     }

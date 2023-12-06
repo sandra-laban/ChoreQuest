@@ -74,8 +74,8 @@ async function seedPrizes(trx) {
       family_id: 1,
       name: 'Ice Cream',
       definition: '1 double scoop from the ice cream store',
-      price: 800,
-      quantity: 1,
+      price: 5,
+      quantity: 10,
     },
     {
       family_id: 1,

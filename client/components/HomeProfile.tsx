@@ -48,7 +48,7 @@ function HomeProfile({ member }: Props) {
               Complete?
             </button>
           ) : null}
-          <h3> CURRENT GOAL PLACEHOLDER - View Prizes</h3>
+          <h3> Current Goal - {member.currentGoal?.name}</h3>
         </div>
       </div>
     </>
