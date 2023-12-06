@@ -68,4 +68,19 @@ router.patch('/', jwtCheck, async (req, res) => {
   }
 })
 
+router.patch('/claim', jwtCheck, async (req, res) => {
+  try {
+    const authId = req.auth?.payload.sub as string
+    const prizeId = req.body.prizeId
+    const claimedPrize = await db.claimPrize(authId, prizeId)
+    if (!claimedPrize) {
+      res.json({ message: 'Unable to edit prize' })
+    } else {
+      res.json({ claimedPrize })
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Unable to edit prizze' })
+  }
+})
+
 export default router

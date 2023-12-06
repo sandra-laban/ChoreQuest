@@ -45,3 +45,13 @@ export async function patchPrize(
     .set('Authorization', `Bearer ${token}`)
     .send({ prizeId, patchedPrize })
 }
+
+export async function claimPrize(
+  token: string,
+  prizeId: number
+): Promise<void> {
+  await request
+    .patch(`${serverUrl}/claim`)
+    .set('Authorization', `Bearer ${token}`)
+    .send({ prizeId })
+}
