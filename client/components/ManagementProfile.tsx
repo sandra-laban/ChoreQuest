@@ -41,27 +41,74 @@ function ManagementProfile({ member }: Props) {
 
   return (
     <>
-      <div className="flex items-center justify-around border border-4 border-white p-1 rounded-md w-1/2 my-8">
-        <div className="flex flex-col items-center justify-center my-6">
-          <h3>{member.name}</h3>
-          <img src={member.picture} alt={member.name} className="my-4" />
+      <div className="card-family-member">
+        <div className="flex flex-col items-center justify-center">
+          <div className="relative">
+            <img src={member.picture} alt={member.name} className="my-4" />
+            {member.is_parent ? (
+              <h3 className="is-parent bg-purple-950 text-yellow-400 ml-5 p-2 rounded text-lg absolute top-0 right-0 w-20 text-center">
+                Parent
+              </h3>
+            ) : (
+              <h3 className="is-parent bg-purple-950 text-yellow-400 ml-5 p-2 rounded text-lg absolute top-0 right-0 w-20 text-center">
+                Kid
+              </h3>
+            )}
+          </div>
+          <h3 className="text-white text-2xl font-bold pb-2">{member.name}</h3>
         </div>
-        <div className="flex flex-col items-center justify-center my-6">
-          {member.is_parent ? <h2>Parent</h2> : <h2>Kid</h2>}
-          {!member.is_parent && <h3>Points - {member.points}</h3>}
+        <div className="flex flex-col items-center justify-center">
+          {!member.is_parent && (
+            <h3 className=" text-yellow-400 grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 text-center">
+              {member.points}
+              <span className="svg-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <g fill="none" fillRule="evenodd">
+                    <path fill="#24CC8F" d="M0 9l5-7h14l5 7-12 13z"></path>
+                    <path
+                      fill="#FFF"
+                      opacity=".25"
+                      d="M7 8.8L6 4h6zM17 8.8L18 4h-6z"
+                    ></path>
+                    <path
+                      fill="#FFF"
+                      opacity=".5"
+                      d="M7 8.8L12 4l5 4.8zM2.6 8.8L6 4l1 4.8z"
+                    ></path>
+                    <path
+                      fill="#34313A"
+                      opacity=".11"
+                      d="M21.4 8.8L18 4l-1 4.8zM2.6 8.8H7l5 10.3z"
+                    ></path>
+                    <path
+                      fill="#FFF"
+                      opacity=".5"
+                      d="M21.4 8.8H17l-5 10.3z"
+                    ></path>
+                    <path
+                      fill="#FFF"
+                      opacity=".25"
+                      d="M7 8.8h10l-5 10.3z"
+                    ></path>
+                  </g>
+                </svg>
+              </span>
+            </h3>
+          )}
           <div className="flex items-center justify-center">
             {!member.is_parent && member.points === 0 ? (
-              <button className="btn-primary" onClick={handleParentClick}>
+              <button className="btn-small" onClick={handleParentClick}>
                 Make Parent?
               </button>
             ) : null}
             {member.auth_id !== user?.sub ? (
-              <button onClick={handleDeleteClick} className="btn-primary">
+              <button onClick={handleDeleteClick} className="btn-small">
                 Delete User?
               </button>
             ) : null}
           </div>
         </div>
+        <span className="colour-border"></span>
       </div>
     </>
   )

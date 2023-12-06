@@ -5,44 +5,50 @@ import { configureSocket } from '../apis/websocket'
 import { useAuth0 } from '@auth0/auth0-react'
 import { getNotifications, deleteNotification } from '../apis/notifications'
 import { useNavigate } from 'react-router-dom'
-
+import { getUser } from '../apis/userApi'
 const NotificationBar = () => {
   const queryClient = useQueryClient()
   const { getAccessTokenSilently } = useAuth0()
-  const accessTokenPromise = getAccessTokenSilently()
+
   const navigate = useNavigate()
 
-  const {
-    data: notifications,
-    error,
-    isPending,
-  } = useQuery({
+  const { data: notifications } = useQuery({
     queryKey: ['notifications'],
     queryFn: async () => {
-      const accessToken = await accessTokenPromise
+      const accessToken = await getAccessTokenSilently()
       return await getNotifications(accessToken)
     },
   })
 
-  useEffect(() => {
-    const connectWebSocket = async () => {
-      const socket = await configureSocket()
+  const { data: profile } = useQuery({
+    queryKey: ['profile'],
+    queryFn: async () => {
+      const accessToken = await getAccessTokenSilently()
+      return await getUser(accessToken)
+    },
+  })
 
-      if (socket) {
-        const handleData = (receivedData: any) => {
-          queryClient.invalidateQueries({ queryKey: ['notifications'] })
-        }
+  const connectWebSocket = async () => {
+    const socket = await configureSocket()
 
-        socket.on('notification_data', handleData)
-      }
+    if (socket) {
+      socket.on('notification_data', ({ queryKey }: { queryKey: string[] }) => {
+        queryKey.forEach((keyName) => {
+          console.log('keyName', keyName)
+          queryClient.invalidateQueries({ queryKey: [keyName] })
+        })
+      })
+      console.log('socket connected')
     }
+  }
 
+  useEffect(() => {
     connectWebSocket()
-  }, [accessTokenPromise])
+  }, [])
 
   const deleteNotificationMutation = useMutation({
     mutationFn: async (notificationId: string) => {
-      const accessToken = await accessTokenPromise
+      const accessToken = await getAccessTokenSilently()
       return await deleteNotification(accessToken, notificationId)
     },
     onSuccess: () => {
