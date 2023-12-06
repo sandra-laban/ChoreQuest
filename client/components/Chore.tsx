@@ -130,7 +130,7 @@ function ChoreBox({ chore, completed }: Props) {
       queryClient.invalidateQueries({ queryKey: ['chores'] })
       socketInstance.emit('update_query_key', {
         queryKey: ['chores', 'notifications'],
-        users: 'all',
+        users: 'family',
         notificationMessage: 'Chore deleted',
       })
     },
