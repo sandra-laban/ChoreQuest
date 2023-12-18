@@ -1,79 +1,22 @@
-# TODO App
+# ChoreQuest!
 
-For this challenge, we will build a todo app (which is a common way to practice a new technology), using the full stack! From the database to the server, the API client, React and React Query, this app will ask you to use everything you've learned.
+## App created for Parents by Parents to help them manage kids chores around house.
 
-## Setup
 
-### 0. Cloning and installation
+I've got this awesome family management app to tell you about. Picture this: parents and kids working together in a fun way to tackle chores and earn rewards. It's like a virtual household adventure!
 
-- [ ] Clone this repo, navigate to it, install packages, and start the server with `npm run dev`
-  <details style="padding-left: 2em">
-    <summary>Tip</summary>
+First off, parents get to set up their family and create cool avatars for everyone. Then, the whole crew joins in – other family members become part of the app, each assigned either the parent or child role. Parents are like the superheroes with admin powers, while the kids are the task conquerors.
 
-  You may also want to start a new branch
+Here's the fun part: parents can create a list of chores and rewards, each with its own point value. The kids get to choose which tasks they want to take on, mark them as done, and earn points. It's like turning everyday responsibilities into a game!
 
-  ```sh
-  cd todo-full-stack-query
-  npm i
-  git checkout -b <branchname>
-  npm run dev
-  ```
+But wait, there's a twist! Before kids can claim their well-deserved rewards, parental approval is needed. It's like a built-in checkpoint to make sure everything's on track.
 
-  </details>
+And just in case a chore seems a bit too dull, parents can step in and assign tasks directly – because sometimes, you need to spice things up a bit, right?
 
-- [ ] See the designs [here](http://localhost:5173/designs/index.html)
+Oh, and did I mention the prizes? Kids can set goals for what they want, and once they've earned enough points, they can redeem them for awesome rewards. It's a win-win for everyone!
 
-<details>
-  <summary>More about using <code>npm</code> vs <code>npx</code></summary>
+Plus, there's this cool web socket thing that keeps everyone's info up to date in real-time, and the app sends out notifications for special events. It's like having your own family command center right in your pocket. How cool is that?" 🚀🏡💡
 
-- When running knex, run `npm run knex <command>`, e.g. `npm run knex migrate:latest` rather than using `npx`
-</details>
+## Tech
 
----
-
-## Requirements
-
-Here's a list of steps in case they are useful. You can build in any order you like though ;)
-
-## Back end (Server-side)
-
-### 1. Building the database
-
-- [ ] Design a database to store a list of tasks, e.g. task details, priority, completed yes/no
-- [ ] Build the migrations and seed data
-
-### 2. Building the API
-
-- [ ] Build an API (back end route) to get the information from your database (list, add, update and delete)
-- [ ] Test your API with Insomnia
-
-## Front end (Client-side)
-
-### 3. Setting the stage
-
-- [ ] Build a React component with static html
-- [ ] Follow the [design](./public/designs/index.html) template for classNames and html element layout
-
-### 4. Building the API client
-
-- [ ] Build API client in the front end
-
-### 5. Querying Data 
-
-- [ ] Write a query with the `useQuery` hook to fetch the task data from the API
-- [ ] Mutate data with the `useMutation` hook to create, update, and delete task data via the API 
-
----
-
-## Stretch
-
-<details>
-  <summary>More about stretch challenges</summary>
-
-- Forms can be tough to build accessibly. First ensure all parts of your form can be reached and used with keyboard-only navigation. Then test your form page with the WAVE browser extension, and fix any accessibility issues it detects
-
-</details>
-
----
-
-[Provide feedback on this repo](https://docs.google.com/forms/d/e/1FAIpQLSfw4FGdWkLwMLlUaNQ8FtP2CTJdGDUv6Xoxrh19zIrJSkvT4Q/viewform?usp=pp_url&entry.1958421517=todo-full-stack-query)
+TypeScript, Node.js, Express.js, React, React Router, SQLite, Auth0, Tailwind CSS
